@@ -5,519 +5,391 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dot1Xer Supreme Enterprise Edition</title>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/vendors.css">
-    <link rel="stylesheet" href="css/help.css">
 </head>
 <body>
     <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">
-                <img src="assets/images/logo.svg" alt="Dot1Xer Logo">
-                Dot1Xer Supreme
-            </a>
-            <nav>
-                <ul>
-                    <li><a href="#configurator" id="configurator-link">Configurator</a></li>
-                    <li><a href="#ai-integration" id="ai-integration-link">AI Integration</a></li>
-                    <li><a href="#reference" id="reference-link">Reference Architecture</a></li>
-                    <li><a href="#discovery" id="discovery-link">Environmental Discovery</a></li>
-                    <li><a href="#help" id="help-link">Help</a></li>
-                </ul>
-            </nav>
-        </div>
-        
-        <div class="video-banner" id="video-banner">
-            <!-- Video banner content loaded via JavaScript -->
+        <div id="video-banner" class="video-banner">
+            <div class="video-banner-placeholder">
+                <div class="banner-content">
+                    <h1>Dot1Xer Supreme</h1>
+                    <p>Complete 802.1X Configuration & Management</p>
+                </div>
+            </div>
         </div>
     </header>
     
     <main>
         <div class="container">
-            <!-- Main configuration interface -->
             <section id="configurator" class="card">
-                <h2>Network Access Control Configurator</h2>
-                
-                <div class="tabs">
-                    <div class="tab active" data-tab="platform">Platform</div>
-                    <div class="tab" data-tab="authentication">Authentication</div>
-                    <div class="tab" data-tab="security">Security</div>
-                    <div class="tab" data-tab="network">Network</div>
-                    <div class="tab" data-tab="advanced">Advanced</div>
-                    <div class="tab" data-tab="preview">Preview</div>
-                </div>
-                
-                <div class="tab-content">
-                    <!-- Platform selection tab -->
-                    <div class="tab-pane active" id="platform">
-                        <div class="card-body">
-                            <h3>Step 1: Select Vendor and Platform</h3>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Vendor Selection <span class="help-icon" data-help-topic="vendor-selection">?</span>
+                <div class="card-body">
+                    <h2>Network Access Control Configurator</h2>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="platform">Platform</div>
+                        <div class="tab" data-tab="authentication">Authentication</div>
+                        <div class="tab" data-tab="security">Security</div>
+                        <div class="tab" data-tab="network">Network</div>
+                        <div class="tab" data-tab="advanced">Advanced</div>
+                        <div class="tab" data-tab="preview">Preview</div>
+                    </div>
+                    
+                    <div id="platform" class="tab-pane">
+                        <h3>Step 1: Select Vendor and Platform</h3>
+                        
+                        <div class="expandable-section">
+                            <div id="vendor-selection" class="expandable-header">
+                                Vendor Selection <span class="help-icon" data-help-topic="vendor-selection">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <!-- Vendor grid will be populated via JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div id="platform-details" class="expandable-header">
+                                Platform Details <span class="help-icon" data-help-topic="platform-details">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="platform-select">Device Platform <span class="help-icon" data-help-topic="platform-select">?</span></label>
+                                    <select id="platform-select" class="form-control">
+                                        <option value="">Select a vendor first</option>
+                                    </select>
                                 </div>
-                                <div class="expandable-content">
-                                    <p>Select the network equipment vendor for your 802.1X deployment. The configuration syntax will be tailored to your specific vendor.</p>
-                                    <div class="vendor-grid" id="vendor-grid">
-                                        <!-- Vendor logos loaded via JavaScript -->
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="software-version">Software Version <span class="help-icon" data-help-topic="software-version">?</span></label>
+                                    <input type="text" id="software-version" class="form-control" placeholder="e.g., 17.3.5">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="device-role">Device Role <span class="help-icon" data-help-topic="device-role">?</span></label>
+                                    <select id="device-role" class="form-control">
+                                        <option value="access">Access Switch</option>
+                                        <option value="distribution">Distribution Switch</option>
+                                        <option value="core">Core Switch</option>
+                                        <option value="wireless">Wireless LAN Controller</option>
+                                        <option value="router">Router</option>
+                                        <option value="firewall">Firewall</option>
+                                    </select>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Platform Details <span class="help-icon" data-help-topic="platform-details">?</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="platform-select">Device Platform <span class="help-icon" data-help-topic="platform-select">?</span></label>
-                                        <select id="platform-select" class="form-control">
-                                            <option value="">Select a vendor first</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="software-version">Software Version <span class="help-icon" data-help-topic="software-version">?</span></label>
-                                        <input type="text" id="software-version" class="form-control" placeholder="e.g., 17.3.5">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="device-role">Device Role <span class="help-icon" data-help-topic="device-role">?</span></label>
-                                        <select id="device-role" class="form-control">
-                                            <option value="access">Access Switch</option>
-                                            <option value="distribution">Distribution Switch</option>
-                                            <option value="core">Core Switch</option>
-                                            <option value="wireless">Wireless LAN Controller</option>
-                                            <option value="router">Router</option>
-                                            <option value="firewall">Firewall</option>
-                                            <option value="nac">NAC Appliance</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <button class="btn next-step" data-next="authentication">Next: Authentication</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn next-step" data-next="authentication">Next: Authentication</button>
                         </div>
                     </div>
                     
-                    <!-- Authentication tab -->
-                    <div class="tab-pane" id="authentication">
-                        <div class="card-body">
-                            <h3>Step 2: Authentication Settings</h3>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Authentication Method <span class="help-icon" data-help-topic="auth-method">?</span>
+                    <div id="authentication" class="tab-pane">
+                        <h3>Step 2: Authentication Settings</h3>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Authentication Method <span class="help-icon" data-help-topic="auth-method">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="auth-method">Primary Method <span class="help-icon" data-help-topic="primary-auth">?</span></label>
+                                    <select id="auth-method" class="form-control">
+                                        <option value="dot1x">802.1X Only</option>
+                                        <option value="mab">MAC Authentication Bypass Only</option>
+                                        <option value="dot1x-mab">802.1X with MAB Fallback (Sequential)</option>
+                                        <option value="concurrent">802.1X and MAB Concurrent</option>
+                                        <option value="dot1x-mab-webauth">802.1X + MAB + WebAuth</option>
+                                    </select>
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="auth-method">Primary Method <span class="help-icon" data-help-topic="primary-auth">?</span></label>
-                                        <select id="auth-method" class="form-control">
-                                            <option value="dot1x">802.1X Only</option>
-                                            <option value="mab">MAC Authentication Bypass Only</option>
-                                            <option value="dot1x-mab">802.1X with MAB Fallback (Sequential)</option>
-                                            <option value="concurrent">802.1X and MAB Concurrent</option>
-                                            <option value="dot1x-mab-webauth">802.1X + MAB + WebAuth</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="auth-mode">Authentication Mode <span class="help-icon" data-help-topic="auth-mode">?</span></label>
-                                        <select id="auth-mode" class="form-control">
-                                            <option value="open">Open (Monitor Mode)</option>
-                                            <option value="closed">Closed (Enforced Mode)</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="host-mode">Host Mode <span class="help-icon" data-help-topic="host-mode">?</span></label>
-                                        <select id="host-mode" class="form-control">
-                                            <option value="multi-auth">Multi-Auth (Multiple Devices)</option>
-                                            <option value="multi-domain">Multi-Domain (1 Data + 1 Voice)</option>
-                                            <option value="single-host">Single-Host (1 Device Total)</option>
-                                            <option value="multi-host">Multi-Host (1 Auth, Multiple Devices)</option>
-                                        </select>
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="auth-mode">Authentication Mode <span class="help-icon" data-help-topic="auth-mode">?</span></label>
+                                    <select id="auth-mode" class="form-control">
+                                        <option value="monitor">Open (Monitor Mode)</option>
+                                        <option value="closed">Closed (Enforced Mode)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="host-mode">Host Mode <span class="help-icon" data-help-topic="host-mode">?</span></label>
+                                    <select id="host-mode" class="form-control">
+                                        <option value="multi-auth">Multi-Auth (Multiple Devices)</option>
+                                        <option value="multi-domain">Multi-Domain (1 Data + 1 Voice)</option>
+                                        <option value="single-host">Single-Host (1 Device Total)</option>
+                                        <option value="multi-host">Multi-Host (1 Auth, Multiple Devices)</option>
+                                    </select>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    RADIUS Configuration <span class="help-icon" data-help-topic="radius-config">?</span>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                RADIUS Configuration <span class="help-icon" data-help-topic="radius-config">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="radius-server1">Primary RADIUS Server <span class="help-icon" data-help-topic="radius-server">?</span></label>
+                                    <input type="text" id="radius-server1" class="form-control" placeholder="e.g., 10.1.1.100">
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="radius-server1">Primary RADIUS Server <span class="help-icon" data-help-topic="radius-server">?</span></label>
-                                        <input type="text" id="radius-server1" class="form-control" placeholder="e.g., 10.1.1.100">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="radius-secret1">Primary RADIUS Secret <span class="help-icon" data-help-topic="radius-secret">?</span></label>
-                                        <input type="password" id="radius-secret1" class="form-control" placeholder="Shared secret key">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="radius-server2">Secondary RADIUS Server <span class="help-icon" data-help-topic="radius-server">?</span></label>
-                                        <input type="text" id="radius-server2" class="form-control" placeholder="e.g., 10.1.1.101">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="radius-secret2">Secondary RADIUS Secret <span class="help-icon" data-help-topic="radius-secret">?</span></label>
-                                        <input type="password" id="radius-secret2" class="form-control" placeholder="Shared secret key">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="use-radsec" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="use-radsec">Use RadSec (RADIUS over TLS/DTLS) <span class="help-icon" data-help-topic="radsec">?</span></label>
-                                        </div>
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="radius-secret1">Primary RADIUS Secret <span class="help-icon" data-help-topic="radius-secret">?</span></label>
+                                    <input type="password" id="radius-secret1" class="form-control" placeholder="Shared secret key">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="radius-server2">Secondary RADIUS Server <span class="help-icon" data-help-topic="radius-server">?</span></label>
+                                    <input type="text" id="radius-server2" class="form-control" placeholder="e.g., 10.1.1.101">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="radius-secret2">Secondary RADIUS Secret <span class="help-icon" data-help-topic="radius-secret">?</span></label>
+                                    <input type="password" id="radius-secret2" class="form-control" placeholder="Shared secret key">
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Authentication Timers <span class="help-icon" data-help-topic="auth-timers">?</span>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Authentication Timers <span class="help-icon" data-help-topic="auth-timers">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="reauth-period">Reauthentication Period (seconds) <span class="help-icon" data-help-topic="reauth-period">?</span></label>
+                                    <input type="number" id="reauth-period" class="form-control" value="3600">
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="reauth-period">Reauthentication Period (seconds) <span class="help-icon" data-help-topic="reauth-period">?</span></label>
-                                        <input type="number" id="reauth-period" class="form-control" value="3600">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                                            <label for="tx-period">Transmit Period (seconds) <span class="help-icon" data-help-topic="tx-period">?</span></label>
-                                        <input type="number" id="tx-period" class="form-control" value="30">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="quiet-period">Quiet Period (seconds) <span class="help-icon" data-help-topic="quiet-period">?</span></label>
-                                        <input type="number" id="quiet-period" class="form-control" value="60">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="max-reauth">Maximum Reauth Attempts <span class="help-icon" data-help-topic="max-reauth">?</span></label>
-                                        <input type="number" id="max-reauth" class="form-control" value="2">
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="tx-period">Transmit Period (seconds) <span class="help-icon" data-help-topic="tx-period">?</span></label>
+                                    <input type="number" id="tx-period" class="form-control" value="30">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="quiet-period">Quiet Period (seconds) <span class="help-icon" data-help-topic="quiet-period">?</span></label>
+                                    <input type="number" id="quiet-period" class="form-control" value="60">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="max-reauth">Maximum Reauth Attempts <span class="help-icon" data-help-topic="max-reauth">?</span></label>
+                                    <input type="number" id="max-reauth" class="form-control" value="2">
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <button class="btn prev-step" data-prev="platform">Previous: Platform</button>
-                                <button class="btn next-step" data-next="security">Next: Security</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn prev-step" data-prev="platform">Previous: Platform</button>
+                            <button class="btn next-step" data-next="security">Next: Security</button>
                         </div>
                     </div>
                     
-                    <!-- Security tab -->
-                    <div class="tab-pane" id="security">
-                        <div class="card-body">
-                            <h3>Step 3: Security Settings</h3>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Advanced Security Options <span class="help-icon" data-help-topic="adv-security">?</span>
+                    <div id="security" class="tab-pane">
+                        <h3>Step 3: Security Settings</h3>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Security Features <span class="help-icon" data-help-topic="security-features">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-coa" checked>
+                                        <label for="enable-coa">Enable RADIUS Change of Authorization (CoA) <span class="help-icon" data-help-topic="coa">?</span></label>
+                                    </div>
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="use-mka" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="use-mka">Enable MACsec (802.1AE) <span class="help-icon" data-help-topic="macsec">?</span></label>
-                                        </div>
+                                
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-accounting" checked>
+                                        <label for="enable-accounting">Enable RADIUS Accounting <span class="help-icon" data-help-topic="radius-accounting">?</span></label>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="use-coa" class="checkbox" checked>
-                                            <span class="checkmark"></span>
-                                            <label for="use-coa">Enable RADIUS Change of Authorization (CoA) <span class="help-icon" data-help-topic="coa">?</span></label>
-                                        </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-macsec">
+                                        <label for="enable-macsec">Enable MACsec (802.1AE) <span class="help-icon" data-help-topic="macsec">?</span></label>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="enable-accounting" class="checkbox" checked>
-                                            <span class="checkmark"></span>
-                                            <label for="enable-accounting">Enable RADIUS Accounting <span class="help-icon" data-help-topic="radius-accounting">?</span></label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="enable-dhcp-snooping" class="checkbox" checked>
-                                            <span class="checkmark"></span>
-                                            <label for="enable-dhcp-snooping">Enable DHCP Snooping <span class="help-icon" data-help-topic="dhcp-snooping">?</span></label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="enable-dai" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="enable-dai">Enable Dynamic ARP Inspection <span class="help-icon" data-help-topic="dai">?</span></label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="enable-ipsg" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="enable-ipsg">Enable IP Source Guard <span class="help-icon" data-help-topic="ipsg">?</span></label>
-                                        </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-radsec">
+                                        <label for="enable-radsec">Enable RadSec (RADIUS over TLS) <span class="help-icon" data-help-topic="radsec">?</span></label>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Management Access <span class="help-icon" data-help-topic="mgmt-access">?</span>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Port Security <span class="help-icon" data-help-topic="port-security">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-storm-control" checked>
+                                        <label for="enable-storm-control">Enable Storm Control <span class="help-icon" data-help-topic="storm-control">?</span></label>
+                                    </div>
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="mgmt-local" name="mgmt-auth" class="radio" checked>
-                                            <span class="radio-mark"></span>
-                                            <label for="mgmt-local">Local Authentication</label>
-                                        </div>
+                                
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-bpduguard" checked>
+                                        <label for="enable-bpduguard">Enable BPDU Guard <span class="help-icon" data-help-topic="bpdu-guard">?</span></label>
                                     </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="mgmt-radius" name="mgmt-auth" class="radio">
-                                            <span class="radio-mark"></span>
-                                            <label for="mgmt-radius">RADIUS Authentication (Same servers)</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="mgmt-tacacs" name="mgmt-auth" class="radio">
-                                            <span class="radio-mark"></span>
-                                            <label for="mgmt-tacacs">TACACS+ Authentication</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="tacacs-options" style="display: none;">
-                                        <div class="form-group">
-                                            <label for="tacacs-server1">Primary TACACS+ Server <span class="help-icon" data-help-topic="tacacs-server">?</span></label>
-                                            <input type="text" id="tacacs-server1" class="form-control" placeholder="e.g., 10.1.1.200">
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="tacacs-secret1">Primary TACACS+ Secret <span class="help-icon" data-help-topic="tacacs-secret">?</span></label>
-                                            <input type="password" id="tacacs-secret1" class="form-control" placeholder="Shared secret key">
-                                        </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div>
+                                        <input type="checkbox" id="enable-rootguard">
+                                        <label for="enable-rootguard">Enable Root Guard <span class="help-icon" data-help-topic="root-guard">?</span></label>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <button class="btn prev-step" data-prev="authentication">Previous: Authentication</button>
-                                <button class="btn next-step" data-next="network">Next: Network</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn prev-step" data-prev="authentication">Previous: Authentication</button>
+                            <button class="btn next-step" data-next="network">Next: Network</button>
                         </div>
                     </div>
                     
-                    <!-- Network tab -->
-                    <div class="tab-pane" id="network">
-                        <div class="card-body">
-                            <h3>Step 4: Network Settings</h3>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    VLAN Configuration <span class="help-icon" data-help-topic="vlan-config">?</span>
+                    <div id="network" class="tab-pane">
+                        <h3>Step 4: Network Settings</h3>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                VLAN Configuration <span class="help-icon" data-help-topic="vlan-config">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="vlan-auth">Authentication VLAN ID <span class="help-icon" data-help-topic="vlan-auth">?</span></label>
+                                    <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="vlan-auth">Authentication VLAN ID <span class="help-icon" data-help-topic="vlan-auth">?</span></label>
-                                        <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="vlan-unauth">Unauthenticated VLAN ID <span class="help-icon" data-help-topic="vlan-unauth">?</span></label>
-                                        <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="vlan-guest">Guest VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-guest">?</span></label>
-                                        <input type="number" id="vlan-guest" class="form-control" placeholder="e.g., 900">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="vlan-voice">Voice VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-voice">?</span></label>
-                                        <input type="number" id="vlan-voice" class="form-control" placeholder="e.g., 200">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="vlan-critical">Critical VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-critical">?</span></label>
-                                        <input type="number" id="vlan-critical" class="form-control" placeholder="e.g., 998">
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="vlan-unauth">Unauthenticated VLAN ID <span class="help-icon" data-help-topic="vlan-unauth">?</span></label>
+                                    <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="vlan-guest">Guest VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-guest">?</span></label>
+                                    <input type="number" id="vlan-guest" class="form-control" placeholder="e.g., 900">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="vlan-voice">Voice VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-voice">?</span></label>
+                                    <input type="number" id="vlan-voice" class="form-control" placeholder="e.g., 200">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="vlan-critical">Critical VLAN ID (Optional) <span class="help-icon" data-help-topic="vlan-critical">?</span></label>
+                                    <input type="number" id="vlan-critical" class="form-control" placeholder="e.g., 998">
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Interface Configuration <span class="help-icon" data-help-topic="interface-config">?</span>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Interface Configuration <span class="help-icon" data-help-topic="interface-config">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="interface">Interface to Configure <span class="help-icon" data-help-topic="interface">?</span></label>
+                                    <input type="text" id="interface" class="form-control" placeholder="e.g., GigabitEthernet1/0/1">
                                 </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="interface">Interface to Configure <span class="help-icon" data-help-topic="interface">?</span></label>
-                                        <input type="text" id="interface" class="form-control" placeholder="e.g., GigabitEthernet1/0/1">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="interface-range">Interface Range (Optional) <span class="help-icon" data-help-topic="interface-range">?</span></label>
-                                        <input type="text" id="interface-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="mgmt-interface">Management Interface <span class="help-icon" data-help-topic="mgmt-interface">?</span></label>
-                                        <input type="text" id="mgmt-interface" class="form-control" placeholder="e.g., Vlan10">
-                                    </div>
+                                
+                                <div class="form-group">
+                                    <label for="interface-range">Interface Range (Optional) <span class="help-icon" data-help-topic="interface-range">?</span></label>
+                                    <input type="text" id="interface-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
                                 </div>
                             </div>
-                            
-                            <div class="form-group">
-                                <button class="btn prev-step" data-prev="security">Previous: Security</button>
-                                <button class="btn next-step" data-next="advanced">Next: Advanced</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn prev-step" data-prev="security">Previous: Security</button>
+                            <button class="btn next-step" data-next="advanced">Next: Advanced</button>
                         </div>
                     </div>
                     
-                    <!-- Advanced tab -->
-                    <div class="tab-pane" id="advanced">
-                        <div class="card-body">
-                            <h3>Step 5: Advanced Settings</h3>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Deployment Strategy <span class="help-icon" data-help-topic="deployment-strategy">?</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="deploy-monitor" name="deploy-strategy" class="radio" checked>
-                                            <span class="radio-mark"></span>
-                                            <label for="deploy-monitor">Monitor Mode (Authentication without enforcement)</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="deploy-low-impact" name="deploy-strategy" class="radio">
-                                            <span class="radio-mark"></span>
-                                            <label for="deploy-low-impact">Low Impact (Open Authentication with Guest VLAN)</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="radio-container">
-                                            <input type="radio" id="deploy-closed" name="deploy-strategy" class="radio">
-                                            <span class="radio-mark"></span>
-                                            <label for="deploy-closed">Closed Mode (Full 802.1X Enforcement)</label>
-                                        </div>
-                                    </div>
+                    <div id="advanced" class="tab-pane">
+                        <h3>Step 5: Advanced Settings</h3>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Deployment Strategy <span class="help-icon" data-help-topic="deployment-strategy">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="deployment-mode">Deployment Mode <span class="help-icon" data-help-topic="deployment-mode">?</span></label>
+                                    <select id="deployment-mode" class="form-control">
+                                        <option value="monitor">Monitor Mode (Authentication without enforcement)</option>
+                                        <option value="low-impact">Low Impact (Open Authentication with Guest VLAN)</option>
+                                        <option value="closed">Closed Mode (Full 802.1X Enforcement)</option>
+                                    </select>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Industry-Specific Settings <span class="help-icon" data-help-topic="industry-settings">?</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="industry-type">Industry Vertical <span class="help-icon" data-help-topic="industry-type">?</span></label>
-                                        <select id="industry-type" class="form-control">
-                                            <option value="enterprise">Enterprise (General Business)</option>
-                                            <option value="healthcare">Healthcare</option>
-                                            <option value="education">Education</option>
-                                            <option value="finance">Financial Services</option>
-                                            <option value="government">Government</option>
-                                            <option value="retail">Retail</option>
-                                            <option value="manufacturing">Manufacturing</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="include-industry-acls" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="include-industry-acls">Include Industry-Specific ACLs <span class="help-icon" data-help-topic="industry-acls">?</span></label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <div class="checkbox-container">
-                                            <input type="checkbox" id="include-industry-vlans" class="checkbox">
-                                            <span class="checkmark"></span>
-                                            <label for="include-industry-vlans">Include Industry-Specific VLANs <span class="help-icon" data-help-topic="industry-vlans">?</span></label>
-                                        </div>
-                                    </div>
+                        </div>
+                        
+                        <div class="expandable-section">
+                            <div class="expandable-header">
+                                Industry-Specific Settings <span class="help-icon" data-help-topic="industry-settings">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div class="form-group">
+                                    <label for="industry-type">Industry Vertical <span class="help-icon" data-help-topic="industry-type">?</span></label>
+                                    <select id="industry-type" class="form-control">
+                                        <option value="enterprise">Enterprise (General Business)</option>
+                                        <option value="healthcare">Healthcare</option>
+                                        <option value="education">Education</option>
+                                        <option value="finance">Financial Services</option>
+                                        <option value="government">Government</option>
+                                        <option value="retail">Retail</option>
+                                        <option value="manufacturing">Manufacturing</option>
+                                    </select>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Custom Parameters <span class="help-icon" data-help-topic="custom-params">?</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div class="form-group">
-                                        <label for="custom-params">Custom Configuration Parameters <span class="help-icon" data-help-topic="custom-params-info">?</span></label>
-                                        <textarea id="custom-params" class="form-control" rows="5" placeholder="Enter custom configuration parameters..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <button class="btn prev-step" data-prev="network">Previous: Network</button>
-                                <button class="btn next-step" data-next="preview">Next: Preview</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn prev-step" data-prev="network">Previous: Network</button>
+                            <button class="btn next-step" data-next="preview">Next: Preview</button>
                         </div>
                     </div>
                     
-                    <!-- Preview tab -->
-                    <div class="tab-pane" id="preview">
-                        <div class="card-body">
-                            <h3>Step 6: Configuration Preview</h3>
-                            
-                            <div class="action-buttons">
-                                <button class="btn" id="generate-config">Generate Configuration</button>
-                                <button class="btn" id="copy-config">Copy to Clipboard</button>
-                                <button class="btn" id="download-config">Download</button>
-                                <button class="btn" id="analyze-config">Analyze</button>
-                                <button class="btn" id="optimize-config">AI Optimize</button>
+                    <div id="preview" class="tab-pane">
+                        <h3>Step 6: Configuration Preview</h3>
+                        
+                        <div class="action-buttons">
+                            <button class="btn" id="generate-config">Generate Configuration</button>
+                            <button class="btn" id="copy-config">Copy to Clipboard</button>
+                            <button class="btn" id="download-config">Download</button>
+                            <button class="btn" id="analyze-config">Analyze</button>
+                        </div>
+                        
+                        <div class="expandable-section open">
+                            <div class="expandable-header active">
+                                Configuration Output <span class="help-icon" data-help-topic="config-output">?</span>
                             </div>
-                            
-                            <div class="expandable-section open">
-                                <div class="expandable-header active">
-                                    Configuration Output <span class="help-icon" data-help-topic="config-output">?</span>
-                                </div>
-                                <div class="expandable-content expanded">
-                                    <pre id="config-output" class="code-block">
+                            <div class="expandable-content" style="display: block;">
+                                <pre id="config-output" class="code-block">
 # No configuration generated yet.
 # Click "Generate Configuration" to create a configuration based on your settings.
-                                    </pre>
+                                </pre>
+                            </div>
+                        </div>
+                        
+                        <div id="config-analysis-section" class="expandable-section">
+                            <div class="expandable-header">
+                                Configuration Analysis <span class="help-icon" data-help-topic="config-analysis">?</span>
+                            </div>
+                            <div class="expandable-content">
+                                <div id="config-analysis">
+                                    <p>No analysis available yet. Click "Analyze" to perform a configuration analysis.</p>
                                 </div>
                             </div>
-                            
-                            <div class="expandable-section">
-                                <div class="expandable-header">
-                                    Configuration Analysis <span class="help-icon" data-help-topic="config-analysis">?</span>
-                                </div>
-                                <div class="expandable-content">
-                                    <div id="config-analysis">
-                                        <p>No analysis available yet. Click "Analyze" to perform a configuration analysis.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <button class="btn prev-step" data-prev="advanced">Previous: Advanced</button>
-                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn prev-step" data-prev="advanced">Previous: Advanced</button>
                         </div>
                     </div>
                 </div>
@@ -559,15 +431,8 @@
         </div>
     </footer>
     
-    <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script src="js/vendors.js"></script>
-    <script src="js/help.js"></script>
     <script src="js/ui.js"></script>
-    <script src="js/config-generator.js"></script>
-    <script src="js/ai-assistant.js"></script>
-    <script src="js/document-generator.js"></script>
-    <script src="js/diagrams.js"></script>
-    <script src="js/questionnaire.js"></script>
+    <script src="js/vendors.js"></script>
 </body>
 </html>

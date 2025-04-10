@@ -1,412 +1,532 @@
 /**
  * Dot1Xer Supreme Enterprise Edition - Main JavaScript
  * Version 4.0.0
- * 
- * This file contains the core functionality for the Dot1Xer Supreme application
  */
 
-// When the DOM is loaded, initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing Dot1Xer Supreme Enterprise Edition v4.0.0');
+// Global object for application
+const Dot1Xer = {
+    // Current settings
+    settings: {
+        vendor: '',
+        platform: '',
+        authMethod: 'dot1x',
+        hostMode: 'multi-auth',
+        radiusServer1: '',
+        radiusSecret1: '',
+        radiusServer2: '',
+        radiusSecret2: '',
+        authVlan: '',
+        unauthVlan: '',
+        guestVlan: '',
+        voiceVlan: '',
+        criticalVlan: '',
+        reauthPeriod: 3600,
+        txPeriod: 30,
+        quietPeriod: 60,
+        maxReauth: 2,
+        interface: '',
+        interfaceRange: '',
+        deploymentMode: 'monitor'
+    },
     
-    // Initialize UI components
-    initTabs();
-    initExpandableSections();
-    initHelpIcons();
-    initStepNavigation();
-    initVendorGrid();
-    
-    // Set up event listeners for the configurator
-    document.getElementById('generate-config').addEventListener('click', generateConfiguration);
-    document.getElementById('copy-config').addEventListener('click', copyConfiguration);
-    document.getElementById('download-config').addEventListener('click', downloadConfiguration);
-    document.getElementById('analyze-config').addEventListener('click', analyzeConfiguration);
-    document.getElementById('optimize-config').addEventListener('click', optimizeConfiguration);
-    
-    // Set up event listeners for form interactions
-    setupFormInteractions();
-    
-    console.log('Initialization complete');
-});
-
-// Initialize tabs
-function initTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Get target tab pane
-            const target = tab.getAttribute('data-tab');
-            
-            // Deactivate all tabs and panes
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-            
-            // Activate selected tab and pane
-            tab.classList.add('active');
-            document.getElementById(target).classList.add('active');
-        });
-    });
-}
-
-// Initialize expandable sections
-function initExpandableSections() {
-    const headers = document.querySelectorAll('.expandable-header');
-    headers.forEach(header => {
-        header.addEventListener('click', () => {
-            // Toggle active class on header
-            header.classList.toggle('active');
-            
-            // Toggle expanded class on content
-            const content = header.nextElementSibling;
-            if (content.classList.contains('expandable-content')) {
-                content.classList.toggle('expanded');
-            }
-        });
-    });
-}
-
-// Initialize help icons
-function initHelpIcons() {
-    const helpIcons = document.querySelectorAll('.help-icon');
-    helpIcons.forEach(icon => {
-        icon.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent triggering expandable section
-            
-            // Get help topic
-            const topic = icon.getAttribute('data-help-topic');
-            showHelpTopic(topic);
-        });
-    });
-}
-
-// Show help topic
-function showHelpTopic(topic) {
-    console.log('Showing help for:', topic);
-    alert('Help information for: ' + topic + '\n\nThis would display detailed help in a proper implementation.');
-}
-
-// Initialize step navigation
-function initStepNavigation() {
-    // Next step buttons
-    const nextButtons = document.querySelectorAll('.next-step');
-    nextButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const nextTab = button.getAttribute('data-next');
-            document.querySelector(`.tab[data-tab="${nextTab}"]`).click();
-        });
-    });
-    
-    // Previous step buttons
-    const prevButtons = document.querySelectorAll('.prev-step');
-    prevButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const prevTab = button.getAttribute('data-prev');
-            document.querySelector(`.tab[data-tab="${prevTab}"]`).click();
-        });
-    });
-}
-
-// Initialize vendor grid
-function initVendorGrid() {
-    // Vendor selection would be populated with actual vendor logos
-    const vendorGrid = document.getElementById('vendor-grid');
-    if (!vendorGrid) return;
-    
-    // List of supported vendors
-    const vendors = [
-        'cisco', 'aruba', 'juniper', 'extreme', 'hp', 'fortinet', 
-        'dell', 'huawei', 'ruckus', 'paloalto', 'checkpoint', 'alcatel'
-    ];
-    
-    // Create vendor logo elements
-    vendors.forEach(vendor => {
-        const container = document.createElement('div');
-        container.className = 'vendor-logo-container';
-        container.setAttribute('data-vendor', vendor);
+    // Initialize application
+    init: function() {
+        console.log('Initializing Dot1Xer Supreme v4.0.0...');
         
-        const img = document.createElement('img');
-        img.className = 'vendor-logo';
-        img.src = `assets/logos/${vendor}-logo.svg`;
-        img.alt = `${vendor.charAt(0).toUpperCase() + vendor.slice(1)} Logo`;
-        img.onerror = function() {
-            // Fallback if logo not found
-            this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='50'%3E%3Crect width='100' height='50' fill='%23f0f0f0' rx='5'/%3E%3Ctext x='50' y='25' font-family='Arial' font-size='16' text-anchor='middle' dominant-baseline='middle' fill='%23333333'%3E${vendor.toUpperCase()}%3C/text%3E%3C/svg%3E`;
-        };
+        // Initialize UI components
+        this.initTabs();
+        this.initExpandableSections();
+        this.initVendorGrid();
+        this.initFormHandlers();
+        this.initButtons();
+        this.initHelpTooltips();
         
-        container.appendChild(img);
-        vendorGrid.appendChild(container);
+        console.log('Initialization complete');
+    },
+    
+    // Initialize tabs
+    initTabs: function() {
+        const tabs = document.querySelectorAll('.tab');
         
-        // Add click event handler
-        container.addEventListener('click', () => {
-            // Remove selected class from all vendors
-            document.querySelectorAll('.vendor-logo-container').forEach(el => {
-                el.classList.remove('selected');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Get tab content ID
+                const tabContent = tab.textContent.trim().toLowerCase();
+                
+                // Hide all tab panes
+                document.querySelectorAll('.tab-pane').forEach(pane => {
+                    pane.style.display = 'none';
+                });
+                
+                // Show selected tab pane
+                const tabPane = document.getElementById(tabContent);
+                if (tabPane) {
+                    tabPane.style.display = 'block';
+                }
+            });
+        });
+        
+        // Activate first tab by default
+        if (tabs.length > 0 && !document.querySelector('.tab.active')) {
+            tabs[0].click();
+        }
+    },
+    
+    // Initialize expandable sections
+    initExpandableSections: function() {
+        const headers = document.querySelectorAll('.expandable-header');
+        
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                // Toggle active class
+                header.classList.toggle('active');
+                
+                // Toggle content visibility
+                const content = header.nextElementSibling;
+                if (content && content.classList.contains('expandable-content')) {
+                    if (content.style.display === 'block') {
+                        content.style.display = 'none';
+                    } else {
+                        content.style.display = 'block';
+                    }
+                }
+            });
+        });
+        
+        // Open the first expandable section by default
+        if (headers.length > 0) {
+            headers[0].click();
+        }
+    },
+    
+    // Initialize vendor grid
+    initVendorGrid: function() {
+        const vendors = [
+            'cisco', 'aruba', 'juniper', 'fortinet', 'extreme', 
+            'hp', 'dell', 'huawei', 'ruckus', 'paloalto', 'checkpoint'
+        ];
+        
+        const vendorSection = document.querySelector('#vendor-selection .expandable-content');
+        if (!vendorSection) return;
+        
+        // Create vendor grid
+        const grid = document.createElement('div');
+        grid.className = 'vendor-grid';
+        
+        // Add vendor options
+        vendors.forEach(vendor => {
+            const vendorItem = document.createElement('div');
+            vendorItem.className = 'vendor-logo-container';
+            vendorItem.setAttribute('data-vendor', vendor);
+            
+            // Add vendor logo or text
+            const logo = document.createElement('img');
+            logo.src = `assets/logos/${vendor}-logo.svg`;
+            logo.alt = vendor.toUpperCase();
+            logo.className = 'vendor-logo';
+            logo.onerror = function() {
+                this.onerror = null;
+                this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23f0f0f0' rx='4'/%3E%3Ctext x='60' y='30' font-family='Arial' font-size='16' text-anchor='middle' dominant-baseline='middle' fill='%23333333'%3E${vendor.toUpperCase()}%3C/text%3E%3C/svg%3E`;
+            };
+            
+            vendorItem.appendChild(logo);
+            
+            // Add click handler
+            vendorItem.addEventListener('click', () => {
+                // Remove selected class from all vendors
+                document.querySelectorAll('.vendor-logo-container').forEach(v => {
+                    v.classList.remove('selected');
+                });
+                
+                // Add selected class to clicked vendor
+                vendorItem.classList.add('selected');
+                
+                // Update selected vendor
+                Dot1Xer.settings.vendor = vendor;
+                
+                // Update platform options
+                Dot1Xer.updatePlatformOptions(vendor);
             });
             
-            // Add selected class to clicked vendor
-            container.classList.add('selected');
-            
-            // Update platform options
-            updatePlatformOptions(vendor);
+            grid.appendChild(vendorItem);
         });
-    });
-}
-
-// Update platform options based on vendor selection
-function updatePlatformOptions(vendor) {
-    const platformSelect = document.getElementById('platform-select');
-    if (!platformSelect) return;
+        
+        // Add grid to vendor section
+        vendorSection.innerHTML = '';
+        vendorSection.appendChild(grid);
+    },
     
-    // Clear existing options
-    platformSelect.innerHTML = '';
+    // Update platform options based on selected vendor
+    updatePlatformOptions: function(vendor) {
+        const platformSelect = document.getElementById('platform-select');
+        if (!platformSelect) return;
+        
+        // Clear existing options
+        platformSelect.innerHTML = '';
+        
+        // Define platform options for each vendor
+        const platforms = {};
+        platforms.cisco = [
+            {value: 'ios', text: 'IOS'},
+            {value: 'ios-xe', text: 'IOS-XE'},
+            {value: 'nx-os', text: 'NX-OS'},
+            {value: 'wlc-9800', text: 'WLC 9800 Series'}
+        ];
+        platforms.aruba = [
+            {value: 'aos-cx', text: 'AOS-CX'},
+            {value: 'aos-switch', text: 'AOS-Switch (ProVision)'}
+        ];
+        platforms.juniper = [
+            {value: 'junos', text: 'JunOS'},
+            {value: 'mist', text: 'Mist Cloud'}
+        ];
+        platforms.extreme = [
+            {value: 'exos', text: 'EXOS'},
+            {value: 'voss', text: 'VOSS'}
+        ];
+        platforms.hp = [
+            {value: 'procurve', text: 'ProCurve'},
+            {value: 'comware', text: 'Comware'}
+        ];
+        platforms.fortinet = [
+            {value: 'fortiswitch', text: 'FortiSwitch'},
+            {value: 'fortigate', text: 'FortiGate'}
+        ];
+        platforms.dell = [
+            {value: 'os10', text: 'OS10'},
+            {value: 'os9', text: 'OS9'}
+        ];
+        platforms.huawei = [
+            {value: 'vrp', text: 'VRP'},
+            {value: 's-series', text: 'S-Series'}
+        ];
+        platforms.ruckus = [
+            {value: 'icx', text: 'ICX'},
+            {value: 'fastiron', text: 'FastIron'}
+        ];
+        
+        // Default platforms for other vendors
+        const defaultPlatforms = [
+            {value: 'default', text: 'Default Platform'}
+        ];
+        
+        // Get platforms for selected vendor or use default
+        const vendorPlatforms = platforms[vendor] || defaultPlatforms;
+        
+        // Add platform options
+        vendorPlatforms.forEach(platform => {
+            const option = document.createElement('option');
+            option.value = platform.value;
+            option.textContent = platform.text;
+            platformSelect.appendChild(option);
+        });
+        
+        // Update selected platform
+        if (vendorPlatforms.length > 0) {
+            Dot1Xer.settings.platform = vendorPlatforms[0].value;
+        }
+        
+        // Display platform details section
+        const platformDetails = document.querySelector('#platform-details');
+        if (platformDetails) {
+            platformDetails.style.display = 'block';
+        }
+    },
     
-    // Define platform options for each vendor
-    const platforms = {};
-    platforms.cisco = [
-        {value: 'ios', text: 'IOS'},
-        {value: 'ios-xe', text: 'IOS-XE'},
-        {value: 'nx-os', text: 'NX-OS'},
-        {value: 'wlc-9800', text: 'WLC 9800 Series'}
-    ];
-    platforms.aruba = [
-        {value: 'aos-cx', text: 'AOS-CX'},
-        {value: 'aos-switch', text: 'AOS-Switch (ProVision)'}
-    ];
-    platforms.juniper = [
-        {value: 'junos', text: 'JunOS'},
-        {value: 'mist', text: 'Mist Cloud'}
-    ];
-    platforms.extreme = [
-        {value: 'exos', text: 'EXOS'},
-        {value: 'voss', text: 'VOSS'}
-    ];
-    platforms.hp = [
-        {value: 'procurve', text: 'ProCurve'},
-        {value: 'comware', text: 'Comware'}
-    ];
-    platforms.fortinet = [
-        {value: 'fortiswitch', text: 'FortiSwitch'},
-        {value: 'fortigate', text: 'FortiGate'}
-    ];
-    platforms.dell = [
-        {value: 'os10', text: 'OS10'},
-        {value: 'os9', text: 'OS9'}
-    ];
-    platforms.huawei = [
-        {value: 'vrp', text: 'VRP'},
-        {value: 's-series', text: 'S-Series'}
-    ];
-    platforms.ruckus = [
-        {value: 'icx', text: 'ICX'},
-        {value: 'fastiron', text: 'FastIron'}
-    ];
-    
-    // Default platforms for other vendors
-    const defaultPlatforms = [
-        {value: 'default', text: 'Default Platform'}
-    ];
-    
-    // Get platforms for selected vendor or use default
-    const vendorPlatforms = platforms[vendor] || defaultPlatforms;
-    
-    // Add platform options
-    vendorPlatforms.forEach(platform => {
-        const option = document.createElement('option');
-        option.value = platform.value;
-        option.textContent = platform.text;
-        platformSelect.appendChild(option);
-    });
-}
-
-// Setup form interactions
-function setupFormInteractions() {
-    // Toggle TACACS+ options visibility based on management authentication selection
-    const tacacsRadio = document.getElementById('mgmt-tacacs');
-    if (tacacsRadio) {
-        tacacsRadio.addEventListener('change', function() {
-            const tacacsOptions = document.querySelector('.tacacs-options');
-            if (tacacsOptions) {
-                tacacsOptions.style.display = this.checked ? 'block' : 'none';
+    // Initialize form handlers
+    initFormHandlers: function() {
+        // Handle form input changes
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.id) {
+                input.addEventListener('change', () => {
+                    // Convert kebab-case to camelCase
+                    const key = input.id.replace(/-([a-z])/g, g => g[1].toUpperCase());
+                    
+                    // Get input value
+                    let value = input.value;
+                    if (input.type === 'checkbox') {
+                        value = input.checked;
+                    } else if (input.type === 'number') {
+                        value = parseInt(value, 10);
+                    }
+                    
+                    // Update settings
+                    if (Dot1Xer.settings.hasOwnProperty(key)) {
+                        Dot1Xer.settings[key] = value;
+                        console.log(`Updated ${key}: ${value}`);
+                    }
+                });
             }
         });
-    }
-}
-
-// Generate configuration based on user inputs
-function generateConfiguration() {
-    console.log('Generating configuration...');
-    
-    // Get selected vendor and platform
-    const vendorElement = document.querySelector('.vendor-logo-container.selected');
-    if (!vendorElement) {
-        alert('Please select a vendor first');
-        return;
-    }
-    
-    const vendor = vendorElement.getAttribute('data-vendor');
-    const platform = document.getElementById('platform-select').value;
-    
-    // Collect form values
-    const formData = collectFormData();
-    
-    // Get output element
-    const outputElement = document.getElementById('config-output');
-    
-    // Generate configuration based on vendor and platform
-    let config = '';
-    try {
-        config = generateVendorConfig(vendor, platform, formData);
-        outputElement.textContent = config;
-    } catch (error) {
-        console.error('Error generating configuration:', error);
-        outputElement.textContent = `Error generating configuration: ${error.message}`;
-    }
-}
-
-// Collect form data from all inputs
-function collectFormData() {
-    const formData = {};
-    
-    // Process text inputs and selects
-    document.querySelectorAll('input[type="text"], input[type="password"], input[type="number"], select, textarea').forEach(el => {
-        if (el.id) {
-            formData[el.id] = el.value;
+        
+        // Handle platform select
+        const platformSelect = document.getElementById('platform-select');
+        if (platformSelect) {
+            platformSelect.addEventListener('change', () => {
+                Dot1Xer.settings.platform = platformSelect.value;
+                console.log(`Selected platform: ${platformSelect.value}`);
+            });
         }
-    });
+    },
     
-    // Process checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-        if (el.id) {
-            formData[el.id] = el.checked;
+    // Initialize buttons
+    initButtons: function() {
+        // Next/Previous step buttons
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentTab = document.querySelector('.tab.active');
+                const tabs = Array.from(document.querySelectorAll('.tab'));
+                const currentIndex = tabs.indexOf(currentTab);
+                
+                if (currentIndex < tabs.length - 1) {
+                    tabs[currentIndex + 1].click();
+                }
+            });
+        });
+        
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', () => {
+                const currentTab = document.querySelector('.tab.active');
+                const tabs = Array.from(document.querySelectorAll('.tab'));
+                const currentIndex = tabs.indexOf(currentTab);
+                
+                if (currentIndex > 0) {
+                    tabs[currentIndex - 1].click();
+                }
+            });
+        });
+        
+        // Generate configuration button
+        const generateBtn = document.getElementById('generate-config');
+        if (generateBtn) {
+            generateBtn.addEventListener('click', () => {
+                Dot1Xer.generateConfiguration();
+            });
         }
-    });
-    
-    // Process radio buttons
-    document.querySelectorAll('input[type="radio"]:checked').forEach(el => {
-        if (el.name) {
-            formData[el.name] = el.value;
+        
+        // Copy configuration button
+        const copyBtn = document.getElementById('copy-config');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                Dot1Xer.copyConfiguration();
+            });
         }
-    });
+        
+        // Download configuration button
+        const downloadBtn = document.getElementById('download-config');
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => {
+                Dot1Xer.downloadConfiguration();
+            });
+        }
+        
+        // Analyze configuration button
+        const analyzeBtn = document.getElementById('analyze-config');
+        if (analyzeBtn) {
+            analyzeBtn.addEventListener('click', () => {
+                Dot1Xer.analyzeConfiguration();
+            });
+        }
+    },
     
-    return formData;
-}
-
-// Generate vendor-specific configuration
-function generateVendorConfig(vendor, platform, formData) {
-    console.log(`Generating configuration for ${vendor} ${platform}`);
+    // Initialize help tooltips
+    initHelpTooltips: function() {
+        document.querySelectorAll('.help-icon').forEach(icon => {
+            icon.addEventListener('click', event => {
+                event.stopPropagation(); // Prevent expandable section toggle
+                
+                const topic = icon.getAttribute('data-help-topic');
+                alert(`Help for: ${topic}\n\nThis would display detailed help information for the selected topic.`);
+            });
+        });
+    },
     
-    // For a real implementation, this would load vendor-specific templates
-    // and fill in the values from formData
+    // Generate configuration
+    generateConfiguration: function() {
+        console.log('Generating configuration with settings:', this.settings);
+        
+        // Get output element
+        const outputEl = document.getElementById('config-output');
+        if (!outputEl) return;
+        
+        // Check if vendor and platform are selected
+        if (!this.settings.vendor) {
+            outputEl.textContent = "Please select a vendor first.";
+            return;
+        }
+        
+        if (!this.settings.platform) {
+            outputEl.textContent = "Please select a platform.";
+            return;
+        }
+        
+        // Generate configuration based on vendor and platform
+        let config = this.generateVendorConfig();
+        
+        // Display configuration
+        outputEl.textContent = config;
+    },
     
-    // Simple placeholder implementation
-    return `
-! ${vendor.toUpperCase()} ${platform.toUpperCase()} 802.1X Configuration
+    // Generate vendor-specific configuration
+    generateVendorConfig: function() {
+        const vendor = this.settings.vendor;
+        const platform = this.settings.platform;
+        
+        // This is a simplified template - in a real implementation,
+        // this would load vendor-specific templates from the server
+        return `! ${vendor.toUpperCase()} ${platform.toUpperCase()} 802.1X Configuration
 ! Generated by Dot1Xer Supreme Enterprise Edition v4.0.0
 ! ${new Date().toISOString()}
-!
-! This is a placeholder configuration. In a real implementation,
-! this would contain a complete, vendor-specific configuration.
-!
-! Authentication Method: ${formData['auth-method']}
-! Host Mode: ${formData['host-mode']}
-! RADIUS Server: ${formData['radius-server1']}
-! VLANs: Auth=${formData['vlan-auth']}, Unauth=${formData['vlan-unauth']}
-!
-! See vendor-specific templates for complete configuration.
-    `;
-}
 
-// Copy configuration to clipboard
-function copyConfiguration() {
-    const output = document.getElementById('config-output');
-    if (!output.textContent.trim()) {
-        alert('No configuration to copy. Generate a configuration first.');
-        return;
-    }
-    
-    // Create a temporary textarea to copy from
-    const textarea = document.createElement('textarea');
-    textarea.value = output.textContent;
-    document.body.appendChild(textarea);
-    textarea.select();
-    
-    try {
-        document.execCommand('copy');
-        alert('Configuration copied to clipboard!');
-    } catch (err) {
-        console.error('Failed to copy text: ', err);
-        alert('Failed to copy configuration');
-    }
-    
-    document.body.removeChild(textarea);
-}
+! RADIUS Server Configuration
+${vendor === 'cisco' && (platform === 'ios' || platform === 'ios-xe') ? 
+`radius server ${this.settings.radiusServer1 || 'PRIMARY'}
+ address ipv4 ${this.settings.radiusServer1 || '10.1.1.1'} auth-port 1812 acct-port 1813
+ key ${this.settings.radiusSecret1 || 'radiuskey1'}
 
-// Download configuration as a file
-function downloadConfiguration() {
-    const output = document.getElementById('config-output');
-    if (!output.textContent.trim()) {
-        alert('No configuration to download. Generate a configuration first.');
-        return;
-    }
-    
-    // Get selected vendor and platform
-    const vendorElement = document.querySelector('.vendor-logo-container.selected');
-    const vendor = vendorElement ? vendorElement.getAttribute('data-vendor') : 'generic';
-    const platform = document.getElementById('platform-select').value || 'default';
-    
-    // Create filename
-    const filename = `${vendor}-${platform}-dot1x-config.txt`;
-    
-    // Create download link
-    const link = document.createElement('a');
-    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(output.textContent));
-    link.setAttribute('download', filename);
-    link.style.display = 'none';
-    
-    // Add to document, click, and remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
+${this.settings.radiusServer2 ? 
+`radius server ${this.settings.radiusServer2 || 'SECONDARY'}
+ address ipv4 ${this.settings.radiusServer2 || '10.1.1.2'} auth-port 1812 acct-port 1813
+ key ${this.settings.radiusSecret2 || 'radiuskey2'}
+` : ''}` : '# RADIUS server configuration would be here'}
 
-// Analyze configuration for potential issues
-function analyzeConfiguration() {
-    const output = document.getElementById('config-output');
-    if (!output.textContent.trim()) {
-        alert('No configuration to analyze. Generate a configuration first.');
-        return;
-    }
-    
-    // Get analysis element
-    const analysisElement = document.getElementById('config-analysis');
-    
-    // Perform analysis
-    const analysisResults = [
-        { type: 'success', message: 'RADIUS server configuration is valid' },
-        { type: 'info', message: 'Consider adding a secondary RADIUS server for redundancy' },
-        { type: 'warning', message: 'Authentication mode is set to "open" which is less secure but good for initial deployments' },
-        { type: 'danger', message: 'No VLAN configuration specified for authenticated devices' }
-    ];
-    
-    // Display analysis results
-    analysisElement.innerHTML = '';
-    analysisResults.forEach(result => {
-        const item = document.createElement('div');
-        item.className = `alert alert-${result.type}`;
-        item.textContent = result.message;
-        analysisElement.appendChild(item);
-    });
-    
-    // Show analysis section
-    const analysisHeader = document.querySelector('.expandable-header:nth-of-type(2)');
-    const analysisContent = document.querySelector('.expandable-content:nth-of-type(2)');
-    
-    if (analysisHeader && !analysisHeader.classList.contains('active')) {
-        analysisHeader.click();
-    }
-}
+! Authentication Method: ${this.settings.authMethod}
+! Host Mode: ${this.settings.hostMode}
+! Authentication VLAN: ${this.settings.authVlan || 'Not configured'}
+! Unauthenticated VLAN: ${this.settings.unauthVlan || 'Not configured'}
+${this.settings.guestVlan ? `! Guest VLAN: ${this.settings.guestVlan}` : ''}
+${this.settings.voiceVlan ? `! Voice VLAN: ${this.settings.voiceVlan}` : ''}
 
-// Use AI to optimize configuration
-function optimizeConfiguration() {
-    alert('This feature would use AI to optimize your configuration based on industry best practices. In a complete implementation, it would connect to an AI service.');
-}
+! Note: This is a placeholder configuration.
+! A full implementation would generate complete vendor-specific syntax.
+
+! Authentication parameters:
+! Reauthentication period: ${this.settings.reauthPeriod} seconds
+! Transmit period: ${this.settings.txPeriod} seconds
+! Quiet period: ${this.settings.quietPeriod} seconds
+! Maximum retries: ${this.settings.maxReauth}
+
+! Interface configuration would be added here
+${this.settings.interface ? `! Interface: ${this.settings.interface}` : ''}
+${this.settings.interfaceRange ? `! Interface range: ${this.settings.interfaceRange}` : ''}
+
+! Deployment mode: ${this.settings.deploymentMode}
+`;
+    },
+    
+    // Copy configuration to clipboard
+    copyConfiguration: function() {
+        const outputEl = document.getElementById('config-output');
+        if (!outputEl || !outputEl.textContent.trim()) {
+            alert('No configuration to copy. Generate configuration first.');
+            return;
+        }
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(outputEl.textContent)
+            .then(() => {
+                alert('Configuration copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy configuration. Please try again.');
+            });
+    },
+    
+    // Download configuration as text file
+    downloadConfiguration: function() {
+        const outputEl = document.getElementById('config-output');
+        if (!outputEl || !outputEl.textContent.trim()) {
+            alert('No configuration to download. Generate configuration first.');
+            return;
+        }
+        
+        // Create filename
+        const vendor = this.settings.vendor || 'generic';
+        const platform = this.settings.platform || 'default';
+        const filename = `${vendor}-${platform}-dot1x-config.txt`;
+        
+        // Create download link
+        const blob = new Blob([outputEl.textContent], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        
+        // Trigger download
+        document.body.appendChild(a);
+        a.click();
+        
+        // Clean up
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+    },
+    
+    // Analyze configuration
+    analyzeConfiguration: function() {
+        const outputEl = document.getElementById('config-output');
+        if (!outputEl || !outputEl.textContent.trim()) {
+            alert('No configuration to analyze. Generate configuration first.');
+            return;
+        }
+        
+        // Get analysis element
+        const analysisEl = document.getElementById('config-analysis');
+        if (!analysisEl) return;
+        
+        // Clear previous analysis
+        analysisEl.innerHTML = '';
+        
+        // Add analysis items
+        const addAnalysisItem = (type, message) => {
+            const item = document.createElement('div');
+            item.className = `alert alert-${type}`;
+            item.textContent = message;
+            analysisEl.appendChild(item);
+        };
+        
+        // Perform simple analysis
+        if (!this.settings.radiusServer1) {
+            addAnalysisItem('danger', 'No primary RADIUS server configured');
+        } else {
+            addAnalysisItem('success', 'Primary RADIUS server is configured');
+        }
+        
+        if (!this.settings.radiusServer2) {
+            addAnalysisItem('warning', 'No secondary RADIUS server configured for redundancy');
+        } else {
+            addAnalysisItem('success', 'Secondary RADIUS server is configured for redundancy');
+        }
+        
+        if (!this.settings.authVlan) {
+            addAnalysisItem('warning', 'No authentication VLAN configured');
+        }
+        
+        if (!this.settings.unauthVlan) {
+            addAnalysisItem('warning', 'No unauthenticated VLAN configured');
+        }
+        
+        if (this.settings.authMethod === 'dot1x-mab' && this.settings.hostMode === 'single-host') {
+            addAnalysisItem('warning', 'Using MAB with single-host mode may cause disconnects when multiple devices are present');
+        }
+        
+        // Make analysis section visible
+        const analysisHeader = document.querySelector('#config-analysis-section .expandable-header');
+        if (analysisHeader && !analysisHeader.classList.contains('active')) {
+            analysisHeader.click();
+        }
+    }
+};
+
+// Initialize application when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    Dot1Xer.init();
+});
