@@ -1,0 +1,32 @@
+! Cisco IOS RadSec Configuration (RADIUS over DTLS)
+! Based on best practices from wiresandwi.fi and Cisco documentation
+!
+! Prerequisites:
+! 1. Certificate needs to be installed on the switch
+! 2. RADIUS server needs to be configured for RadSec
+!
+! RadSec Server Configuration
+radius server {{RADSEC_SERVER_NAME}}
+ address ipv4 {{RADSEC_SERVER_IP}}
+ automate-tester username {{RADIUS_TEST_USER}} probe-on
+ key radius/dtls
+ dtls connectiontimeout 10
+ dtls idletimeout 75
+ dtls retries 15
+ dtls ip radius source-interface {{MANAGEMENT_INTERFACE}}
+ dtls match-server-identity hostname {{RADSEC_SERVER_HOSTNAME}}
+ dtls port 2083
+ dtls trustpoint client {{DEVICE_CERT_TRUSTPOINT}}
+ dtls trustpoint server {{SERVER_CERT_TRUSTPOINT}}
+
+! RADIUS Server Group with RadSec
+aaa group server radius {{RADSEC_GROUP}}
+ server name {{RADSEC_SERVER_NAME}}
+ deadtime 15
+
+! Change of Authorization (CoA) for RadSec
+aaa server radius dynamic-author
+ client {{RADSEC_SERVER_IP}} dtls client-tp {{DEVICE_CERT_TRUSTPOINT}} server-tp {{SERVER_CERT_TRUSTPOINT}}
+ dtls ip radius source-interface {{MANAGEMENT_INTERFACE}}
+ dtls port 2083
+ auth-type any
