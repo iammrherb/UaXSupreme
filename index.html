@@ -7,14 +7,11 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/vendors.css">
     <link rel="stylesheet" href="css/help.css">
-<<<<<<< HEAD
-=======
     <!-- External libraries -->
     <script src="lib/jspdf.min.js"></script>
     <script src="lib/html2canvas.min.js"></script>
     <script src="lib/FileSaver.min.js"></script>
     <script src="lib/ai-integration.js"></script>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 </head>
 <body>
     <header>
@@ -28,10 +25,7 @@
                     <li><a href="#" id="questionnaire-link">Project Questionnaire</a></li>
                     <li><a href="#" id="checklist-link">Deployment Checklist</a></li>
                     <li><a href="#" id="help-link">Help</a></li>
-<<<<<<< HEAD
-=======
                     <li><a href="#" id="settings-link">Settings</a></li>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                     <li><a href="#" id="about-link">About</a></li>
                 </ul>
             </nav>
@@ -138,8 +132,6 @@
                             </div>
                             
                             <div class="form-group">
-<<<<<<< HEAD
-=======
                                 <label for="radius-port-1">Primary RADIUS Ports</label>
                                 <div class="input-group">
                                     <input type="number" id="radius-auth-port-1" class="form-control" placeholder="Auth Port" value="1812">
@@ -148,7 +140,6 @@
                             </div>
                             
                             <div class="form-group">
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                                 <label for="radius-secret-1">Primary RADIUS Secret</label>
                                 <input type="password" id="radius-secret-1" class="form-control" placeholder="Shared secret key">
                             </div>
@@ -159,11 +150,6 @@
                             </div>
                             
                             <div class="form-group">
-<<<<<<< HEAD
-                                <label for="radius-secret-2">Secondary RADIUS Secret</label>
-                                <input type="password" id="radius-secret-2" class="form-control" placeholder="Shared secret key">
-                            </div>
-=======
                                 <label for="radius-port-2">Secondary RADIUS Ports</label>
                                 <div class="input-group">
                                     <input type="number" id="radius-auth-port-2" class="form-control" placeholder="Auth Port" value="1812">
@@ -268,7 +254,6 @@
                                     <input type="password" id="tacacs-secret-2" class="form-control" placeholder="Shared secret key">
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="panel">
@@ -305,11 +290,7 @@
                         <h2>Security Settings</h2>
                         
                         <div class="panel">
-<<<<<<< HEAD
-                            <h3>Security Features</h3>
-=======
                             <h3>RADIUS Security Features</h3>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" id="use-coa" checked>
@@ -317,8 +298,6 @@
                                 </div>
                             </div>
                             
-<<<<<<< HEAD
-=======
                             <div id="coa-settings" class="nested-settings">
                                 <div class="form-group">
                                     <label for="coa-port">CoA Port</label>
@@ -342,7 +321,6 @@
                                 </div>
                             </div>
                             
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" id="enable-accounting" checked>
@@ -350,12 +328,6 @@
                                 </div>
                             </div>
                             
-<<<<<<< HEAD
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="use-macsec">
-                                    <label for="use-macsec">Enable MACsec (802.1AE)</label>
-=======
                             <div id="accounting-settings" class="nested-settings">
                                 <div class="form-group">
                                     <label for="accounting-update">Accounting Update Interval (minutes)</label>
@@ -367,7 +339,6 @@
                                         <input type="checkbox" id="accounting-interim" checked>
                                         <label for="accounting-interim">Send Interim Accounting Updates</label>
                                     </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                                 </div>
                             </div>
                             
@@ -377,8 +348,6 @@
                                     <label for="use-radsec">Enable RadSec (RADIUS over TLS)</label>
                                 </div>
                             </div>
-<<<<<<< HEAD
-=======
                             
                             <div id="radsec-settings" class="nested-settings" style="display: none;">
                                 <div class="form-group">
@@ -444,7 +413,6 @@
                                     <input type="number" id="macsec-replay-window" class="form-control" value="0">
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="panel">
@@ -456,8 +424,6 @@
                                 </div>
                             </div>
                             
-<<<<<<< HEAD
-=======
                             <div id="dhcp-snooping-settings" class="nested-settings">
                                 <div class="form-group">
                                     <label for="dhcp-rate-limit">DHCP Rate Limit (packets/sec)</label>
@@ -472,7 +438,6 @@
                                 </div>
                             </div>
                             
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" id="enable-dai">
@@ -480,8 +445,6 @@
                                 </div>
                             </div>
                             
-<<<<<<< HEAD
-=======
                             <div id="dai-settings" class="nested-settings" style="display: none;">
                                 <div class="form-group">
                                     <div class="checkbox">
@@ -505,15 +468,12 @@
                                 </div>
                             </div>
                             
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" id="enable-ipsg">
                                     <label for="enable-ipsg">Enable IP Source Guard</label>
                                 </div>
                             </div>
-<<<<<<< HEAD
-=======
                             
                             <div class="form-group">
                                 <div class="checkbox">
@@ -561,7 +521,6 @@
                                     </select>
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="actions">
@@ -578,36 +537,14 @@
                             <h3>VLAN Configuration</h3>
                             <div class="form-group">
                                 <label for="vlan-auth">Authentication VLAN ID</label>
-<<<<<<< HEAD
-                                <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
-=======
                                 <div class="input-group">
                                     <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
                                     <input type="text" id="vlan-auth-name" class="form-control" placeholder="VLAN Name (optional)">
                                 </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             </div>
                             
                             <div class="form-group">
                                 <label for="vlan-unauth">Unauthenticated VLAN ID</label>
-<<<<<<< HEAD
-                                <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-guest">Guest VLAN ID (Optional)</label>
-                                <input type="number" id="vlan-guest" class="form-control" placeholder="e.g., 900">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-voice">Voice VLAN ID (Optional)</label>
-                                <input type="number" id="vlan-voice" class="form-control" placeholder="e.g., 200">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-critical">Critical VLAN ID (Optional)</label>
-                                <input type="number" id="vlan-critical" class="form-control" placeholder="e.g., 998">
-=======
                                 <div class="input-group">
                                     <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
                                     <input type="text" id="vlan-unauth-name" class="form-control" placeholder="VLAN Name (optional)">
@@ -660,7 +597,6 @@
                                         <label for="enable-voice-vlan-detection">Enable Voice VLAN Detection (CDP/LLDP)</label>
                                     </div>
                                 </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                             </div>
                         </div>
                         
@@ -672,11 +608,7 @@
                             </div>
                             
                             <div class="form-group">
-<<<<<<< HEAD
-                                <label for="interface-range">Interface Range (Optional)</label>
-=======
                                 <label for="interface-range">Interface Range</label>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                                 <input type="text" id="interface-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
                             </div>
                             
@@ -684,8 +616,6 @@
                                 <label for="mgmt-interface">Management Interface</label>
                                 <input type="text" id="mgmt-interface" class="form-control" placeholder="e.g., Vlan10">
                             </div>
-<<<<<<< HEAD
-=======
                             
                             <div class="expandable-header">Interface Additional Settings</div>
                             <div class="expandable-content">
@@ -772,7 +702,6 @@
                                     </div>
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="actions">
@@ -807,8 +736,6 @@
                                     <label for="deploy-closed">Closed Mode (Full 802.1X Enforcement)</label>
                                 </div>
                             </div>
-<<<<<<< HEAD
-=======
                             
                             <div class="expandable-header">Deployment Timeline</div>
                             <div class="expandable-content">
@@ -827,7 +754,6 @@
                                     <input type="date" id="phase3-date" class="form-control">
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="panel">
@@ -844,8 +770,6 @@
                                     <option value="manufacturing">Manufacturing</option>
                                 </select>
                             </div>
-<<<<<<< HEAD
-=======
                             
                             <div class="form-group">
                                 <div class="checkbox">
@@ -903,7 +827,6 @@
                                     <label for="enable-aaa-logging">Enable AAA Logging</label>
                                 </div>
                             </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="actions">
@@ -922,10 +845,7 @@
                             <button id="download-config" class="btn">Download</button>
                             <button id="analyze-config" class="btn">Analyze</button>
                             <button id="optimize-config" class="btn">Optimize with AI</button>
-<<<<<<< HEAD
-=======
                             <button id="save-config" class="btn">Save Config</button>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
                         </div>
                         
                         <div class="panel">
@@ -991,8 +911,6 @@
         </div>
     </div>
     
-<<<<<<< HEAD
-=======
     <div id="checklist-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
@@ -1011,7 +929,6 @@
         </div>
     </div>
     
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
     <div id="export-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
@@ -1070,8 +987,6 @@
                         <label for="export-best-practices">Best Practices</label>
                     </div>
                 </div>
-<<<<<<< HEAD
-=======
                 
                 <div class="form-group">
                     <div class="checkbox">
@@ -1079,7 +994,6 @@
                         <label for="export-troubleshooting">Troubleshooting Guide</label>
                     </div>
                 </div>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
             </div>
             <div class="modal-footer">
                 <button id="export-cancel" class="btn">Cancel</button>
@@ -1088,8 +1002,6 @@
         </div>
     </div>
     
-<<<<<<< HEAD
-=======
     <div id="settings-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
@@ -1284,7 +1196,6 @@
         </div>
     </div>
     
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
     <!-- AI Assistant -->
     <div id="ai-assistant-button" class="ai-assistant-container">
         <div class="ai-icon">AI</div>
@@ -1335,11 +1246,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-<<<<<<< HEAD
-                <p>&copy; 2025 Dot1Xer Supreme Enterprise Edition. Version 4.0.0</p>
-=======
                 <p>&copy; 2025 Dot1Xer Supreme Enterprise Edition. Version 4.1.0</p>
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
             </div>
         </div>
     </footer>

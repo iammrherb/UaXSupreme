@@ -212,8 +212,6 @@ h3 {
   display: block;
 }
 
-<<<<<<< HEAD
-=======
 /* Settings Tabs */
 .settings-tabs {
   margin-bottom: 20px;
@@ -225,7 +223,6 @@ h3 {
   font-size: 14px;
 }
 
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 /* Form styles */
 .form-group {
   margin-bottom: 20px;
@@ -253,8 +250,6 @@ label {
   outline: none;
 }
 
-<<<<<<< HEAD
-=======
 .input-group {
   display: flex;
   gap: 10px;
@@ -274,7 +269,6 @@ label {
   color: var(--danger-color);
 }
 
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 /* Radio and checkbox styles */
 .radio-group {
   margin-top: 5px;
@@ -291,8 +285,6 @@ label {
   margin-right: 10px;
 }
 
-<<<<<<< HEAD
-=======
 /* Expandable sections */
 .expandable-header {
   background-color: #f1f1f1;
@@ -338,7 +330,6 @@ label {
   margin-bottom: 20px;
 }
 
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 /* Button styles */
 .btn {
   display: inline-block;
@@ -386,8 +377,6 @@ label {
   background-color: #5a6268;
 }
 
-<<<<<<< HEAD
-=======
 .btn.danger {
   background-color: var(--danger-color);
 }
@@ -396,7 +385,6 @@ label {
   background-color: #bd2130;
 }
 
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 /* Actions section */
 .actions {
   margin-top: 20px;
@@ -406,12 +394,9 @@ label {
 
 .action-bar {
   margin: 0 0 20px 0;
-<<<<<<< HEAD
-=======
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 }
 
 /* Code block */
@@ -762,8 +747,6 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-<<<<<<< HEAD
-=======
 /* Dark theme */
 body.dark-theme {
   --primary-color: #2c3e50;
@@ -807,7 +790,6 @@ body.dark-theme .ai-message.assistant {
   border-color: #555;
 }
 
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .tabs {
@@ -847,19 +829,12 @@ body.dark-theme .ai-message.assistant {
   
   nav ul {
     margin-top: 10px;
-<<<<<<< HEAD
-  }
-  
-  nav ul li {
-    margin-left: 10px;
-=======
     flex-wrap: wrap;
     justify-content: center;
   }
   
   nav ul li {
     margin: 5px 10px;
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
   }
   
   .ai-assistant-panel {
@@ -867,8 +842,6 @@ body.dark-theme .ai-message.assistant {
     right: 5%;
     left: 5%;
   }
-<<<<<<< HEAD
-=======
   
   .input-group {
     flex-direction: column;
@@ -912,5 +885,4 @@ body.dark-theme .ai-message.assistant {
   .diagram-display {
     page-break-inside: avoid;
   }
->>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
 }
