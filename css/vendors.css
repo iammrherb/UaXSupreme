@@ -35,75 +35,81 @@
   --vendor-accent: #ff9900;
 }
 
-/* Extreme Networks */
+/* Extreme */
 .extreme-theme {
-  --vendor-primary: #e41a2d;
-  --vendor-secondary: #292560;
-  --vendor-accent: #595959;
+  --vendor-primary: #00c340;
+  --vendor-secondary: #222222;
+  --vendor-accent: #8dc63f;
 }
 
 /* Dell */
 .dell-theme {
   --vendor-primary: #007db8;
-  --vendor-secondary: #00447c;
-  --vendor-accent: #444444;
+  --vendor-secondary: #444444;
+  --vendor-accent: #00447c;
 }
 
 /* Huawei */
 .huawei-theme {
-  --vendor-primary: #c7000b;
-  --vendor-secondary: #cf0a2c;
-  --vendor-accent: #000000;
-}
-
-/* Ubiquiti */
-.ubiquiti-theme {
-  --vendor-primary: #0559a0;
-  --vendor-secondary: #ffc107;
-  --vendor-accent: #ffffff;
-}
-
-/* Meraki */
-.meraki-theme {
-  --vendor-primary: #67c100;
-  --vendor-secondary: #8fc400;
-  --vendor-accent: #444444;
+  --vendor-primary: #e40521;
+  --vendor-secondary: #000000;
+  --vendor-accent: #a5a5a5;
 }
 
 /* Ruckus */
 .ruckus-theme {
-  --vendor-primary: #e4002b;
-  --vendor-secondary: #cf0a2c;
-  --vendor-accent: #000000;
+  --vendor-primary: #c41230;
+  --vendor-secondary: #a2aaad;
+  --vendor-accent: #535353;
 }
 
-/* Arista */
-.arista-theme {
-  --vendor-primary: #272f63;
-  --vendor-secondary: #63d5f0;
-  --vendor-accent: #e1261c;
+/* Ubiquiti */
+.ubiquiti-theme {
+  --vendor-primary: #0559c9;
+  --vendor-secondary: #2c323c;
+  --vendor-accent: #aaaaaa;
 }
 
-/* Vendor-specific themes can be applied to the whole app */
-.app-vendor-theme {
-  background-color: var(--vendor-primary-bg, #ffffff);
-  color: var(--vendor-primary-text, #333333);
+/* Meraki */
+.meraki-theme {
+  --vendor-primary: #78be20;
+  --vendor-secondary: #00a2df;
+  --vendor-accent: #383838;
 }
 
-.app-vendor-theme .btn-primary {
-  background-color: var(--vendor-primary, #0077cc);
-  border-color: var(--vendor-primary, #0077cc);
+/* Checkpoint */
+.checkpoint-theme {
+  --vendor-primary: #e66400;
+  --vendor-secondary: #ff9e18;
+  --vendor-accent: #2c2c2c;
 }
 
-.app-vendor-theme .btn-secondary {
-  background-color: var(--vendor-secondary, #6c757d);
-  border-color: var(--vendor-secondary, #6c757d);
+/* Palo Alto */
+.paloalto-theme {
+  --vendor-primary: #fa582d;
+  --vendor-secondary: #383838;
+  --vendor-accent: #01b1ea;
 }
 
-.app-vendor-theme .header {
-  background-color: var(--vendor-primary, #0077cc);
+/* Vendor-specific UI adjustments */
+[data-vendor-theme] .card {
+  border-top: 3px solid var(--vendor-primary);
 }
 
-.app-vendor-theme .footer {
-  background-color: var(--vendor-primary, #0077cc);
+[data-vendor-theme] .btn.primary {
+  background-color: var(--vendor-primary);
+}
+
+[data-vendor-theme] .btn.primary:hover {
+  background-color: var(--vendor-secondary);
+}
+
+[data-vendor-theme] .tab.active {
+  border-bottom-color: var(--vendor-primary);
+  color: var(--vendor-primary);
+}
+
+[data-vendor-theme] .form-control:focus {
+  border-color: var(--vendor-primary);
+  box-shadow: 0 0 0 3px rgba(var(--vendor-primary), 0.2);
 }

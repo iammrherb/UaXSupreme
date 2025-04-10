@@ -1,532 +1,332 @@
 /**
  * Dot1Xer Supreme Enterprise Edition - Main JavaScript
  * Version 4.0.0
+ * 
+ * This file handles core functionality including initialization,
+ * UI management, and application bootstrapping.
  */
 
-// Global object for application
+// Main application object
 const Dot1Xer = {
-    // Current settings
-    settings: {
-        vendor: '',
-        platform: '',
-        authMethod: 'dot1x',
-        hostMode: 'multi-auth',
-        radiusServer1: '',
-        radiusSecret1: '',
-        radiusServer2: '',
-        radiusSecret2: '',
-        authVlan: '',
-        unauthVlan: '',
-        guestVlan: '',
-        voiceVlan: '',
-        criticalVlan: '',
-        reauthPeriod: 3600,
-        txPeriod: 30,
-        quietPeriod: 60,
-        maxReauth: 2,
-        interface: '',
-        interfaceRange: '',
-        deploymentMode: 'monitor'
-    },
+    // Application version
+    version: '4.0.0',
     
-    // Initialize application
+    // Configuration object
+    config: {},
+    
+    // Saved configurations
+    savedConfigs: [],
+    
+    // Current vendor theme
+    currentVendorTheme: '',
+    
+    // Initialization function
     init: function() {
-        console.log('Initializing Dot1Xer Supreme v4.0.0...');
+        console.log('Initializing Dot1Xer Supreme Enterprise Edition v' + this.version);
         
-        // Initialize UI components
-        this.initTabs();
-        this.initExpandableSections();
-        this.initVendorGrid();
-        this.initFormHandlers();
-        this.initButtons();
-        this.initHelpTooltips();
+        // Load saved configurations from localStorage
+        this.loadSavedConfigurations();
+        
+        // Load components
+        this.loadUI();
+        this.setupEventHandlers();
+        this.loadVendors();
+        this.initHelp();
+        this.initAI();
+        
+        // Set default form values from previous session if available
+        this.loadLastSession();
         
         console.log('Initialization complete');
     },
     
-    // Initialize tabs
-    initTabs: function() {
-        const tabs = document.querySelectorAll('.tab');
+    // Load UI components
+    loadUI: function() {
+        console.log('Loading UI components...');
         
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                // Remove active class from all tabs
-                tabs.forEach(t => t.classList.remove('active'));
-                
-                // Add active class to clicked tab
-                tab.classList.add('active');
-                
-                // Get tab content ID
-                const tabContent = tab.textContent.trim().toLowerCase();
-                
-                // Hide all tab panes
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.style.display = 'none';
-                });
-                
-                // Show selected tab pane
-                const tabPane = document.getElementById(tabContent);
-                if (tabPane) {
-                    tabPane.style.display = 'block';
-                }
-            });
+        // Set up theme handler
+        document.addEventListener('vendorChange', (event) => {
+            const vendor = event.detail.vendor;
+            this.setVendorTheme(vendor);
         });
+    },
+    
+    // Set up event handlers
+    setupEventHandlers: function() {
+        console.log('Setting up event handlers...');
         
-        // Activate first tab by default
-        if (tabs.length > 0 && !document.querySelector('.tab.active')) {
-            tabs[0].click();
+        // Export documentation button
+        const exportButton = document.getElementById('export-documentation');
+        if (exportButton) {
+            exportButton.addEventListener('click', () => {
+                // Show export modal
+                const modal = document.getElementById('export-modal');
+                if (modal) modal.classList.add('visible');
+            });
+        }
+        
+        // Export modal close button
+        const exportModalClose = document.getElementById('export-modal-close');
+        if (exportModalClose) {
+            exportModalClose.addEventListener('click', () => {
+                // Hide export modal
+                const modal = document.getElementById('export-modal');
+                if (modal) modal.classList.remove('visible');
+            });
+        }
+        
+        // Export cancel button
+        const exportCancel = document.getElementById('export-cancel');
+        if (exportCancel) {
+            exportCancel.addEventListener('click', () => {
+                // Hide export modal
+                const modal = document.getElementById('export-modal');
+                if (modal) modal.classList.remove('visible');
+            });
+        }
+        
+        // Help link
+        const helpLink = document.getElementById('help-link');
+        if (helpLink) {
+            helpLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showHelp();
+            });
+        }
+        
+        // Footer help link
+        const helpFooter = document.getElementById('help-footer');
+        if (helpFooter) {
+            helpFooter.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showHelp();
+            });
+        }
+        
+        // About link
+        const aboutLink = document.getElementById('about-link');
+        if (aboutLink) {
+            aboutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showAbout();
+            });
+        }
+        
+        // Footer about link
+        const aboutFooter = document.getElementById('about-footer');
+        if (aboutFooter) {
+            aboutFooter.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showAbout();
+            });
+        }
+        
+        // Updates link
+        const updatesFooter = document.getElementById('updates-footer');
+        if (updatesFooter) {
+            updatesFooter.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.checkForUpdates();
+            });
         }
     },
     
-    // Initialize expandable sections
-    initExpandableSections: function() {
-        const headers = document.querySelectorAll('.expandable-header');
+    // Load vendor information
+    loadVendors: function() {
+        console.log('Loading vendor information...');
+        // This functionality is implemented in vendors.js
+    },
+    
+    // Initialize help system
+    initHelp: function() {
+        console.log('Initializing help system...');
+        // This functionality is implemented in help.js
+    },
+    
+    // Initialize AI integration
+    initAI: function() {
+        console.log('Initializing AI integration...');
         
-        headers.forEach(header => {
-            header.addEventListener('click', () => {
-                // Toggle active class
-                header.classList.toggle('active');
+        // Initialize AI with settings
+        if (window.AIAssistant && typeof window.AIAssistant.init === 'function') {
+            const aiSettings = this.loadAISettings();
+            window.AIAssistant.init(aiSettings);
+        } else {
+            console.log('AI Assistant not available or init method missing');
+        }
+    },
+    
+    // Load AI settings from localStorage
+    loadAISettings: function() {
+        try {
+            const saved = localStorage.getItem('dot1xer_ai_settings');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Error loading AI settings:', e);
+        }
+        
+        // Return default settings if none saved
+        return {
+            provider: 'local',
+            apiKeys: {}
+        };
+    },
+    
+    // Set vendor theme
+    setVendorTheme: function(vendor) {
+        if (!vendor) return;
+        
+        // Remove previous vendor theme
+        if (this.currentVendorTheme) {
+            document.body.classList.remove(`${this.currentVendorTheme}-theme`);
+            document.body.removeAttribute('data-vendor-theme');
+        }
+        
+        // Set new vendor theme
+        document.body.classList.add(`${vendor}-theme`);
+        document.body.setAttribute('data-vendor-theme', vendor);
+        this.currentVendorTheme = vendor;
+        
+        console.log(`Vendor theme set to: ${vendor}`);
+    },
+    
+    // Load saved configurations
+    loadSavedConfigurations: function() {
+        try {
+            const saved = localStorage.getItem('dot1xer_saved_configs');
+            if (saved) {
+                this.savedConfigs = JSON.parse(saved);
+                console.log(`Loaded ${this.savedConfigs.length} saved configurations`);
+            }
+        } catch (e) {
+            console.error('Error loading saved configurations:', e);
+            this.savedConfigs = [];
+        }
+    },
+    
+    // Save a new configuration
+    saveConfiguration: function(name, config) {
+        // Create a configuration object
+        const savedConfig = {
+            name: name,
+            date: new Date().toISOString(),
+            config: config,
+            vendor: config.vendor,
+            platform: config.platform
+        };
+        
+        // Add to saved configs
+        this.savedConfigs.push(savedConfig);
+        
+        // Save to localStorage
+        try {
+            localStorage.setItem('dot1xer_saved_configs', JSON.stringify(this.savedConfigs));
+            console.log(`Configuration "${name}" saved successfully`);
+            return true;
+        } catch (e) {
+            console.error('Error saving configuration:', e);
+            return false;
+        }
+    },
+    
+    // Load session from localStorage
+    loadLastSession: function() {
+        try {
+            const lastSession = localStorage.getItem('dot1xer_last_session');
+            if (lastSession) {
+                const session = JSON.parse(lastSession);
                 
-                // Toggle content visibility
-                const content = header.nextElementSibling;
-                if (content && content.classList.contains('expandable-content')) {
-                    if (content.style.display === 'block') {
-                        content.style.display = 'none';
+                // Apply session values to form fields
+                for (const [key, value] of Object.entries(session)) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = value;
+                        } else if (element.type === 'radio') {
+                            if (element.value === value) {
+                                element.checked = true;
+                            }
+                        } else {
+                            element.value = value;
+                        }
+                    }
+                }
+                
+                console.log('Last session restored');
+            }
+        } catch (e) {
+            console.error('Error loading last session:', e);
+        }
+    },
+    
+    // Save current session to localStorage
+    saveSession: function() {
+        const session = {};
+        
+        // Collect form field values
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            const elements = form.elements;
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                if (element.id) {
+                    if (element.type === 'checkbox') {
+                        session[element.id] = element.checked;
+                    } else if (element.type === 'radio') {
+                        if (element.checked) {
+                            session[element.name] = element.value;
+                        }
                     } else {
-                        content.style.display = 'block';
+                        session[element.id] = element.value;
                     }
                 }
-            });
-        });
-        
-        // Open the first expandable section by default
-        if (headers.length > 0) {
-            headers[0].click();
-        }
-    },
-    
-    // Initialize vendor grid
-    initVendorGrid: function() {
-        const vendors = [
-            'cisco', 'aruba', 'juniper', 'fortinet', 'extreme', 
-            'hp', 'dell', 'huawei', 'ruckus', 'paloalto', 'checkpoint'
-        ];
-        
-        const vendorSection = document.querySelector('#vendor-selection .expandable-content');
-        if (!vendorSection) return;
-        
-        // Create vendor grid
-        const grid = document.createElement('div');
-        grid.className = 'vendor-grid';
-        
-        // Add vendor options
-        vendors.forEach(vendor => {
-            const vendorItem = document.createElement('div');
-            vendorItem.className = 'vendor-logo-container';
-            vendorItem.setAttribute('data-vendor', vendor);
-            
-            // Add vendor logo or text
-            const logo = document.createElement('img');
-            logo.src = `assets/logos/${vendor}-logo.svg`;
-            logo.alt = vendor.toUpperCase();
-            logo.className = 'vendor-logo';
-            logo.onerror = function() {
-                this.onerror = null;
-                this.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Crect width='120' height='60' fill='%23f0f0f0' rx='4'/%3E%3Ctext x='60' y='30' font-family='Arial' font-size='16' text-anchor='middle' dominant-baseline='middle' fill='%23333333'%3E${vendor.toUpperCase()}%3C/text%3E%3C/svg%3E`;
-            };
-            
-            vendorItem.appendChild(logo);
-            
-            // Add click handler
-            vendorItem.addEventListener('click', () => {
-                // Remove selected class from all vendors
-                document.querySelectorAll('.vendor-logo-container').forEach(v => {
-                    v.classList.remove('selected');
-                });
-                
-                // Add selected class to clicked vendor
-                vendorItem.classList.add('selected');
-                
-                // Update selected vendor
-                Dot1Xer.settings.vendor = vendor;
-                
-                // Update platform options
-                Dot1Xer.updatePlatformOptions(vendor);
-            });
-            
-            grid.appendChild(vendorItem);
-        });
-        
-        // Add grid to vendor section
-        vendorSection.innerHTML = '';
-        vendorSection.appendChild(grid);
-    },
-    
-    // Update platform options based on selected vendor
-    updatePlatformOptions: function(vendor) {
-        const platformSelect = document.getElementById('platform-select');
-        if (!platformSelect) return;
-        
-        // Clear existing options
-        platformSelect.innerHTML = '';
-        
-        // Define platform options for each vendor
-        const platforms = {};
-        platforms.cisco = [
-            {value: 'ios', text: 'IOS'},
-            {value: 'ios-xe', text: 'IOS-XE'},
-            {value: 'nx-os', text: 'NX-OS'},
-            {value: 'wlc-9800', text: 'WLC 9800 Series'}
-        ];
-        platforms.aruba = [
-            {value: 'aos-cx', text: 'AOS-CX'},
-            {value: 'aos-switch', text: 'AOS-Switch (ProVision)'}
-        ];
-        platforms.juniper = [
-            {value: 'junos', text: 'JunOS'},
-            {value: 'mist', text: 'Mist Cloud'}
-        ];
-        platforms.extreme = [
-            {value: 'exos', text: 'EXOS'},
-            {value: 'voss', text: 'VOSS'}
-        ];
-        platforms.hp = [
-            {value: 'procurve', text: 'ProCurve'},
-            {value: 'comware', text: 'Comware'}
-        ];
-        platforms.fortinet = [
-            {value: 'fortiswitch', text: 'FortiSwitch'},
-            {value: 'fortigate', text: 'FortiGate'}
-        ];
-        platforms.dell = [
-            {value: 'os10', text: 'OS10'},
-            {value: 'os9', text: 'OS9'}
-        ];
-        platforms.huawei = [
-            {value: 'vrp', text: 'VRP'},
-            {value: 's-series', text: 'S-Series'}
-        ];
-        platforms.ruckus = [
-            {value: 'icx', text: 'ICX'},
-            {value: 'fastiron', text: 'FastIron'}
-        ];
-        
-        // Default platforms for other vendors
-        const defaultPlatforms = [
-            {value: 'default', text: 'Default Platform'}
-        ];
-        
-        // Get platforms for selected vendor or use default
-        const vendorPlatforms = platforms[vendor] || defaultPlatforms;
-        
-        // Add platform options
-        vendorPlatforms.forEach(platform => {
-            const option = document.createElement('option');
-            option.value = platform.value;
-            option.textContent = platform.text;
-            platformSelect.appendChild(option);
-        });
-        
-        // Update selected platform
-        if (vendorPlatforms.length > 0) {
-            Dot1Xer.settings.platform = vendorPlatforms[0].value;
-        }
-        
-        // Display platform details section
-        const platformDetails = document.querySelector('#platform-details');
-        if (platformDetails) {
-            platformDetails.style.display = 'block';
-        }
-    },
-    
-    // Initialize form handlers
-    initFormHandlers: function() {
-        // Handle form input changes
-        document.querySelectorAll('input, select, textarea').forEach(input => {
-            if (input.id) {
-                input.addEventListener('change', () => {
-                    // Convert kebab-case to camelCase
-                    const key = input.id.replace(/-([a-z])/g, g => g[1].toUpperCase());
-                    
-                    // Get input value
-                    let value = input.value;
-                    if (input.type === 'checkbox') {
-                        value = input.checked;
-                    } else if (input.type === 'number') {
-                        value = parseInt(value, 10);
-                    }
-                    
-                    // Update settings
-                    if (Dot1Xer.settings.hasOwnProperty(key)) {
-                        Dot1Xer.settings[key] = value;
-                        console.log(`Updated ${key}: ${value}`);
-                    }
-                });
             }
         });
         
-        // Handle platform select
-        const platformSelect = document.getElementById('platform-select');
-        if (platformSelect) {
-            platformSelect.addEventListener('change', () => {
-                Dot1Xer.settings.platform = platformSelect.value;
-                console.log(`Selected platform: ${platformSelect.value}`);
-            });
+        // Save to localStorage
+        try {
+            localStorage.setItem('dot1xer_last_session', JSON.stringify(session));
+            console.log('Session saved');
+        } catch (e) {
+            console.error('Error saving session:', e);
         }
     },
     
-    // Initialize buttons
-    initButtons: function() {
-        // Next/Previous step buttons
-        document.querySelectorAll('.next-step').forEach(button => {
-            button.addEventListener('click', () => {
-                const currentTab = document.querySelector('.tab.active');
-                const tabs = Array.from(document.querySelectorAll('.tab'));
-                const currentIndex = tabs.indexOf(currentTab);
-                
-                if (currentIndex < tabs.length - 1) {
-                    tabs[currentIndex + 1].click();
-                }
-            });
-        });
-        
-        document.querySelectorAll('.prev-step').forEach(button => {
-            button.addEventListener('click', () => {
-                const currentTab = document.querySelector('.tab.active');
-                const tabs = Array.from(document.querySelectorAll('.tab'));
-                const currentIndex = tabs.indexOf(currentTab);
-                
-                if (currentIndex > 0) {
-                    tabs[currentIndex - 1].click();
-                }
-            });
-        });
-        
-        // Generate configuration button
-        const generateBtn = document.getElementById('generate-config');
-        if (generateBtn) {
-            generateBtn.addEventListener('click', () => {
-                Dot1Xer.generateConfiguration();
-            });
-        }
-        
-        // Copy configuration button
-        const copyBtn = document.getElementById('copy-config');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', () => {
-                Dot1Xer.copyConfiguration();
-            });
-        }
-        
-        // Download configuration button
-        const downloadBtn = document.getElementById('download-config');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => {
-                Dot1Xer.downloadConfiguration();
-            });
-        }
-        
-        // Analyze configuration button
-        const analyzeBtn = document.getElementById('analyze-config');
-        if (analyzeBtn) {
-            analyzeBtn.addEventListener('click', () => {
-                Dot1Xer.analyzeConfiguration();
-            });
+    // Show help panel
+    showHelp: function() {
+        console.log('Showing help panel...');
+        // This functionality is implemented in help.js
+        if (window.HelpSystem && typeof window.HelpSystem.showHelpPanel === 'function') {
+            window.HelpSystem.showHelpPanel();
+        } else {
+            alert('Help system is being loaded. Please try again in a moment.');
         }
     },
     
-    // Initialize help tooltips
-    initHelpTooltips: function() {
-        document.querySelectorAll('.help-icon').forEach(icon => {
-            icon.addEventListener('click', event => {
-                event.stopPropagation(); // Prevent expandable section toggle
-                
-                const topic = icon.getAttribute('data-help-topic');
-                alert(`Help for: ${topic}\n\nThis would display detailed help information for the selected topic.`);
-            });
-        });
+    // Show about dialog
+    showAbout: function() {
+        alert(`Dot1Xer Supreme Enterprise Edition\nVersion ${this.version}\n\nA comprehensive 802.1X configuration and documentation platform supporting multiple vendors, advanced security features, and complete deployment assistance.`);
     },
     
-    // Generate configuration
-    generateConfiguration: function() {
-        console.log('Generating configuration with settings:', this.settings);
+    // Check for updates
+    checkForUpdates: function() {
+        console.log('Checking for updates...');
         
-        // Get output element
-        const outputEl = document.getElementById('config-output');
-        if (!outputEl) return;
-        
-        // Check if vendor and platform are selected
-        if (!this.settings.vendor) {
-            outputEl.textContent = "Please select a vendor first.";
-            return;
-        }
-        
-        if (!this.settings.platform) {
-            outputEl.textContent = "Please select a platform.";
-            return;
-        }
-        
-        // Generate configuration based on vendor and platform
-        let config = this.generateVendorConfig();
-        
-        // Display configuration
-        outputEl.textContent = config;
-    },
-    
-    // Generate vendor-specific configuration
-    generateVendorConfig: function() {
-        const vendor = this.settings.vendor;
-        const platform = this.settings.platform;
-        
-        // This is a simplified template - in a real implementation,
-        // this would load vendor-specific templates from the server
-        return `! ${vendor.toUpperCase()} ${platform.toUpperCase()} 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.0.0
-! ${new Date().toISOString()}
-
-! RADIUS Server Configuration
-${vendor === 'cisco' && (platform === 'ios' || platform === 'ios-xe') ? 
-`radius server ${this.settings.radiusServer1 || 'PRIMARY'}
- address ipv4 ${this.settings.radiusServer1 || '10.1.1.1'} auth-port 1812 acct-port 1813
- key ${this.settings.radiusSecret1 || 'radiuskey1'}
-
-${this.settings.radiusServer2 ? 
-`radius server ${this.settings.radiusServer2 || 'SECONDARY'}
- address ipv4 ${this.settings.radiusServer2 || '10.1.1.2'} auth-port 1812 acct-port 1813
- key ${this.settings.radiusSecret2 || 'radiuskey2'}
-` : ''}` : '# RADIUS server configuration would be here'}
-
-! Authentication Method: ${this.settings.authMethod}
-! Host Mode: ${this.settings.hostMode}
-! Authentication VLAN: ${this.settings.authVlan || 'Not configured'}
-! Unauthenticated VLAN: ${this.settings.unauthVlan || 'Not configured'}
-${this.settings.guestVlan ? `! Guest VLAN: ${this.settings.guestVlan}` : ''}
-${this.settings.voiceVlan ? `! Voice VLAN: ${this.settings.voiceVlan}` : ''}
-
-! Note: This is a placeholder configuration.
-! A full implementation would generate complete vendor-specific syntax.
-
-! Authentication parameters:
-! Reauthentication period: ${this.settings.reauthPeriod} seconds
-! Transmit period: ${this.settings.txPeriod} seconds
-! Quiet period: ${this.settings.quietPeriod} seconds
-! Maximum retries: ${this.settings.maxReauth}
-
-! Interface configuration would be added here
-${this.settings.interface ? `! Interface: ${this.settings.interface}` : ''}
-${this.settings.interfaceRange ? `! Interface range: ${this.settings.interfaceRange}` : ''}
-
-! Deployment mode: ${this.settings.deploymentMode}
-`;
-    },
-    
-    // Copy configuration to clipboard
-    copyConfiguration: function() {
-        const outputEl = document.getElementById('config-output');
-        if (!outputEl || !outputEl.textContent.trim()) {
-            alert('No configuration to copy. Generate configuration first.');
-            return;
-        }
-        
-        // Copy to clipboard
-        navigator.clipboard.writeText(outputEl.textContent)
-            .then(() => {
-                alert('Configuration copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Failed to copy:', err);
-                alert('Failed to copy configuration. Please try again.');
-            });
-    },
-    
-    // Download configuration as text file
-    downloadConfiguration: function() {
-        const outputEl = document.getElementById('config-output');
-        if (!outputEl || !outputEl.textContent.trim()) {
-            alert('No configuration to download. Generate configuration first.');
-            return;
-        }
-        
-        // Create filename
-        const vendor = this.settings.vendor || 'generic';
-        const platform = this.settings.platform || 'default';
-        const filename = `${vendor}-${platform}-dot1x-config.txt`;
-        
-        // Create download link
-        const blob = new Blob([outputEl.textContent], {type: 'text/plain'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        
-        // Trigger download
-        document.body.appendChild(a);
-        a.click();
-        
-        // Clean up
+        // In a real implementation, this would call an API to check for updates
         setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
-    },
-    
-    // Analyze configuration
-    analyzeConfiguration: function() {
-        const outputEl = document.getElementById('config-output');
-        if (!outputEl || !outputEl.textContent.trim()) {
-            alert('No configuration to analyze. Generate configuration first.');
-            return;
-        }
-        
-        // Get analysis element
-        const analysisEl = document.getElementById('config-analysis');
-        if (!analysisEl) return;
-        
-        // Clear previous analysis
-        analysisEl.innerHTML = '';
-        
-        // Add analysis items
-        const addAnalysisItem = (type, message) => {
-            const item = document.createElement('div');
-            item.className = `alert alert-${type}`;
-            item.textContent = message;
-            analysisEl.appendChild(item);
-        };
-        
-        // Perform simple analysis
-        if (!this.settings.radiusServer1) {
-            addAnalysisItem('danger', 'No primary RADIUS server configured');
-        } else {
-            addAnalysisItem('success', 'Primary RADIUS server is configured');
-        }
-        
-        if (!this.settings.radiusServer2) {
-            addAnalysisItem('warning', 'No secondary RADIUS server configured for redundancy');
-        } else {
-            addAnalysisItem('success', 'Secondary RADIUS server is configured for redundancy');
-        }
-        
-        if (!this.settings.authVlan) {
-            addAnalysisItem('warning', 'No authentication VLAN configured');
-        }
-        
-        if (!this.settings.unauthVlan) {
-            addAnalysisItem('warning', 'No unauthenticated VLAN configured');
-        }
-        
-        if (this.settings.authMethod === 'dot1x-mab' && this.settings.hostMode === 'single-host') {
-            addAnalysisItem('warning', 'Using MAB with single-host mode may cause disconnects when multiple devices are present');
-        }
-        
-        // Make analysis section visible
-        const analysisHeader = document.querySelector('#config-analysis-section .expandable-header');
-        if (analysisHeader && !analysisHeader.classList.contains('active')) {
-            analysisHeader.click();
-        }
+            alert(`You are running the latest version of Dot1Xer Supreme Enterprise Edition (v${this.version}).`);
+        }, 500);
     }
 };
 
 // Initialize application when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     Dot1Xer.init();
+});
+
+// Save session before page unload
+window.addEventListener('beforeunload', function() {
+    Dot1Xer.saveSession();
 });
