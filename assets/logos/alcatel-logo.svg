@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 Couldn't find the requested file /logos/alcatel.svg in gilbarbara/logos.
+=======
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">
+  <rect width="120" height="60" fill="#f8f8f8" rx="4"/>
+  <text x="60" y="35" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#0077cc">ALCATEL</text>
+</svg>
+>>>>>>> 0b11660 (Updated UaXSupreme with improved functionality and fixed issues)
