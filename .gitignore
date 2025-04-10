@@ -1,0 +1,47 @@
+# Dot1Xer Supreme .gitignore
+
+# Backup directories
+backups/
+
+# Temporary files
+temp_update/
+*.tmp
+*.bak
+
+# User-specific files
+user_config.json
+*.local.js
+*.local.css
+
+# Environment-specific files
+.env
+.env.local
+
+# API keys
+api_keys.json
+*api_key*
+*_key.txt
+
+# Logs
+*.log
+logs/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+.DS_Store
+
+# Generated documentation
+exports/
+generated/
+
+# User data
+user_data/
+user_templates/
+user_configs/
+
+# Cached data
+cache/
+.cache/

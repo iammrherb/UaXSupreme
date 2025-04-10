@@ -1,0 +1,109 @@
+/* Dot1Xer Supreme Enterprise Edition - Vendor-specific Styles */
+
+/* Cisco */
+.cisco-theme {
+  --vendor-primary: #049fd9;
+  --vendor-secondary: #00bceb;
+  --vendor-accent: #fbab18;
+}
+
+/* Aruba */
+.aruba-theme {
+  --vendor-primary: #f26334;
+  --vendor-secondary: #949300;
+  --vendor-accent: #8dc63f;
+}
+
+/* Juniper */
+.juniper-theme {
+  --vendor-primary: #84b135;
+  --vendor-secondary: #6a737b;
+  --vendor-accent: #a5ce3a;
+}
+
+/* HP */
+.hp-theme {
+  --vendor-primary: #0096d6;
+  --vendor-secondary: #d7410b;
+  --vendor-accent: #425563;
+}
+
+/* Fortinet */
+.fortinet-theme {
+  --vendor-primary: #ee3124;
+  --vendor-secondary: #5b5f97;
+  --vendor-accent: #ff9900;
+}
+
+/* Extreme Networks */
+.extreme-theme {
+  --vendor-primary: #e41a2d;
+  --vendor-secondary: #292560;
+  --vendor-accent: #595959;
+}
+
+/* Dell */
+.dell-theme {
+  --vendor-primary: #007db8;
+  --vendor-secondary: #00447c;
+  --vendor-accent: #444444;
+}
+
+/* Huawei */
+.huawei-theme {
+  --vendor-primary: #c7000b;
+  --vendor-secondary: #cf0a2c;
+  --vendor-accent: #000000;
+}
+
+/* Ubiquiti */
+.ubiquiti-theme {
+  --vendor-primary: #0559a0;
+  --vendor-secondary: #ffc107;
+  --vendor-accent: #ffffff;
+}
+
+/* Meraki */
+.meraki-theme {
+  --vendor-primary: #67c100;
+  --vendor-secondary: #8fc400;
+  --vendor-accent: #444444;
+}
+
+/* Ruckus */
+.ruckus-theme {
+  --vendor-primary: #e4002b;
+  --vendor-secondary: #cf0a2c;
+  --vendor-accent: #000000;
+}
+
+/* Arista */
+.arista-theme {
+  --vendor-primary: #272f63;
+  --vendor-secondary: #63d5f0;
+  --vendor-accent: #e1261c;
+}
+
+/* Vendor-specific themes can be applied to the whole app */
+.app-vendor-theme {
+  background-color: var(--vendor-primary-bg, #ffffff);
+  color: var(--vendor-primary-text, #333333);
+}
+
+.app-vendor-theme .btn-primary {
+  background-color: var(--vendor-primary, #0077cc);
+  border-color: var(--vendor-primary, #0077cc);
+}
+
+.app-vendor-theme .btn-secondary {
+  background-color: var(--vendor-secondary, #6c757d);
+  border-color: var(--vendor-secondary, #6c757d);
+}
+
+.app-vendor-theme .header {
+  background-color: var(--vendor-primary, #0077cc);
+}
+
+.app-vendor-theme .footer {
+  background-color: var(--vendor-primary, #0077cc);
+}

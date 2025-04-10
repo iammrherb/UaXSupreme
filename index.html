@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot1Xer Supreme Enterprise Edition</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vendors.css">
+    <link rel="stylesheet" href="css/help.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.svg" alt="Dot1Xer Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%230077cc\' rx=\'5\'/%3E%3Ctext x=\'20\' y=\'25\' font-family=\'Arial\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\'%3E1X%3C/text%3E%3C/svg%3E';">
+                Dot1Xer Supreme
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#" id="questionnaire-link">Project Questionnaire</a></li>
+                    <li><a href="#" id="checklist-link">Deployment Checklist</a></li>
+                    <li><a href="#" id="help-link">Help</a></li>
+                    <li><a href="#" id="about-link">About</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="video-banner" id="video-banner">
+            <!-- Video will be loaded here via JavaScript -->
+            <div class="video-overlay">
+                <h1 class="banner-title">Dot1Xer Supreme</h1>
+                <p class="banner-subtitle">Comprehensive 802.1X Configuration & Management Platform</p>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="card">
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">
+                        <div class="wizard-step-number">1</div>
+                        <div class="wizard-step-text">Vendor Selection</div>
+                    </div>
+                    <div class="wizard-step" data-step="2">
+                        <div class="wizard-step-number">2</div>
+                        <div class="wizard-step-text">Authentication</div>
+                    </div>
+                    <div class="wizard-step" data-step="3">
+                        <div class="wizard-step-number">3</div>
+                        <div class="wizard-step-text">Security Features</div>
+                    </div>
+                    <div class="wizard-step" data-step="4">
+                        <div class="wizard-step-number">4</div>
+                        <div class="wizard-step-text">Network Config</div>
+                    </div>
+                    <div class="wizard-step" data-step="5">
+                        <div class="wizard-step-number">5</div>
+                        <div class="wizard-step-text">Advanced</div>
+                    </div>
+                    <div class="wizard-step" data-step="6">
+                        <div class="wizard-step-number">6</div>
+                        <div class="wizard-step-text">Review</div>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="platform">Platform</div>
+                    <div class="tab" data-tab="authentication">Authentication</div>
+                    <div class="tab" data-tab="security">Security</div>
+                    <div class="tab" data-tab="network">Network</div>
+                    <div class="tab" data-tab="advanced">Advanced</div>
+                    <div class="tab" data-tab="preview">Preview</div>
+                </div>
+                
+                <div class="tab-content">
+                    <!-- Platform Tab -->
+                    <div class="tab-pane active" id="platform">
+                        <div class="card-body">
+                            <h2>Step 1: Select Vendor and Platform</h2>
+                            
+                            <div class="expandable-section">
+                                <div class="expandable-header">
+                                    Vendor Selection <span class="help-icon" data-help-topic="vendor-selection">?</span>
+                                </div>
+                                <div class="expandable-content">
+                                    <p>Select the network equipment vendor for your 802.1X deployment. The configuration syntax will be tailored to your specific vendor.</p>
+                                    <div class="vendor-grid" id="vendor-grid">
+                                        <!-- Vendor logos will be loaded here via JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="expandable-section">
+                                <div class="expandable-header">
+                                    Platform Details <span class="help-icon" data-help-topic="platform-details">?</span>
+                                </div>
+                                <div class="expandable-content">
+                                    <div class="form-group">
+                                        <label for="platform-select">Device Platform <span class="help-icon" data-help-topic="platform-select">?</span></label>
+                                        <select id="platform-select" class="form-control">
+                                            <option value="">Select a vendor first</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="software-version">Software Version <span class="help-icon" data-help-topic="software-version">?</span></label>
+                                        <input type="text" id="software-version" class="form-control" placeholder="e.g., 17.3.5">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="device-role">Device Role <span class="help-icon" data-help-topic="device-role">?</span></label>
+                                        <select id="device-role" class="form-control">
+                                            <option value="access">Access Switch</option>
+                                            <option value="distribution">Distribution Switch</option>
+                                            <option value="core">Core Switch</option>
+                                            <option value="wireless">Wireless LAN Controller</option>
+                                            <option value="router">Router</option>
+                                            <option value="firewall">Firewall</option>
+                                            <option value="nac">NAC Appliance</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="port-range">Port Range <span class="help-icon" data-help-topic="port-range">?</span></label>
+                                        <input type="text" id="port-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-48">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="expandable-section">
+                                <div class="expandable-header">
+                                    Environment Type <span class="help-icon" data-help-topic="environment-type">?</span>
+                                </div>
+                                <div class="expandable-content">
+                                    <div class="form-group">
+                                        <label for="industry-type">Industry <span class="help-icon" data-help-topic="industry-selection">?</span></label>
+                                        <select id="industry-type" class="form-control">
+                                            <option value="enterprise">Enterprise</option>
+                                            <option value="healthcare">Healthcare</option>
+                                            <option value="education">Education</option>
+                                            <option value="government">Government</option>
+                                            <option value="finance">Financial Services</option>
+                                            <option value="retail">Retail</option>
+                                            <option value="manufacturing">Manufacturing</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="deployment-scale">Deployment Scale <span class="help-icon" data-help-topic="deployment-scale">?</span></label>
+                                        <select id="deployment-scale" class="form-control">
+                                            <option value="small">Small (1-10 devices)</option>
+                                            <option value="medium">Medium (11-100 devices)</option>
+                                            <option value="large">Large (101-500 devices)</option>
+                                            <option value="enterprise">Enterprise (500+ devices)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="security-level">Security Level <span class="help-icon" data-help-topic="security-level">?</span></label>
+                                        <select id="security-level" class="form-control">
+                                            <option value="standard">Standard</option>
+                                            <option value="high">High</option>
+                                            <option value="government">Government/Military</option>
+                                            <option value="financial">Financial/PCI-DSS</option>
+                                            <option value="healthcare">Healthcare/HIPAA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button class="btn next-step" data-next="authentication">Next: Authentication</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add other tabs: Authentication, Security, Network, Advanced, Preview -->
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h2>Project Documentation</h2>
+                    
+                    <div class="expandable-section">
+                        <div class="expandable-header">
+                            Pre-Deployment Checklist <span class="help-icon" data-help-topic="pre-deployment-checklist">?</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p>Use this checklist to ensure your environment is ready for 802.1X deployment:</p>
+                            <div id="pre-deployment-checklist">
+                                <!-- Will be populated via JavaScript -->
+                                <p>Loading pre-deployment checklist...</p>
+                            </div>
+                            <div class="form-group">
+                                <button id="download-checklist" class="btn">Download Checklist</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="expandable-section">
+                        <div class="expandable-header">
+                            Deployment Timeline Generator <span class="help-icon" data-help-topic="deployment-timeline">?</span>
+                        </div>
+                        <div class="expandable-content">
+                            <div class="form-group">
+                                <label for="deployment-size">Deployment Size <span class="help-icon" data-help-topic="deployment-size">?</span></label>
+                                <select id="deployment-size" class="form-control">
+                                    <option value="small">Small (1-50 devices)</option>
+                                    <option value="medium" selected>Medium (51-200 devices)</option>
+                                    <option value="large">Large (201-1000 devices)</option>
+                                    <option value="enterprise">Enterprise (1000+ devices)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="deployment-approach">Deployment Approach <span class="help-icon" data-help-topic="deployment-approach">?</span></label>
+                                <select id="deployment-approach" class="form-control">
+                                    <option value="phased">Phased (Recommended)</option>
+                                    <option value="pilot-then-full">Pilot Then Full Rollout</option>
+                                    <option value="monitor-enforce">Monitor Mode Then Enforce</option>
+                                    <option value="immediate">Immediate Cutover (High Risk)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button id="generate-timeline" class="btn">Generate Timeline</button>
+                            </div>
+                            
+                            <div id="timeline-output">
+                                <p>Click "Generate Timeline" to create a customized deployment timeline.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="expandable-section">
+                        <div class="expandable-header">
+                            Architecture Diagram <span class="help-icon" data-help-topic="architecture-diagram">?</span>
+                        </div>
+                        <div class="expandable-content">
+                            <p>Generate a network architecture diagram for your 802.1X deployment:</p>
+                            <div class="form-group">
+                                <label for="diagram-type">Diagram Type <span class="help-icon" data-help-topic="diagram-type">?</span></label>
+                                <select id="diagram-type" class="form-control">
+                                    <option value="network-topology">Network Topology</option>
+                                    <option value="authentication-flow">Authentication Flow</option>
+                                    <option value="deployment-architecture">Deployment Architecture</option>
+                                    <option value="radius-communication">RADIUS Communication</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button id="generate-diagram" class="btn">Generate Diagram</button>
+                            </div>
+                            
+                            <div id="diagram-display">
+                                <!-- Diagram will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Dot1Xer Supreme</h3>
+                    <ul>
+                        <li><a href="#" id="about-footer">About</a></li>
+                        <li><a href="#" id="help-footer">Help</a></li>
+                        <li><a href="#" id="updates-footer">Check for Updates</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#" id="best-practices">Best Practices</a></li>
+                        <li><a href="#" id="vendor-docs">Vendor Documentation</a></li>
+                        <li><a href="#" id="standards">IEEE Standards</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Tools</h3>
+                    <ul>
+                        <li><a href="#" id="export-tool">Export Tools</a></li>
+                        <li><a href="#" id="checklist-tool">Checklists</a></li>
+                        <li><a href="#" id="template-tool">Templates</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Dot1Xer Supreme Enterprise Edition. Version 3.0.0</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- AI Assistant -->
+    <div class="ai-assistant-container" id="ai-assistant-button">
+        <div class="ai-icon">AI</div>
+    </div>
+    
+    <div class="ai-assistant-panel" id="ai-assistant-panel">
+        <div class="ai-assistant-header">
+            <h3>802.1X Configuration Assistant</h3>
+            <button class="ai-assistant-close" id="ai-assistant-close">&times;</button>
+        </div>
+        <div class="ai-assistant-body" id="ai-assistant-body">
+            <div class="ai-message assistant">
+                Hello! I'm your 802.1X configuration assistant. How can I help you with your deployment today?
+            </div>
+        </div>
+        <div class="ai-assistant-footer">
+            <input type="text" id="ai-assistant-input" class="ai-assistant-input" placeholder="Ask a question...">
+            <button id="ai-assistant-send" class="ai-assistant-send">Send</button>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/vendors.js"></script>
+    <script src="js/help.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/config-generator.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/document-generator.js"></script>
+    <script src="js/diagrams.js"></script>
+    <script src="js/questionnaire.js"></script>
+</body>
+</html>

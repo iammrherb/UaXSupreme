@@ -1,0 +1,206 @@
+/* Dot1Xer Supreme Enterprise Edition - Help System Styles */
+
+.help-icon {
+  cursor: pointer;
+  color: var(--help-icon-color);
+  margin-left: 5px;
+  font-size: 16px;
+  transition: color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.help-icon:hover {
+  color: var(--help-icon-hover);
+  background-color: rgba(0, 119, 204, 0.2);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 280px;
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-color);
+  text-align: left;
+  border-radius: 6px;
+  padding: 12px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  transform-origin: bottom center;
+  pointer-events: none;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip .tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -8px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: var(--tooltip-bg) transparent transparent transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.help-panel {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.help-panel.visible {
+  right: 0;
+}
+
+.help-panel-header {
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.help-panel-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: white;
+}
+
+.help-panel-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.help-search {
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.help-search input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.help-topics {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px;
+  border-bottom: 1px solid var(--border-color);
+  gap: 10px;
+}
+
+.help-topic {
+  background-color: #f0f0f0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.help-topic:hover {
+  background-color: #e0e0e0;
+}
+
+.help-topic.active {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.help-content {
+  padding: 15px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.help-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+}
+
+.help-content p {
+  margin-bottom: 15px;
+}
+
+.help-content ul, .help-content ol {
+  margin-bottom: 15px;
+  padding-left: 20px;
+}
+
+.help-content img {
+  max-width: 100%;
+  margin: 15px 0;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.help-content code {
+  font-family: monospace;
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 90%;
+}
+
+.help-content pre {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .help-panel {
+    width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .help-panel {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .tooltip .tooltip-text {
+    width: 240px;
+  }
+}
