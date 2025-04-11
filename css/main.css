@@ -212,17 +212,6 @@ h3 {
   display: block;
 }
 
-/* Settings Tabs */
-.settings-tabs {
-  margin-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.settings-tabs .tab {
-  padding: 10px 15px;
-  font-size: 14px;
-}
-
 /* Form styles */
 .form-group {
   margin-bottom: 20px;
@@ -250,25 +239,6 @@ label {
   outline: none;
 }
 
-.input-group {
-  display: flex;
-  gap: 10px;
-}
-
-.input-group .form-control {
-  flex: 1;
-}
-
-.help-text {
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 5px;
-}
-
-.help-text.warning {
-  color: var(--danger-color);
-}
-
 /* Radio and checkbox styles */
 .radio-group {
   margin-top: 5px;
@@ -283,51 +253,6 @@ label {
 
 .radio input, .checkbox input {
   margin-right: 10px;
-}
-
-/* Expandable sections */
-.expandable-header {
-  background-color: #f1f1f1;
-  padding: 10px 15px;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  font-weight: 500;
-  cursor: pointer;
-  position: relative;
-}
-
-.expandable-header:after {
-  content: "+";
-  position: absolute;
-  right: 15px;
-  transition: transform 0.3s;
-}
-
-.expandable-header.expanded:after {
-  content: "-";
-}
-
-.expandable-content {
-  padding: 0 15px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s, padding 0.3s;
-}
-
-.expandable-content.expanded {
-  max-height: 1000px;
-  padding: 15px;
-  border: 1px solid #eee;
-  border-radius: 0 0 4px 4px;
-  margin-bottom: 15px;
-}
-
-/* Nested settings */
-.nested-settings {
-  margin-left: 20px;
-  padding-left: 10px;
-  border-left: 2px solid #eee;
-  margin-bottom: 20px;
 }
 
 /* Button styles */
@@ -377,14 +302,6 @@ label {
   background-color: #5a6268;
 }
 
-.btn.danger {
-  background-color: var(--danger-color);
-}
-
-.btn.danger:hover {
-  background-color: #bd2130;
-}
-
 /* Actions section */
 .actions {
   margin-top: 20px;
@@ -394,9 +311,6 @@ label {
 
 .action-bar {
   margin: 0 0 20px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 /* Code block */
@@ -747,49 +661,6 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Dark theme */
-body.dark-theme {
-  --primary-color: #2c3e50;
-  --secondary-color: #3498db;
-  --background-color: #1a1a1a;
-  --text-color: #f0f0f0;
-  --border-color: #444;
-  --header-color: #2c3e50;
-  --card-bg: #2d2d2d;
-  --card-header: #333;
-  --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-}
-
-body.dark-theme .panel {
-  background-color: #2a2a2a;
-  border-color: #444;
-}
-
-body.dark-theme .code-block {
-  background-color: #333;
-  border-color: #555;
-  color: #f0f0f0;
-}
-
-body.dark-theme .expandable-header {
-  background-color: #333;
-}
-
-body.dark-theme .form-control {
-  background-color: #333;
-  border-color: #555;
-  color: #f0f0f0;
-}
-
-body.dark-theme .modal-container {
-  background-color: #2d2d2d;
-}
-
-body.dark-theme .ai-message.assistant {
-  background-color: #333;
-  border-color: #555;
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .tabs {
@@ -829,60 +700,15 @@ body.dark-theme .ai-message.assistant {
   
   nav ul {
     margin-top: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
   }
   
   nav ul li {
-    margin: 5px 10px;
+    margin-left: 10px;
   }
   
   .ai-assistant-panel {
     width: 90%;
     right: 5%;
     left: 5%;
-  }
-  
-  .input-group {
-    flex-direction: column;
-    gap: 5px;
-  }
-  
-  .action-bar {
-    flex-direction: column;
-  }
-  
-  .action-bar .btn {
-    width: 100%;
-    margin-bottom: 5px;
-  }
-}
-
-/* Print styles */
-@media print {
-  header, footer, .tabs, .actions, .action-bar {
-    display: none;
-  }
-  
-  body, .card, .panel {
-    background: white !important;
-    color: black !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-  
-  .tab-pane {
-    display: block !important;
-  }
-  
-  .code-block {
-    white-space: pre-wrap;
-    max-height: none;
-    overflow: visible;
-    page-break-inside: avoid;
-  }
-  
-  .diagram-display {
-    page-break-inside: avoid;
   }
 }
