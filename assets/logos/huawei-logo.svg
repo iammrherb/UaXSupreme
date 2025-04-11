@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
-    <rect width="200" height="100" fill="#ffffff"/>
-    <text x="100" y="55" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#d31145">HUAWEI</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="60" viewBox="0 0 120 60">
+  <style>
+    text {
+      font-family: 'Arial', sans-serif;
+      font-weight: bold;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  </style>
+  <text x="60" y="30" font-size="20" fill="#d31145">HUAWEI</text>
 </svg>

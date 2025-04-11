@@ -1,13 +1,10 @@
 /**
  * Dot1Xer Supreme Enterprise Edition - Vendor Configuration
  * Version 4.2.0
- * 
- * This module contains information about all supported vendors and their platforms.
  */
 
 // Define all vendors with their capabilities
 const vendors = {
-    // Cisco - https://www.cisco.com/
     cisco: {
         name: "Cisco",
         types: ["wired", "wireless", "tacacs", "vpn", "uaac"],
@@ -75,7 +72,6 @@ const vendors = {
         }
     },
     
-    // Aruba - https://www.arubanetworks.com/
     aruba: {
         name: "Aruba",
         types: ["wired", "wireless", "tacacs", "uaac"],
@@ -119,7 +115,6 @@ const vendors = {
         }
     },
     
-    // Juniper - https://www.juniper.net/
     juniper: {
         name: "Juniper",
         types: ["wired", "wireless", "vpn", "tacacs"],
@@ -145,7 +140,6 @@ const vendors = {
         }
     },
     
-    // HP - https://www.hpe.com/
     hp: {
         name: "HP",
         types: ["wired"],
@@ -165,7 +159,6 @@ const vendors = {
         }
     },
     
-    // Extreme Networks - https://www.extremenetworks.com/
     extreme: {
         name: "Extreme",
         types: ["wired", "wireless", "tacacs"],
@@ -203,7 +196,6 @@ const vendors = {
         }
     },
     
-    // Fortinet - https://www.fortinet.com/
     fortinet: {
         name: "Fortinet",
         types: ["wired", "wireless", "vpn", "tacacs"],
@@ -235,7 +227,6 @@ const vendors = {
         }
     },
     
-    // Dell - https://www.dell.com/
     dell: {
         name: "Dell",
         types: ["wired", "tacacs"],
@@ -261,7 +252,6 @@ const vendors = {
         }
     },
     
-    // Huawei - https://www.huawei.com/
     huawei: {
         name: "Huawei",
         types: ["wired", "wireless", "vpn", "tacacs"],
@@ -287,7 +277,6 @@ const vendors = {
         }
     },
     
-    // Ruckus - https://www.commscope.com/ruckus/
     ruckus: {
         name: "Ruckus",
         types: ["wired", "wireless"],
@@ -313,7 +302,6 @@ const vendors = {
         }
     },
     
-    // Palo Alto Networks - https://www.paloaltonetworks.com/
     paloalto: {
         name: "Palo Alto",
         types: ["vpn", "tacacs"],
@@ -333,7 +321,6 @@ const vendors = {
         }
     },
     
-    // Check Point - https://www.checkpoint.com/
     checkpoint: {
         name: "CheckPoint",
         types: ["vpn", "tacacs"],
@@ -353,7 +340,6 @@ const vendors = {
         }
     },
     
-    // Alcatel-Lucent Enterprise - https://www.al-enterprise.com/
     alcatel: {
         name: "Alcatel-Lucent",
         types: ["wired", "wireless"],
@@ -379,7 +365,6 @@ const vendors = {
         }
     },
     
-    // Cisco Meraki - https://meraki.cisco.com/
     meraki: {
         name: "Meraki",
         types: ["wired", "wireless", "vpn"],
@@ -393,7 +378,6 @@ const vendors = {
         }
     },
     
-    // Arista - https://www.arista.com/
     arista: {
         name: "Arista",
         types: ["wired", "tacacs"],
@@ -413,7 +397,6 @@ const vendors = {
         }
     },
     
-    // Ubiquiti - https://www.ui.com/
     ubiquiti: {
         name: "Ubiquiti",
         types: ["wired", "wireless", "vpn"],
@@ -439,8 +422,244 @@ const vendors = {
         }
     },
     
-    // Other Vendors (summarized for brevity)
-    // Additional vendors would continue here
+    brocade: {
+        name: "Brocade",
+        types: ["wired"],
+        platforms: {
+            "fastiron": {
+                name: "FastIron",
+                description: "FastIron for ICX switches",
+                versions: ["8.0.x", "9.0.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    allied: {
+        name: "Allied Telesis",
+        types: ["wired", "wireless"],
+        platforms: {
+            "awplus": {
+                name: "AlliedWare Plus",
+                description: "AlliedWare Plus for switches and routers",
+                versions: ["5.4.x", "5.5.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    enterasys: {
+        name: "Enterasys",
+        types: ["wired"],
+        platforms: {
+            "eos": {
+                name: "EOS",
+                description: "Enterasys Operating System for legacy switches",
+                versions: ["8.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    avaya: {
+        name: "Avaya",
+        types: ["wired"],
+        platforms: {
+            "acli": {
+                name: "ACLI",
+                description: "Avaya Command Line Interface for ERS switches",
+                versions: ["7.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    cambium: {
+        name: "Cambium",
+        types: ["wireless"],
+        platforms: {
+            "cnmaestro": {
+                name: "cnMaestro",
+                description: "cnMaestro for wireless network management",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "cnmatrix": {
+                name: "cnMatrix",
+                description: "cnMatrix for switches",
+                versions: ["current"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    sonicwall: {
+        name: "SonicWall",
+        types: ["vpn", "tacacs"],
+        platforms: {
+            "sonicOS": {
+                name: "SonicOS",
+                description: "SonicOS for firewalls and VPN appliances",
+                versions: ["7.0.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    watchguard: {
+        name: "WatchGuard",
+        types: ["wireless", "vpn", "tacacs"],
+        platforms: {
+            "fireware": {
+                name: "Fireware",
+                description: "Fireware OS for Firebox appliances",
+                versions: ["12.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            },
+            "wgap": {
+                name: "WatchGuard AP",
+                description: "WatchGuard AP firmware",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
+    },
+    
+    sophos: {
+        name: "Sophos",
+        types: ["vpn", "tacacs"],
+        platforms: {
+            "sfos": {
+                name: "SFOS",
+                description: "Sophos Firewall OS",
+                versions: ["18.x", "19.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    netgear: {
+        name: "Netgear",
+        types: ["wired", "wireless"],
+        platforms: {
+            "gsm": {
+                name: "GSM",
+                description: "Netgear Smart Managed Pro for switches",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
+    },
+    
+    arubaio: {
+        name: "Aruba Instant On",
+        types: ["wired", "wireless"],
+        platforms: {
+            "instanton": {
+                name: "Instant On",
+                description: "Aruba Instant On for SMB switches and APs",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
+    },
+    
+    ciscosmb: {
+        name: "Cisco SMB",
+        types: ["wired", "wireless"],
+        platforms: {
+            "cbs": {
+                name: "CBS",
+                description: "Cisco Business Switches",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "rv": {
+                name: "RV",
+                description: "Cisco Small Business RV Series",
+                versions: ["current"],
+                capabilities: ["dot1x", "vpn", "radius"]
+            }
+        }
+    },
+    
+    clearpass: {
+        name: "ClearPass",
+        types: ["uaac"],
+        platforms: {
+            "cppm": {
+                name: "CPPM",
+                description: "ClearPass Policy Manager",
+                versions: ["6.9.x", "6.10.x", "6.11.x"],
+                capabilities: ["uaac", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    ise: {
+        name: "Cisco ISE",
+        types: ["uaac"],
+        platforms: {
+            "ise": {
+                name: "ISE",
+                description: "Identity Services Engine",
+                versions: ["2.7.x", "3.0.x", "3.1.x", "3.2.x"],
+                capabilities: ["uaac", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    freeradius: {
+        name: "FreeRADIUS",
+        types: ["uaac"],
+        platforms: {
+            "freeradius": {
+                name: "FreeRADIUS",
+                description: "Open source RADIUS server",
+                versions: ["3.0.x", "3.2.x"],
+                capabilities: ["uaac", "radius"]
+            }
+        }
+    },
+    
+    nps: {
+        name: "Microsoft NPS",
+        types: ["uaac"],
+        platforms: {
+            "nps": {
+                name: "NPS",
+                description: "Network Policy Server",
+                versions: ["Windows Server 2016", "Windows Server 2019", "Windows Server 2022"],
+                capabilities: ["uaac", "radius"]
+            }
+        }
+    },
+    
+    portnox: {
+        name: "Portnox",
+        types: ["uaac"],
+        platforms: {
+            "portnox": {
+                name: "Portnox",
+                description: "Portnox CLEAR/CORE for network access control",
+                versions: ["current"],
+                capabilities: ["uaac", "radius"]
+            }
+        }
+    },
+    
+    packetfence: {
+        name: "PacketFence",
+        types: ["uaac"],
+        platforms: {
+            "packetfence": {
+                name: "PacketFence",
+                description: "Open source NAC solution",
+                versions: ["10.x", "11.x", "12.x"],
+                capabilities: ["uaac", "radius"]
+            }
+        }
+    }
 };
 
 // Initialize on page load
@@ -453,14 +672,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize vendor grid
 function initVendorGrid() {
     const vendorGrid = document.getElementById('vendor-grid');
-    if (!vendorGrid) return;
+    if (!vendorGrid) {
+        console.error('Vendor grid element not found!');
+        return;
+    }
     
     // Clear existing content
     vendorGrid.innerHTML = '';
     
     // Create vendor cards
     for (const [vendorId, vendor] of Object.entries(vendors)) {
-        // Skip alternate formats or duplicates if needed
+        // Skip duplicates
         if (vendorId === 'fortinetalt') continue;
         
         const vendorCard = document.createElement('div');
@@ -536,6 +758,8 @@ function setupVendorSelection() {
 
 // Select a vendor
 function selectVendor(vendorId) {
+    console.log('Selecting vendor:', vendorId);
+    
     // Update selected vendor styling
     const vendorCards = document.querySelectorAll('.vendor-logo-container');
     vendorCards.forEach(card => {
@@ -548,9 +772,6 @@ function selectVendor(vendorId) {
     
     // Update platform select
     updatePlatformSelect(vendorId);
-    
-    // Update platform details
-    updatePlatformDetails();
     
     // Store selected vendor
     localStorage.setItem('selectedVendor', vendorId);
@@ -584,6 +805,8 @@ function updatePlatformSelect(vendorId) {
     const deploymentType = document.getElementById('deployment-type');
     const currentDeploymentType = deploymentType ? deploymentType.value : 'wired';
     
+    console.log(`Updating platform select for ${vendorId} with deployment type ${currentDeploymentType}`);
+    
     // Add platform options that support the selected deployment type
     for (const [platformId, platform] of Object.entries(vendor.platforms)) {
         // Check if platform supports deployment type
@@ -603,6 +826,9 @@ function updatePlatformSelect(vendorId) {
     
     // Enable select
     platformSelect.disabled = false;
+    
+    // Trigger platform details update
+    updatePlatformDetails();
 }
 
 // Update platform options based on deployment type
@@ -622,6 +848,8 @@ function updatePlatformDetails() {
     const selectedVendor = getSelectedVendor();
     const platformSelect = document.getElementById('platform-select');
     const selectedPlatform = platformSelect ? platformSelect.value : '';
+    
+    console.log(`Updating platform details for ${selectedVendor}/${selectedPlatform}`);
     
     // Clear if nothing selected
     if (!selectedVendor || !selectedPlatform) {
@@ -697,22 +925,21 @@ function getSelectedVendor() {
 function createTextLogoDataUrl(vendorName) {
     // Create a canvas element
     const canvas = document.createElement('canvas');
-    canvas.width = 200;
-    canvas.height = 100;
+    canvas.width = 120;
+    canvas.height = 60;
     
     // Get the context
     const ctx = canvas.getContext('2d');
     
-    // Draw background
-    ctx.fillStyle = '#f8f8f8';
-    ctx.fillRect(0, 0, 200, 100);
+    // Draw background (transparent)
+    ctx.clearRect(0, 0, 120, 60);
     
     // Draw text
     ctx.fillStyle = '#0077cc';
-    ctx.font = 'bold 24px Arial';
+    ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(vendorName, 100, 50);
+    ctx.fillText(vendorName, 60, 30);
     
     // Return data URL
     return canvas.toDataURL('image/png');
@@ -720,35 +947,23 @@ function createTextLogoDataUrl(vendorName) {
 
 // Select the default vendor when the page is loaded
 function selectDefaultVendor() {
+    console.log('Selecting default vendor...');
+    
     // Check if we have a saved vendor
     const savedVendor = localStorage.getItem('selectedVendor');
     
     if (savedVendor && vendors[savedVendor]) {
+        console.log('Using saved vendor:', savedVendor);
         selectVendor(savedVendor);
     } else {
         // Otherwise select Cisco by default
+        console.log('Selecting default vendor (Cisco)');
         selectVendor('cisco');
     }
 }
 
-// Initialize the vendor logos with current theme
-function initVendorLogos() {
-    // Check if we're in dark theme
-    const isDarkTheme = document.body.classList.contains('dark-theme');
-    
-    // Adjust logo background for dark theme
-    if (isDarkTheme) {
-        const vendorCards = document.querySelectorAll('.vendor-logo-container');
-        vendorCards.forEach(card => {
-            card.style.backgroundColor = '#2d3748';
-        });
-    }
-}
-
-// Global function to regenerate vendor logos if theme changes
-window.regenerateVendorLogos = function() {
-    initVendorLogos();
-};
-
-// Select default vendor when loaded
-setTimeout(selectDefaultVendor, 100);
+// Wait a moment then select default vendor
+setTimeout(function() {
+    console.log('Initializing vendor selection...');
+    selectDefaultVendor();
+}, 500);
