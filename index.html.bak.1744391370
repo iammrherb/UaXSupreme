@@ -75,8 +75,6 @@
         }
     };
     </script>
-    <script src="js/vendor-grid-fix.js"></script>
-    <script src="js/alert-fix.js"></script>
 </head>
 <body>
     <script src="lib/ai-integration.js"></script>
