@@ -1,1 +1,4 @@
-Couldn't find the requested file /logos/netgear.svg in gilbarbara/logos.
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+    <rect width="200" height="100" fill="#ffffff"/>
+    <text x="100" y="55" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#004d40">NETGEAR</text>
+</svg>

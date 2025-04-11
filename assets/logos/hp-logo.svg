@@ -1,1 +1,4 @@
-File not found: /v1/AUTH_mw/wikipedia-commons-local-public.29/2/29/HP_logo_2012.svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">
+    <rect width="200" height="100" fill="#ffffff"/>
+    <text x="100" y="55" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle" fill="#0096d6">HP</text>
+</svg>

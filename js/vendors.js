@@ -1,147 +1,454 @@
 /**
- * Dot1Xer Supreme Enterprise Edition - Vendor Functionality
- * Version 4.1.0
+ * Dot1Xer Supreme Enterprise Edition - Vendor Configuration
+ * Version 4.2.0
  * 
- * This module handles vendor-specific functionality, including:
- * - Vendor selection and display
- * - Platform selection based on vendor
- * - Vendor-specific configuration templates
+ * This module contains information about all supported vendors and their platforms.
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing Vendor functionality...');
-    
-    // Initialize vendor grid
-    initVendorGrid();
-    
-    // Set up change listeners
-    setupVendorChangeListeners();
-});
-
-// List of supported vendors with their platforms
+// Define all vendors with their capabilities
 const vendors = {
+    // Cisco - https://www.cisco.com/
     cisco: {
         name: "Cisco",
-        logo: "assets/logos/cisco-logo.svg",
-        platforms: [
-            { value: "ios", name: "IOS" },
-            { value: "ios-xe", name: "IOS-XE" },
-            { value: "nx-os", name: "NX-OS" },
-            { value: "catalyst", name: "Catalyst OS" }
-        ]
+        types: ["wired", "wireless", "tacacs", "vpn", "uaac"],
+        platforms: {
+            "ios": {
+                name: "IOS",
+                description: "Traditional Cisco IOS for older Catalyst switches",
+                versions: ["12.2(55)SE", "15.0(2)SE", "15.2(2)E", "15.2(4)E", "15.2(7)E"],
+                capabilities: ["dot1x", "mab", "tacacs", "radius"]
+            },
+            "ios-xe": {
+                name: "IOS-XE",
+                description: "IOS-XE for newer Catalyst switches and ISR routers",
+                versions: ["16.12.x", "17.3.x", "17.6.x", "17.9.x", "17.11.x"],
+                capabilities: ["dot1x", "mab", "radsec", "tacacs", "radius"]
+            },
+            "ios-xr": {
+                name: "IOS-XR",
+                description: "IOS-XR for high-end routers",
+                versions: ["7.3.x", "7.5.x", "7.8.x"],
+                capabilities: ["tacacs", "radius"]
+            },
+            "nx-os": {
+                name: "NX-OS",
+                description: "NX-OS for Nexus switches",
+                versions: ["9.3.x", "10.1.x", "10.2.x"],
+                capabilities: ["dot1x", "mab", "tacacs", "radius"]
+            },
+            "catalyst-os": {
+                name: "Catalyst OS",
+                description: "Software for Catalyst 9800 Series Wireless Controllers",
+                versions: ["17.3.x", "17.6.x", "17.9.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "aireos": {
+                name: "AireOS",
+                description: "AireOS for Cisco Wireless LAN Controllers",
+                versions: ["8.5.x", "8.10.x"],
+                capabilities: ["dot1x", "radius", "tacacs"]
+            },
+            "asa": {
+                name: "ASA",
+                description: "Adaptive Security Appliance for firewalls & VPN",
+                versions: ["9.12.x", "9.15.x", "9.17.x", "9.18.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            },
+            "firepower": {
+                name: "Firepower",
+                description: "Firepower Threat Defense for next-gen firewalls",
+                versions: ["7.0.x", "7.1.x", "7.2.x", "7.3.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            },
+            "meraki": {
+                name: "Meraki",
+                description: "Meraki Dashboard for cloud-managed networks",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "ise": {
+                name: "ISE",
+                description: "Identity Services Engine for network access control",
+                versions: ["2.7.x", "3.0.x", "3.1.x", "3.2.x"],
+                capabilities: ["uaac", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // Aruba - https://www.arubanetworks.com/
     aruba: {
         name: "Aruba",
-        logo: "assets/logos/aruba-logo.svg",
-        platforms: [
-            { value: "aos-cx", name: "AOS-CX" },
-            { value: "aos-switch", name: "AOS-Switch" },
-            { value: "clearpass", name: "ClearPass" }
-        ]
+        types: ["wired", "wireless", "tacacs", "uaac"],
+        platforms: {
+            "aos-cx": {
+                name: "AOS-CX",
+                description: "AOS-CX for Aruba CX switches",
+                versions: ["10.04.x", "10.05.x", "10.06.x", "10.08.x", "10.09.x", "10.10.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "aos-switch": {
+                name: "AOS-Switch",
+                description: "AOS-Switch for Aruba/HP switches (former ProVision)",
+                versions: ["16.08.x", "16.09.x", "16.10.x", "16.11.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "arubaos": {
+                name: "ArubaOS",
+                description: "ArubaOS for Mobility Controllers",
+                versions: ["8.6.x", "8.7.x", "8.8.x", "8.9.x", "8.10.x"],
+                capabilities: ["dot1x", "radius", "tacacs"]
+            },
+            "instant": {
+                name: "Instant",
+                description: "Aruba Instant for autonomous APs",
+                versions: ["8.6.x", "8.7.x", "8.8.x", "8.9.x", "8.10.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "central": {
+                name: "Central",
+                description: "Aruba Central for cloud-managed networks",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "clearpass": {
+                name: "ClearPass",
+                description: "ClearPass Policy Manager for network access control",
+                versions: ["6.9.x", "6.10.x", "6.11.x"],
+                capabilities: ["uaac", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // Juniper - https://www.juniper.net/
     juniper: {
         name: "Juniper",
-        logo: "assets/logos/juniper-logo.svg",
-        platforms: [
-            { value: "junos", name: "JunOS" },
-            { value: "ex-series", name: "EX Series" },
-            { value: "srx-series", name: "SRX Series" }
-        ]
+        types: ["wired", "wireless", "vpn", "tacacs"],
+        platforms: {
+            "junos": {
+                name: "JunOS",
+                description: "JunOS for EX/QFX switches, SRX firewalls, and MX routers",
+                versions: ["19.4R3", "20.4R3", "21.2R3", "21.4R3", "22.1R1", "22.2R1", "22.3R1", "22.4R1"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "mist": {
+                name: "Mist",
+                description: "Mist for cloud-managed wireless",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "srx": {
+                name: "SRX",
+                description: "SRX Services Gateway firewalls",
+                versions: ["19.4R3", "20.4R3", "21.2R3", "21.4R3", "22.1R1", "22.2R1"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // HP - https://www.hpe.com/
     hp: {
         name: "HP",
-        logo: "assets/logos/hp-logo.svg",
-        platforms: [
-            { value: "procurve", name: "ProCurve" },
-            { value: "comware", name: "Comware" }
-        ]
+        types: ["wired"],
+        platforms: {
+            "provision": {
+                name: "ProVision",
+                description: "ProVision for legacy HP ProCurve/Aruba switches",
+                versions: ["K.16.05", "K.16.06", "K.16.07", "K.16.08", "K.16.09"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "comware": {
+                name: "Comware",
+                description: "Comware for HP H3C/3Com switches",
+                versions: ["7.1.x", "7.2.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // Extreme Networks - https://www.extremenetworks.com/
     extreme: {
         name: "Extreme",
-        logo: "assets/logos/extreme-logo.svg",
-        platforms: [
-            { value: "exos", name: "EXOS" },
-            { value: "voss", name: "VOSS" }
-        ]
+        types: ["wired", "wireless", "tacacs"],
+        platforms: {
+            "exos": {
+                name: "EXOS",
+                description: "EXOS for Summit and X Series switches",
+                versions: ["30.7.x", "31.1.x", "31.2.x", "31.3.x", "31.4.x", "31.5.x", "31.6.x", "31.7.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "voss": {
+                name: "VOSS",
+                description: "VOSS for VSP Series switches",
+                versions: ["8.4.x", "8.5.x", "8.6.x", "8.7.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "wing": {
+                name: "WiNG",
+                description: "WiNG for Extreme wireless APs (former Motorola/Symbol/Zebra)",
+                versions: ["7.6.x", "7.7.x", "7.8.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "identifi": {
+                name: "IdentiFi",
+                description: "IdentiFi for wireless controllers",
+                versions: ["10.51.x", "10.52.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "xiq": {
+                name: "XIQ",
+                description: "ExtremeCloud IQ for cloud-managed networks",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
     },
+    
+    // Fortinet - https://www.fortinet.com/
     fortinet: {
         name: "Fortinet",
-        logo: "assets/logos/fortinet-logo.svg",
-        platforms: [
-            { value: "fortiswitch", name: "FortiSwitch" },
-            { value: "fortigate", name: "FortiGate" },
-            { value: "fortinac", name: "FortiNAC" }
-        ]
+        types: ["wired", "wireless", "vpn", "tacacs"],
+        platforms: {
+            "fortiswitch": {
+                name: "FortiSwitch",
+                description: "FortiSwitch operating system",
+                versions: ["6.4.x", "7.0.x", "7.2.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "fortigate": {
+                name: "FortiGate",
+                description: "FortiGate for firewall and VPN",
+                versions: ["6.4.x", "7.0.x", "7.2.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            },
+            "fortiwlc": {
+                name: "FortiWLC",
+                description: "FortiWLC for wireless controllers",
+                versions: ["8.6.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "fortiauth": {
+                name: "FortiAuthenticator",
+                description: "FortiAuthenticator for authentication server",
+                versions: ["6.4.x", "7.0.x", "7.2.x"],
+                capabilities: ["uaac", "radius", "tacacs", "saml"]
+            }
+        }
     },
+    
+    // Dell - https://www.dell.com/
     dell: {
         name: "Dell",
-        logo: "assets/logos/dell-logo.svg",
-        platforms: [
-            { value: "os10", name: "OS10" },
-            { value: "os9", name: "OS9" }
-        ]
+        types: ["wired", "tacacs"],
+        platforms: {
+            "os10": {
+                name: "OS10",
+                description: "OS10 for newest Dell EMC PowerSwitch",
+                versions: ["10.5.x", "10.6.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "os9": {
+                name: "OS9",
+                description: "OS9 for Dell EMC PowerSwitch (former Force10)",
+                versions: ["9.14.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "os6": {
+                name: "OS6",
+                description: "OS6 for Dell PowerSwitch N-Series",
+                versions: ["6.6.x", "6.7.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // Huawei - https://www.huawei.com/
     huawei: {
         name: "Huawei",
-        logo: "assets/logos/huawei-logo.svg",
-        platforms: [
-            { value: "vrp", name: "VRP" },
-            { value: "s-series", name: "S-Series" }
-        ]
+        types: ["wired", "wireless", "vpn", "tacacs"],
+        platforms: {
+            "vrp": {
+                name: "VRP",
+                description: "Versatile Routing Platform for switches and routers",
+                versions: ["8.x", "9.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "ac": {
+                name: "AC",
+                description: "Huawei Wireless Access Controller",
+                versions: ["8.x", "9.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "usg": {
+                name: "USG",
+                description: "Unified Security Gateway for firewalls and VPN",
+                versions: ["6.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            }
+        }
     },
+    
+    // Ruckus - https://www.commscope.com/ruckus/
     ruckus: {
         name: "Ruckus",
-        logo: "assets/logos/ruckus-logo.svg",
-        platforms: [
-            { value: "icx", name: "ICX" },
-            { value: "fastiron", name: "FastIron" },
-            { value: "smartzone", name: "SmartZone" }
-        ]
+        types: ["wired", "wireless"],
+        platforms: {
+            "fastiron": {
+                name: "FastIron",
+                description: "FastIron for ICX switches",
+                versions: ["8.0.x", "9.0.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "smartzone": {
+                name: "SmartZone",
+                description: "SmartZone for wireless controllers",
+                versions: ["5.2.x", "6.0.x"],
+                capabilities: ["dot1x", "radius"]
+            },
+            "unleashed": {
+                name: "Unleashed",
+                description: "Unleashed for autonomous APs",
+                versions: ["200.7.x"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
     },
+    
+    // Palo Alto Networks - https://www.paloaltonetworks.com/
     paloalto: {
         name: "Palo Alto",
-        logo: "assets/logos/paloalto-logo.svg",
-        platforms: [
-            { value: "panos", name: "PAN-OS" }
-        ]
+        types: ["vpn", "tacacs"],
+        platforms: {
+            "panos": {
+                name: "PAN-OS",
+                description: "PAN-OS for Palo Alto firewalls",
+                versions: ["9.1.x", "10.0.x", "10.1.x", "10.2.x", "11.0.x"],
+                capabilities: ["vpn", "radius", "tacacs", "saml"]
+            },
+            "panorama": {
+                name: "Panorama",
+                description: "Panorama for centralized management",
+                versions: ["9.1.x", "10.0.x", "10.1.x", "10.2.x", "11.0.x"],
+                capabilities: ["radius", "tacacs"]
+            }
+        }
     },
+    
+    // Check Point - https://www.checkpoint.com/
     checkpoint: {
         name: "CheckPoint",
-        logo: "assets/logos/checkpoint-logo.svg",
-        platforms: [
-            { value: "gaia", name: "Gaia" }
-        ]
+        types: ["vpn", "tacacs"],
+        platforms: {
+            "gaia": {
+                name: "Gaia",
+                description: "Gaia for Check Point security gateways",
+                versions: ["R80.20", "R80.30", "R80.40", "R81", "R81.10", "R81.20"],
+                capabilities: ["vpn", "radius", "tacacs", "saml"]
+            },
+            "mds": {
+                name: "MDS",
+                description: "Multi-Domain Security Management",
+                versions: ["R80.20", "R80.30", "R80.40", "R81", "R81.10", "R81.20"],
+                capabilities: ["radius", "tacacs"]
+            }
+        }
     },
+    
+    // Alcatel-Lucent Enterprise - https://www.al-enterprise.com/
     alcatel: {
         name: "Alcatel-Lucent",
-        logo: "assets/logos/alcatel-logo.svg",
-        platforms: [
-            { value: "aos", name: "AOS" }
-        ]
+        types: ["wired", "wireless"],
+        platforms: {
+            "aos": {
+                name: "AOS",
+                description: "Alcatel-Lucent Operating System for OmniSwitch",
+                versions: ["8.6.x", "8.7.x", "8.8.x", "8.9.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "omnivista": {
+                name: "OmniVista",
+                description: "OmniVista for network management",
+                versions: ["4.x"],
+                capabilities: ["radius", "tacacs"]
+            },
+            "stellar": {
+                name: "Stellar",
+                description: "Stellar for wireless APs",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius"]
+            }
+        }
     },
+    
+    // Cisco Meraki - https://meraki.cisco.com/
     meraki: {
         name: "Meraki",
-        logo: "assets/logos/meraki-logo.svg",
-        platforms: [
-            { value: "meraki-ms", name: "Meraki MS Switch" }
-        ]
+        types: ["wired", "wireless", "vpn"],
+        platforms: {
+            "dashboard": {
+                name: "Dashboard",
+                description: "Meraki Dashboard for MS switches, MR APs, and MX security appliances",
+                versions: ["current"],
+                capabilities: ["dot1x", "radius", "vpn"]
+            }
+        }
     },
+    
+    // Arista - https://www.arista.com/
     arista: {
         name: "Arista",
-        logo: "assets/logos/arista-logo.svg",
-        platforms: [
-            { value: "eos", name: "EOS" }
-        ]
+        types: ["wired", "tacacs"],
+        platforms: {
+            "eos": {
+                name: "EOS",
+                description: "Extensible Operating System for Arista switches",
+                versions: ["4.27.x", "4.28.x", "4.29.x", "4.30.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            },
+            "cloudvision": {
+                name: "CloudVision",
+                description: "CloudVision for network management",
+                versions: ["2021.x", "2022.x"],
+                capabilities: ["radius", "tacacs"]
+            }
+        }
     },
+    
+    // Ubiquiti - https://www.ui.com/
     ubiquiti: {
         name: "Ubiquiti",
-        logo: "assets/logos/ubiquiti-logo.svg",
-        platforms: [
-            { value: "unifi", name: "UniFi" },
-            { value: "edgeswitch", name: "EdgeSwitch" }
-        ]
-    }
+        types: ["wired", "wireless", "vpn"],
+        platforms: {
+            "unifi": {
+                name: "UniFi",
+                description: "UniFi controllers for switches and APs",
+                versions: ["5.14.x", "6.0.x", "7.1.x", "7.2.x", "7.3.x"],
+                capabilities: ["dot1x", "radius", "vpn"]
+            },
+            "edgeos": {
+                name: "EdgeOS",
+                description: "EdgeOS for EdgeRouter",
+                versions: ["2.0.x"],
+                capabilities: ["vpn", "radius", "tacacs"]
+            },
+            "edgeswitch": {
+                name: "EdgeSwitch",
+                description: "EdgeSwitch for EdgeSwitch models",
+                versions: ["1.9.x"],
+                capabilities: ["dot1x", "mab", "radius", "tacacs"]
+            }
+        }
+    },
+    
+    // Other Vendors (summarized for brevity)
+    // Additional vendors would continue here
 };
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing vendor selection system...');
+    initVendorGrid();
+    setupVendorSelection();
+});
 
 // Initialize vendor grid
 function initVendorGrid() {
@@ -151,97 +458,112 @@ function initVendorGrid() {
     // Clear existing content
     vendorGrid.innerHTML = '';
     
-    // Add vendor logo containers
-    Object.keys(vendors).forEach(vendorId => {
-        const vendor = vendors[vendorId];
+    // Create vendor cards
+    for (const [vendorId, vendor] of Object.entries(vendors)) {
+        // Skip alternate formats or duplicates if needed
+        if (vendorId === 'fortinetalt') continue;
         
-        // Create vendor logo container
-        const vendorContainer = document.createElement('div');
-        vendorContainer.className = 'vendor-logo-container';
-        vendorContainer.setAttribute('data-vendor', vendorId);
+        const vendorCard = document.createElement('div');
+        vendorCard.className = 'vendor-logo-container';
+        vendorCard.setAttribute('data-vendor', vendorId);
+        
+        // Get vendor types and determine primary type for badge
+        const types = vendor.types || [];
+        let primaryType = types.length > 0 ? types[0] : 'unknown';
+        let typeLabel = primaryType.toUpperCase();
+        
+        // If vendor supports both wired and wireless, show as "BOTH"
+        if (types.includes('wired') && types.includes('wireless')) {
+            primaryType = 'both';
+            typeLabel = 'BOTH';
+        }
         
         // Create vendor logo
+        const logoPath = `assets/logos/${vendorId}-logo.svg`;
         const vendorLogo = document.createElement('img');
         vendorLogo.className = 'vendor-logo';
-        vendorLogo.src = vendor.logo;
-        vendorLogo.alt = vendor.name;
+        vendorLogo.src = logoPath;
+        vendorLogo.alt = `${vendor.name} logo`;
         vendorLogo.onerror = function() {
-            // Fallback if logo loading fails
+            // If image fails to load, replace with text logo
             this.onerror = null;
-            this.src = createFallbackLogo(vendor.name);
+            this.src = createTextLogoDataUrl(vendor.name);
         };
         
         // Create vendor name
-        const vendorName = document.createElement('div');
+        const vendorName = document.createElement('span');
         vendorName.className = 'vendor-name';
         vendorName.textContent = vendor.name;
         
-        // Add to container
-        vendorContainer.appendChild(vendorLogo);
-        vendorContainer.appendChild(vendorName);
+        // Create vendor type badge
+        const vendorType = document.createElement('span');
+        vendorType.className = `vendor-type vendor-type-${primaryType}`;
+        vendorType.textContent = typeLabel;
         
-        // Add click handler
-        vendorContainer.addEventListener('click', () => {
+        // Add all elements to card
+        vendorCard.appendChild(vendorLogo);
+        vendorCard.appendChild(vendorName);
+        vendorCard.appendChild(vendorType);
+        
+        // Add click event listener
+        vendorCard.addEventListener('click', function() {
             selectVendor(vendorId);
         });
         
-        // Add to grid
-        vendorGrid.appendChild(vendorContainer);
-    });
-    
-    // Check for default vendor
-    const defaultVendor = localStorage.getItem('default_vendor');
-    if (defaultVendor && vendors[defaultVendor]) {
-        selectVendor(defaultVendor);
+        // Add card to grid
+        vendorGrid.appendChild(vendorCard);
     }
 }
 
-// Create fallback logo as data URL
-function createFallbackLogo(vendorName) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 120;
-    canvas.height = 60;
-    const ctx = canvas.getContext('2d');
+// Setup vendor selection event handling
+function setupVendorSelection() {
+    // Listen for platform selection changes
+    const platformSelect = document.getElementById('platform-select');
+    if (platformSelect) {
+        platformSelect.addEventListener('change', function() {
+            updatePlatformDetails();
+        });
+    }
     
-    // Draw background
-    ctx.fillStyle = '#f8f8f8';
-    ctx.fillRect(0, 0, 120, 60);
-    
-    // Draw text
-    ctx.fillStyle = '#0077cc';
-    ctx.font = 'bold 14px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(vendorName.toUpperCase(), 60, 30);
-    
-    return canvas.toDataURL();
+    // Listen for deployment type changes
+    const deploymentType = document.getElementById('deployment-type');
+    if (deploymentType) {
+        deploymentType.addEventListener('change', function() {
+            updatePlatformOptions();
+        });
+    }
 }
 
 // Select a vendor
 function selectVendor(vendorId) {
-    const vendorContainers = document.querySelectorAll('.vendor-logo-container');
-    
-    // Remove selected class from all vendors
-    vendorContainers.forEach(container => {
-        container.classList.remove('selected');
+    // Update selected vendor styling
+    const vendorCards = document.querySelectorAll('.vendor-logo-container');
+    vendorCards.forEach(card => {
+        if (card.getAttribute('data-vendor') === vendorId) {
+            card.classList.add('selected');
+        } else {
+            card.classList.remove('selected');
+        }
     });
     
-    // Add selected class to clicked vendor
-    const selectedContainer = document.querySelector(`.vendor-logo-container[data-vendor="${vendorId}"]`);
-    if (selectedContainer) {
-        selectedContainer.classList.add('selected');
+    // Update platform select
+    updatePlatformSelect(vendorId);
+    
+    // Update platform details
+    updatePlatformDetails();
+    
+    // Store selected vendor
+    localStorage.setItem('selectedVendor', vendorId);
+    
+    // Enable the next button if it exists
+    const nextButton = document.getElementById('platform-next');
+    if (nextButton) {
+        nextButton.disabled = false;
     }
-    
-    // Update platform dropdown
-    updatePlatformOptions(vendorId);
-    
-    // Trigger change event
-    const event = new CustomEvent('vendorChange', { detail: { vendor: vendorId } });
-    document.dispatchEvent(event);
 }
 
-// Update platform dropdown based on selected vendor
-function updatePlatformOptions(vendorId) {
+// Update platform select dropdown for selected vendor
+function updatePlatformSelect(vendorId) {
     const platformSelect = document.getElementById('platform-select');
     if (!platformSelect) return;
     
@@ -251,876 +573,182 @@ function updatePlatformOptions(vendorId) {
     // Add default option
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
-    defaultOption.textContent = '-- Select Platform --';
+    defaultOption.textContent = 'Select a platform';
     platformSelect.appendChild(defaultOption);
     
-    // If no vendor selected, return
-    if (!vendorId || !vendors[vendorId]) return;
+    // Get vendor platforms
+    const vendor = vendors[vendorId];
+    if (!vendor) return;
     
-    // Add platform options for selected vendor
-    vendors[vendorId].platforms.forEach(platform => {
-        const option = document.createElement('option');
-        option.value = platform.value;
-        option.textContent = platform.name;
-        platformSelect.appendChild(option);
-    });
+    // Get deployment type
+    const deploymentType = document.getElementById('deployment-type');
+    const currentDeploymentType = deploymentType ? deploymentType.value : 'wired';
+    
+    // Add platform options that support the selected deployment type
+    for (const [platformId, platform] of Object.entries(vendor.platforms)) {
+        // Check if platform supports deployment type
+        if (platform.capabilities.includes(currentDeploymentType) || 
+            (currentDeploymentType === 'wired' && platform.capabilities.includes('dot1x')) ||
+            (currentDeploymentType === 'wireless' && platform.capabilities.includes('dot1x')) ||
+            (currentDeploymentType === 'tacacs' && platform.capabilities.includes('tacacs')) ||
+            (currentDeploymentType === 'vpn' && platform.capabilities.includes('vpn')) ||
+            (currentDeploymentType === 'uaac' && platform.capabilities.includes('radius'))) {
+            
+            const option = document.createElement('option');
+            option.value = platformId;
+            option.textContent = platform.name;
+            platformSelect.appendChild(option);
+        }
+    }
+    
+    // Enable select
+    platformSelect.disabled = false;
 }
 
-// Setup vendor change listeners
-function setupVendorChangeListeners() {
-    // Listen for vendor change events
-    document.addEventListener('vendorChange', function(e) {
-        const vendorId = e.detail.vendor;
-        console.log('Vendor changed to:', vendorId);
+// Update platform options based on deployment type
+function updatePlatformOptions() {
+    const selectedVendor = getSelectedVendor();
+    if (selectedVendor) {
+        updatePlatformSelect(selectedVendor);
+    }
+}
+
+// Update platform details based on selected vendor and platform
+function updatePlatformDetails() {
+    const platformDetails = document.getElementById('platform-details');
+    if (!platformDetails) return;
+    
+    // Get selected vendor and platform
+    const selectedVendor = getSelectedVendor();
+    const platformSelect = document.getElementById('platform-select');
+    const selectedPlatform = platformSelect ? platformSelect.value : '';
+    
+    // Clear if nothing selected
+    if (!selectedVendor || !selectedPlatform) {
+        platformDetails.innerHTML = '<p>Please select a vendor and platform.</p>';
+        return;
+    }
+    
+    // Get vendor and platform data
+    const vendor = vendors[selectedVendor];
+    if (!vendor) return;
+    
+    const platform = vendor.platforms[selectedPlatform];
+    if (!platform) return;
+    
+    // Create platform details HTML
+    let detailsHtml = `
+        <div class="platform-details-header">
+            <h3>${platform.name}</h3>
+            <span class="vendor-badge">${vendor.name}</span>
+        </div>
+        <p>${platform.description}</p>
         
-        // Perform any other vendor-specific actions here
+        <h4>Capabilities</h4>
+        <div class="capability-badges">
+    `;
+    
+    // Add capability badges
+    const capabilities = platform.capabilities || [];
+    const capabilityLabels = {
+        'dot1x': '802.1X',
+        'mab': 'MAB',
+        'radsec': 'RadSec',
+        'radius': 'RADIUS',
+        'tacacs': 'TACACS+',
+        'vpn': 'VPN',
+        'uaac': 'User Auth',
+        'saml': 'SAML'
+    };
+    
+    capabilities.forEach(capability => {
+        const label = capabilityLabels[capability] || capability;
+        detailsHtml += `<span class="capability-badge">${label}</span>`;
     });
     
-    // Listen for platform changes
-    const platformSelect = document.getElementById('platform-select');
-    if (platformSelect) {
-        platformSelect.addEventListener('change', function() {
-            const selectedVendor = getSelectedVendor();
-            const selectedPlatform = this.value;
-            
-            if (selectedVendor && selectedPlatform) {
-                console.log('Platform changed to:', selectedPlatform);
-                
-                // Perform any platform-specific actions here
-            }
+    detailsHtml += '</div>';
+    
+    // Add version selection
+    if (platform.versions && platform.versions.length > 0) {
+        detailsHtml += `
+            <h4>Software Version</h4>
+            <select id="platform-version" class="form-control">
+                <option value="">Select a version</option>
+        `;
+        
+        platform.versions.forEach(version => {
+            detailsHtml += `<option value="${version}">${version}</option>`;
+        });
+        
+        detailsHtml += '</select>';
+    }
+    
+    // Update platform details
+    platformDetails.innerHTML = detailsHtml;
+}
+
+// Get selected vendor
+function getSelectedVendor() {
+    const selectedCard = document.querySelector('.vendor-logo-container.selected');
+    return selectedCard ? selectedCard.getAttribute('data-vendor') : '';
+}
+
+// Create text logo as data URL if image fails to load
+function createTextLogoDataUrl(vendorName) {
+    // Create a canvas element
+    const canvas = document.createElement('canvas');
+    canvas.width = 200;
+    canvas.height = 100;
+    
+    // Get the context
+    const ctx = canvas.getContext('2d');
+    
+    // Draw background
+    ctx.fillStyle = '#f8f8f8';
+    ctx.fillRect(0, 0, 200, 100);
+    
+    // Draw text
+    ctx.fillStyle = '#0077cc';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(vendorName, 100, 50);
+    
+    // Return data URL
+    return canvas.toDataURL('image/png');
+}
+
+// Select the default vendor when the page is loaded
+function selectDefaultVendor() {
+    // Check if we have a saved vendor
+    const savedVendor = localStorage.getItem('selectedVendor');
+    
+    if (savedVendor && vendors[savedVendor]) {
+        selectVendor(savedVendor);
+    } else {
+        // Otherwise select Cisco by default
+        selectVendor('cisco');
+    }
+}
+
+// Initialize the vendor logos with current theme
+function initVendorLogos() {
+    // Check if we're in dark theme
+    const isDarkTheme = document.body.classList.contains('dark-theme');
+    
+    // Adjust logo background for dark theme
+    if (isDarkTheme) {
+        const vendorCards = document.querySelectorAll('.vendor-logo-container');
+        vendorCards.forEach(card => {
+            card.style.backgroundColor = '#2d3748';
         });
     }
 }
 
-// Get the currently selected vendor
-function getSelectedVendor() {
-    const selectedContainer = document.querySelector('.vendor-logo-container.selected');
-    return selectedContainer ? selectedContainer.getAttribute('data-vendor') : null;
-}
-
-// Generate vendor-specific configuration
-function generateVendorConfig(vendorId, platform, settings) {
-    console.log(`Generating configuration for ${vendorId} ${platform}`);
-    
-    // Check if vendor and platform are valid
-    if (!vendorId || !platform) {
-        return '# Please select a vendor and platform first.';
-    }
-    
-    // Get vendor-specific generator function
-    const generatorFunction = vendorConfigGenerators[vendorId] && vendorConfigGenerators[vendorId][platform];
-    
-    if (generatorFunction && typeof generatorFunction === 'function') {
-        return generatorFunction(settings);
-    } else if (vendorConfigGenerators[vendorId] && vendorConfigGenerators[vendorId]['default']) {
-        // Use default generator for this vendor if platform-specific one doesn't exist
-        return vendorConfigGenerators[vendorId]['default'](platform, settings);
-    } else {
-        // Use generic template
-        return generateGenericConfig(vendorId, platform, settings);
-    }
-}
-
-// Generate generic configuration
-function generateGenericConfig(vendorId, platform, settings) {
-    const vendor = vendors[vendorId];
-    const vendorName = vendor ? vendor.name : vendorId.toUpperCase();
-    
-    return `! ${vendorName} ${platform.toUpperCase()} 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-! Note: This is a generic template. For vendor-specific optimizations, update vendorConfigGenerators.
-!
-! ===================== AUTHENTICATION CONFIGURATION =====================
-!
-${settings.authMethod === 'dot1x' || settings.authMethod === 'dot1x-mab' || settings.authMethod === 'concurrent' || settings.authMethod === 'dot1x-mab-webauth' ? 
-`! Configure 802.1X globally
-aaa authentication dot1x default group radius
-aaa authorization network default group radius
-dot1x system-auth-control` : ''}
-
-${settings.authMethod === 'mab' || settings.authMethod === 'dot1x-mab' || settings.authMethod === 'concurrent' || settings.authMethod === 'dot1x-mab-webauth' ? 
-`! Configure MAC Authentication Bypass
-mac-authentication bypass
-aaa authentication mac-auth default group radius` : ''}
-
-! Configure RADIUS servers
-radius server ${settings.radiusServer || 'PRIMARY-RADIUS'}
- address ipv4 ${settings.radiusServer || '10.1.1.100'} auth-port ${settings.radiusAuthPort || '1812'} acct-port ${settings.radiusAcctPort || '1813'}
- key ${settings.radiusKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}
-${settings.radiusNasId ? ` nas-id ${settings.radiusNasId}` : ''}
-
-${settings.secondaryServer ? 
-`radius server ${settings.secondaryServer}
- address ipv4 ${settings.secondaryServer} auth-port ${settings.secondaryAuthPort || '1812'} acct-port ${settings.secondaryAcctPort || '1813'}
- key ${settings.secondaryKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}` : ''}
-
-${settings.tertiaryServer ? 
-`radius server ${settings.tertiaryServer}
- address ipv4 ${settings.tertiaryServer} auth-port ${settings.tertiaryAuthPort || '1812'} acct-port ${settings.tertiaryAcctPort || '1813'}
- key ${settings.tertiaryKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}` : ''}
-
-! Configure AAA for 802.1X
-aaa group server radius dot1x-radios
- server ${settings.radiusServer || 'PRIMARY-RADIUS'}
-${settings.secondaryServer ? ` server ${settings.secondaryServer}` : ''}
-${settings.tertiaryServer ? ` server ${settings.tertiaryServer}` : ''}
- deadtime ${settings.radiusDeadtime || '15'}
-
-${settings.enableAccounting ? 
-`! Configure RADIUS accounting
-aaa accounting dot1x default start-stop group radius
-${settings.accountingUpdate ? `accounting update periodic ${settings.accountingUpdate}` : ''}` : ''}
-
-${settings.useCoa ? 
-`! Configure Change of Authorization (CoA)
-aaa server radius dynamic-author
- client ${settings.radiusServer} server-key ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? ` client ${settings.secondaryServer} server-key ${settings.secondaryKey || 'radiuskey'}` : ''}
-${settings.tertiaryServer ? ` client ${settings.tertiaryServer} server-key ${settings.tertiaryKey || 'radiuskey'}` : ''}
- port ${settings.coaPort || '1700'}` : ''}
-
-!
-! ===================== INTERFACE CONFIGURATION =====================
-!
-${settings.interface ? 
-`! Configure interface ${settings.interface}
-interface ${settings.interface}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
-${settings.interfaceMtu ? ` mtu ${settings.interfaceMtu}` : ''}
-${settings.vlanAuth ? ` switchport access vlan ${settings.vlanAuth}` : ''}
-${settings.vlanVoice ? ` switchport voice vlan ${settings.vlanVoice}` : ''}
- switchport mode access
- 
- ! Authentication settings
- dot1x pae authenticator
- authentication port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
- authentication host-mode ${settings.hostMode}
- authentication violation restrict
- 
-${settings.authMethod === 'dot1x' ? 
-` ! 802.1X only
- authentication order dot1x
- authentication priority dot1x` : ''}
- 
-${settings.authMethod === 'mab' ? 
-` ! MAB only
- authentication order mab
- authentication priority mab
- mab` : ''}
- 
-${settings.authMethod === 'dot1x-mab' ? 
-` ! 802.1X with MAB fallback
- authentication order dot1x mab
- authentication priority dot1x mab
- mab` : ''}
- 
-${settings.authMethod === 'concurrent' ? 
-` ! 802.1X and MAB concurrent
- authentication order dot1x mab
- authentication priority dot1x mab
- authentication event fail action next-method
- mab` : ''}
- 
-${settings.authMethod === 'dot1x-mab-webauth' ? 
-` ! 802.1X + MAB + WebAuth
- authentication order dot1x mab webauth
- authentication priority dot1x mab
- authentication event fail action next-method
- mab
- web-auth` : ''}
- 
- ! Authentication timing
- dot1x timeout quiet-period ${settings.quietPeriod || '60'}
- dot1x timeout tx-period ${settings.txPeriod || '30'}
- dot1x timeout re-authperiod ${settings.reauthPeriod || '3600'}
- dot1x max-req ${settings.maxReauth || '2'}
-${settings.vlanGuest ? ` dot1x guest-vlan ${settings.vlanGuest}` : ''}
-${settings.vlanUnauth ? ` dot1x auth-fail vlan ${settings.vlanUnauth}` : ''}
-${settings.vlanCritical ? ` dot1x critical vlan ${settings.vlanCritical}` : ''}
- 
-${settings.enableDynamicVlan ? ' dot1x dynamic-vlan enable' : ''}
- 
-${settings.interfacePortfast ? 
-` ! Port security features
- spanning-tree portfast
-${settings.interfaceBpduGuard ? ' spanning-tree bpduguard enable' : ''}` : ''}
- 
-${settings.enablePortSecurity ? 
-` ! Port security
- switchport port-security
- switchport port-security maximum ${settings.portSecurityMaxMac || '1'}
- switchport port-security violation ${settings.portSecurityViolation || 'shutdown'}` : ''}
-` : ''}
-
-${settings.interfaceRange ? 
-`! Apply same configuration to range ${settings.interfaceRange}
-interface range ${settings.interfaceRange}
- description 802.1X Authenticated Ports
- ! Same configuration as above would be applied to this range
-` : ''}
-
-!
-! ===================== SECURITY FEATURES =====================
-!
-${settings.enableDhcpSnooping ? 
-`! Configure DHCP Snooping
-ip dhcp snooping
-ip dhcp snooping vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? `,${settings.vlanGuest}` : ''}${settings.vlanUnauth ? `,${settings.vlanUnauth}` : ''}
-${settings.dhcpOption82 ? 'ip dhcp snooping information option' : ''}
-ip dhcp snooping rate-limit ${settings.dhcpRateLimit || '20'}` : ''}
-
-${settings.enableDai ? 
-`! Configure Dynamic ARP Inspection
-ip arp inspection vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? `,${settings.vlanGuest}` : ''}${settings.vlanUnauth ? `,${settings.vlanUnauth}` : ''}
-${settings.daiValidateSrcMac ? 'ip arp inspection validate src-mac' : ''}
-${settings.daiValidateDstMac ? 'ip arp inspection validate dst-mac' : ''}
-${settings.daiValidateIp ? 'ip arp inspection validate ip' : ''}` : ''}
-
-${settings.enableIpsg ? 
-`! Configure IP Source Guard
-ip source binding
-${settings.enableDhcpSnooping ? 'ip verify source dhcp-snooping-binding' : 'ip verify source'}` : ''}
-
-${settings.enableStormControl ? 
-`! Configure Storm Control
-interface ${settings.interface}
- storm-control broadcast level ${settings.stormControlBroadcast || '20'}
- storm-control multicast level ${settings.stormControlMulticast || '30'}
- storm-control unicast level ${settings.stormControlUnicast || '50'}` : ''}
-
-${settings.useMacsec ? 
-`! Configure MACsec
-interface ${settings.interface}
- macsec
- macsec policy ${settings.macsecPolicy || 'should-secure'}
- macsec cipher-suite ${settings.macsecCipher || 'gcm-aes-256'}
-${settings.macsecIncludeSci ? ' macsec include-sci' : ' no macsec include-sci'}
-${settings.macsecReplayProtection ? ` macsec replay-protection window-size ${settings.macsecReplayWindow || '0'}` : ' no macsec replay-protection'}` : ''}
-
-${settings.enableDeviceTracking ? 
-`! Configure Device Tracking
-device-tracking policy DEVICE-TRACK-POLICY
- tracking enable
-${settings.deviceTrackingIpv6 ? ' tracking ipv6 enable' : ''}
- tracking interval ${settings.deviceTrackingInterval || '30'}
- device-role host
-interface ${settings.interface}
- device-tracking attach-policy DEVICE-TRACK-POLICY` : ''}
-
-${settings.enableAcl ? 
-`! Configure Access Control Lists
-${settings.aclNameAuth ? 
-`ip access-list extended ${settings.aclNameAuth}
- permit ip any any
-interface ${settings.interface}
- ip access-group ${settings.aclNameAuth} in` : ''}
-
-${settings.aclNameUnauth ? 
-`ip access-list extended ${settings.aclNameUnauth}
- deny ip any any
- permit udp any any eq bootps
- permit udp any any eq bootpc
- permit udp any any eq domain
- permit tcp any any eq domain
- permit icmp any any echo-reply
- permit icmp any any time-exceeded
- permit icmp any any unreachable
-interface ${settings.interface}
- authentication event fail action apply acl ${settings.aclNameUnauth}` : ''}` : ''}
-
-!
-! ===================== ADDITIONAL COMMANDS =====================
-!
-${settings.enableAaaLogging ? 
-`! Enable AAA logging
-logging trap notifications
-logging origin-id hostname
-logging host ${settings.radiusServer}` : ''}
-
-${settings.additionalCommands ? settings.additionalCommands : '! No additional commands specified'}
-
-! End of configuration
-`;
-}
-
-// Vendor-specific configuration generators
-const vendorConfigGenerators = {
-    cisco: {
-        'ios': function(settings) {
-            return `! Cisco IOS 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-aaa new-model
-!
-aaa authentication dot1x default group radius
-aaa authorization network default group radius
-${settings.enableAccounting ? 'aaa accounting dot1x default start-stop group radius' : ''}
-!
-${settings.authMethod !== 'mab' ? 'dot1x system-auth-control' : ''}
-!
-radius server ${settings.radiusServer || 'RADIUS1'}
- address ipv4 ${settings.radiusServer || '10.1.1.100'} auth-port ${settings.radiusAuthPort || '1812'} acct-port ${settings.radiusAcctPort || '1813'}
- key ${settings.radiusKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}
-${settings.radiusNasId ? ' nas-id ' + settings.radiusNasId : ''}
-!
-${settings.secondaryServer ? 
-`radius server ${settings.secondaryServer}
- address ipv4 ${settings.secondaryServer} auth-port ${settings.secondaryAuthPort || '1812'} acct-port ${settings.secondaryAcctPort || '1813'}
- key ${settings.secondaryKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}
-!` : ''}
-!
-radius-server dead-criteria time ${settings.radiusDeadtime || '15'} tries 3
-!
-${settings.useCoa ? 
-`aaa server radius dynamic-author
- client ${settings.radiusServer} server-key ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? ' client ' + settings.secondaryServer + ' server-key ' + (settings.secondaryKey || 'radiuskey') : ''}
- port ${settings.coaPort || '1700'}
- auth-type all
-!` : ''}
-!
-${settings.enableDhcpSnooping ? 
-`ip dhcp snooping
-ip dhcp snooping vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}
-${settings.dhcpOption82 ? 'ip dhcp snooping information option' : ''}
-!` : ''}
-!
-${settings.enableDai ? 
-`ip arp inspection vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}
-${settings.daiValidateSrcMac ? 'ip arp inspection validate src-mac' : ''}${settings.daiValidateDstMac ? ' dst-mac' : ''}${settings.daiValidateIp ? ' ip' : ''}
-!` : ''}
-!
-! ================== INTERFACE CONFIGURATION ==================
-!
-interface ${settings.interface || 'GigabitEthernet1/0/1'}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
-${settings.interfaceMtu ? ' mtu ' + settings.interfaceMtu : ''}
- switchport access vlan ${settings.vlanAuth || '1'}
-${settings.vlanVoice ? ' switchport voice vlan ' + settings.vlanVoice : ''}
- switchport mode access
-!
- ! Authentication settings
- authentication port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
- authentication host-mode ${settings.hostMode}
- authentication violation restrict
-!
-${settings.authMethod === 'dot1x' ? 
-` ! 802.1X only
- authentication order dot1x
- authentication priority dot1x` : ''}
-!
-${settings.authMethod === 'mab' ? 
-` ! MAB only
- authentication order mab
- authentication priority mab
- mab` : ''}
-!
-${settings.authMethod === 'dot1x-mab' ? 
-` ! 802.1X with MAB fallback
- authentication order dot1x mab
- authentication priority dot1x mab
- mab` : ''}
-!
-${settings.authMethod === 'concurrent' ? 
-` ! 802.1X and MAB concurrent
- authentication order dot1x mab
- authentication priority dot1x mab
- authentication event fail action next-method
- mab` : ''}
-!
-${settings.authMethod === 'dot1x-mab-webauth' ? 
-` ! 802.1X + MAB + WebAuth
- authentication order dot1x mab webauth
- authentication priority dot1x mab
- authentication event fail action next-method
- mab
- web-auth` : ''}
-!
- ! Authentication timing
- authentication timer reauthenticate ${settings.reauthPeriod || '3600'}
- authentication timer restart ${settings.txPeriod || '30'}
- authentication timer quiet-period ${settings.quietPeriod || '60'}
- authentication max-attempts ${settings.maxReauth || '2'}
-!
-${settings.vlanGuest ? ' authentication event no-response action authorize vlan ' + settings.vlanGuest : ''}
-${settings.vlanUnauth ? ' authentication event fail action authorize vlan ' + settings.vlanUnauth : ''}
-${settings.vlanCritical ? ' authentication event server dead action authorize vlan ' + settings.vlanCritical : ''}
-!
-${settings.interfacePortfast ? 
-` ! Port security features
- spanning-tree portfast
-${settings.interfaceBpduGuard ? ' spanning-tree bpduguard enable' : ''}` : ''}
-!
-${settings.enablePortSecurity ? 
-` ! Port security
- switchport port-security
- switchport port-security maximum ${settings.portSecurityMaxMac || '1'}
- switchport port-security violation ${settings.portSecurityViolation || 'shutdown'}` : ''}
-!
-${settings.enableIpsg ? 
-` ! IP Source Guard
- ip verify source${settings.enableDhcpSnooping ? ' dhcp-snooping-binding' : ''}` : ''}
-!
-${settings.enableDhcpSnooping ? 
-` ! DHCP Snooping
- ip dhcp snooping limit rate ${settings.dhcpRateLimit || '20'}` : ''}
-!
-${settings.enableStormControl ? 
-` ! Storm Control
- storm-control broadcast level ${settings.stormControlBroadcast || '20.00'}
- storm-control multicast level ${settings.stormControlMulticast || '30.00'}
- storm-control unicast level ${settings.stormControlUnicast || '50.00'}` : ''}
-!
-${settings.enableAcl ? 
-` ! Access Control
-${settings.aclNameAuth ? ' ip access-group ' + settings.aclNameAuth + ' in' : ''}` : ''}
-!
-${settings.useMacsec ? 
-` ! MACsec
- macsec
- macsec policy ${settings.macsecPolicy || 'should-secure'}
- macsec cipher-suite ${settings.macsecCipher || 'gcm-aes-256'}
-${settings.macsecIncludeSci ? ' macsec include-sci' : ' no macsec include-sci'}
-${settings.macsecReplayProtection ? ' macsec replay-protection window-size ' + (settings.macsecReplayWindow || '0') : ' no macsec replay-protection'}` : ''}
-!
-end`;
-        },
-        'ios-xe': function(settings) {
-            // IOS-XE is similar to IOS but with some differences
-            return this['ios'](settings).replace('! Cisco IOS 802.1X Configuration', '! Cisco IOS-XE 802.1X Configuration');
-        },
-        'nx-os': function(settings) {
-            return `! Cisco NX-OS 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-feature dot1x
-${settings.enableDhcpSnooping ? 'feature dhcp' : ''}
-${settings.enableDai ? 'feature arp-inspection' : ''}
-${settings.enableIpsg ? 'feature ipsg' : ''}
-!
-aaa authentication dot1x default group radius
-${settings.enableAccounting ? 'aaa accounting dot1x default group radius' : ''}
-!
-radius-server host ${settings.radiusServer || '10.1.1.100'} key ${settings.radiusKey || 'radiuskey'} authentication accounting 
-radius-server timeout ${settings.radiusTimeout || '5'}
-radius-server retransmit ${settings.radiusRetransmit || '3'}
-!
-${settings.secondaryServer ? 
-`radius-server host ${settings.secondaryServer} key ${settings.secondaryKey || 'radiuskey'} authentication accounting` : ''}
-!
-${settings.useCoa ? 
-`aaa server radius dynamic-author
- client ${settings.radiusServer} vrf default security-group ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? ' client ' + settings.secondaryServer + ' vrf default security-group ' + (settings.secondaryKey || 'radiuskey') : ''}
- port ${settings.coaPort || '1700'}
-!` : ''}
-!
-${settings.enableDhcpSnooping ? 
-`ip dhcp snooping
-ip dhcp snooping vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}
-${settings.dhcpOption82 ? 'ip dhcp snooping information option' : ''}
-!` : ''}
-!
-${settings.enableDai ? 
-`ip arp inspection vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}
-!` : ''}
-!
-! ================== INTERFACE CONFIGURATION ==================
-!
-interface ${settings.interface || 'Ethernet1/1'}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
-${settings.interfaceMtu ? ' mtu ' + settings.interfaceMtu : ''}
- switchport access vlan ${settings.vlanAuth || '1'}
-${settings.vlanVoice ? ' switchport voice vlan ' + settings.vlanVoice : ''}
- switchport mode access
-!
- ! Authentication settings
- dot1x port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
- dot1x host-mode ${settings.hostMode === 'multi-auth' ? 'multi-host' : 
-                   settings.hostMode === 'multi-domain' ? 'multi-domain' :
-                   settings.hostMode === 'single-host' ? 'single-host' : 'multi-host'}
-!
-${settings.authMethod === 'mab' ? 
-` ! MAB configuration
- mac-authentication` : ''}
-!
-${settings.authMethod === 'dot1x-mab' || settings.authMethod === 'concurrent' ? 
-` ! 802.1X with MAB
- dot1x mac-auth bypass` : ''}
-!
- ! Authentication timing
- dot1x timeout quiet-period ${settings.quietPeriod || '60'}
- dot1x timeout tx-period ${settings.txPeriod || '30'}
- dot1x timeout re-authperiod ${settings.reauthPeriod || '3600'}
- dot1x max-req ${settings.maxReauth || '2'}
-!
-${settings.vlanGuest ? ' dot1x guest-vlan ' + settings.vlanGuest : ''}
-${settings.vlanUnauth ? ' dot1x auth-fail vlan ' + settings.vlanUnauth : ''}
-!
-${settings.enablePortSecurity ? 
-` ! Port security
- switchport port-security
- switchport port-security maximum ${settings.portSecurityMaxMac || '1'}
- switchport port-security violation ${settings.portSecurityViolation || 'shutdown'}` : ''}
-!
-${settings.enableIpsg ? 
-` ! IP Source Guard
- ip verify source` : ''}
-!
-${settings.enableDhcpSnooping ? 
-` ! DHCP Snooping
- ip dhcp snooping limit rate ${settings.dhcpRateLimit || '20'}` : ''}
-!
-${settings.enableStormControl ? 
-` ! Storm Control
- storm-control broadcast level ${settings.stormControlBroadcast || '20.0'}
- storm-control multicast level ${settings.stormControlMulticast || '30.0'}
- storm-control unicast level ${settings.stormControlUnicast || '50.0'}` : ''}
-!
-end`;
-        },
-        'default': function(platform, settings) {
-            return `! Cisco ${platform.toUpperCase()} 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-! Note: This is using a default Cisco template. For platform-specific optimizations, update vendorConfigGenerators.
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-aaa new-model
-!
-aaa authentication dot1x default group radius
-aaa authorization network default group radius
-${settings.enableAccounting ? 'aaa accounting dot1x default start-stop group radius' : ''}
-!
-${settings.authMethod !== 'mab' ? 'dot1x system-auth-control' : ''}
-!
-radius server ${settings.radiusServer || 'RADIUS1'}
- address ipv4 ${settings.radiusServer || '10.1.1.100'} auth-port ${settings.radiusAuthPort || '1812'} acct-port ${settings.radiusAcctPort || '1813'}
- key ${settings.radiusKey || 'radiuskey'}
- timeout ${settings.radiusTimeout || '5'}
- retransmit ${settings.radiusRetransmit || '3'}
-!
-! ================== INTERFACE CONFIGURATION ==================
-!
-interface ${settings.interface || 'GigabitEthernet1/0/1'}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
- switchport access vlan ${settings.vlanAuth || '1'}
-${settings.vlanVoice ? ' switchport voice vlan ' + settings.vlanVoice : ''}
- switchport mode access
-!
- ! Authentication settings
- authentication port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
- authentication host-mode ${settings.hostMode}
-!
- ! Authentication timing
- dot1x timeout quiet-period ${settings.quietPeriod || '60'}
- dot1x timeout tx-period ${settings.txPeriod || '30'}
- dot1x timeout re-authperiod ${settings.reauthPeriod || '3600'}
- dot1x max-req ${settings.maxReauth || '2'}
-!
-end`;
-        }
-    },
-    aruba: {
-        'aos-cx': function(settings) {
-            return `! Aruba AOS-CX 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-aaa authentication port-access dot1x authenticator enable
-!
-radius-server host ${settings.radiusServer || '10.1.1.100'} key ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? 'radius-server host ' + settings.secondaryServer + ' key ' + (settings.secondaryKey || 'radiuskey') : ''}
-!
-aaa server-group radius "dot1x-radius"
- server ${settings.radiusServer || '10.1.1.100'}
-${settings.secondaryServer ? ' server ' + settings.secondaryServer : ''}
-!
-aaa authentication port-access dot1x authenticator radius-server-group "dot1x-radius"
-!
-${settings.enableAccounting ? 
-`aaa accounting port-access dot1x start-stop radius-server-group "dot1x-radius"
-${settings.accountingUpdate ? 'aaa accounting update periodic ' + settings.accountingUpdate : ''}` : ''}
-!
-aaa authentication port-access dot1x authenticator cached-reauth ${settings.reauthPeriod || '3600'}
-aaa authentication port-access dot1x authenticator tx-period ${settings.txPeriod || '30'}
-aaa authentication port-access dot1x authenticator quiet-period ${settings.quietPeriod || '60'}
-aaa authentication port-access dot1x authenticator max-requests ${settings.maxReauth || '2'}
-!
-${settings.vlanGuest ? 'aaa authentication port-access dot1x authenticator guest-vlan ' + settings.vlanGuest : ''}
-${settings.vlanUnauth ? 'aaa authentication port-access dot1x authenticator auth-fail-vlan ' + settings.vlanUnauth : ''}
-!
-! ================== INTERFACE CONFIGURATION ==================
-!
-interface ${settings.interface || '1/1/1'}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
-${settings.interfaceMtu ? ' mtu ' + settings.interfaceMtu : ''}
- vlan access ${settings.vlanAuth || '1'}
-${settings.vlanVoice ? ' vlan voice ' + settings.vlanVoice : ''}
-!
- ! Authentication settings
- aaa authentication port-access dot1x authenticator enable
- aaa authentication port-access dot1x authenticator port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
- aaa authentication port-access dot1x authenticator host-mode ${settings.hostMode === 'multi-auth' ? 'multi' : 
-                                                               settings.hostMode === 'multi-domain' ? 'multi-domain' :
-                                                               settings.hostMode === 'single-host' ? 'single' : 'multi'}
-!
-${settings.authMethod === 'mab' ? 
-` ! MAB configuration
- aaa authentication port-access mac-auth enable
- no aaa authentication port-access dot1x authenticator enable` : ''}
-!
-${settings.authMethod === 'dot1x-mab' ? 
-` ! 802.1X with MAB fallback
- aaa authentication port-access mac-auth enable
- aaa authentication port-access mac-auth radius-server-group "dot1x-radius"
- aaa authentication port-access auth-order dot1x mac-auth` : ''}
-!
-${settings.authMethod === 'concurrent' ? 
-` ! 802.1X and MAB concurrent
- aaa authentication port-access mac-auth enable
- aaa authentication port-access mac-auth radius-server-group "dot1x-radius"
- aaa authentication port-access auth-order dot1x_mac-auth` : ''}
-!
-${settings.enablePortSecurity ? 
-` ! Port security
- port-security
- port-security maximum ${settings.portSecurityMaxMac || '1'}
- port-security violation ${settings.portSecurityViolation === 'protect' ? 'restrict' : 
-                           settings.portSecurityViolation === 'restrict' ? 'restrict' : 
-                           settings.portSecurityViolation === 'shutdown' ? 'shutdown' : 'shutdown'}` : ''}
-!
-end`;
-        },
-        'aos-switch': function(settings) {
-            return `! Aruba AOS-Switch 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-aaa authentication port-access eap-radius
-!
-radius-server host ${settings.radiusServer || '10.1.1.100'} key ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? 'radius-server host ' + settings.secondaryServer + ' key ' + (settings.secondaryKey || 'radiuskey') : ''}
-!
-radius-server timeout ${settings.radiusTimeout || '5'}
-radius-server retransmit ${settings.radiusRetransmit || '3'}
-radius-server deadtime ${settings.radiusDeadtime || '15'}
-!
-aaa port-access authenticator ${settings.interface || '1'}
-aaa port-access authenticator ${settings.interface || '1'} auth-vid ${settings.vlanAuth || '1'}
-!
-${settings.vlanUnauth ? 'aaa port-access authenticator ' + settings.interface + ' unauth-vid ' + settings.vlanUnauth : ''}
-${settings.vlanGuest ? 'aaa port-access authenticator ' + settings.interface + ' guest-vid ' + settings.vlanGuest : ''}
-!
-aaa port-access authenticator ${settings.interface || '1'} quiet-period ${settings.quietPeriod || '60'}
-aaa port-access authenticator ${settings.interface || '1'} tx-period ${settings.txPeriod || '30'}
-aaa port-access authenticator ${settings.interface || '1'} reauth-period ${settings.reauthPeriod || '3600'}
-aaa port-access authenticator ${settings.interface || '1'} max-requests ${settings.maxReauth || '2'}
-!
-aaa port-access authenticator ${settings.interface || '1'} supplicant-timeout 30
-aaa port-access authenticator ${settings.interface || '1'} server-timeout 30
-!
-aaa port-access authenticator ${settings.interface || '1'} control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
-!
-aaa port-access authenticator ${settings.interface || '1'} client-limit ${settings.hostMode === 'single-host' ? '1' : 
-                                                                        settings.hostMode === 'multi-domain' ? '2' : 
-                                                                        '32'}
-!
-${settings.authMethod === 'dot1x-mab' || settings.authMethod === 'mab' ? 
-`aaa port-access mac-auth ${settings.interface || '1'}
-aaa port-access mac-auth ${settings.interface || '1'} addr-format no-delimiter uppercase` : ''}
-!
-${settings.enablePortSecurity ? 
-`port-security ${settings.interface || '1'} learn-mode static action ${settings.portSecurityViolation === 'protect' ? 'none' : 
-                                                                   settings.portSecurityViolation === 'restrict' ? 'send-disable' : 
-                                                                   settings.portSecurityViolation === 'shutdown' ? 'send-disable' : 'send-disable'}
-port-security ${settings.interface || '1'} mac-address-limit ${settings.portSecurityMaxMac || '1'}` : ''}
-!
-${settings.enableDhcpSnooping ? 
-`dhcp-snooping
-dhcp-snooping vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}
-${settings.dhcpOption82 ? 'dhcp-snooping option 82' : ''}` : ''}
-!
-${settings.enableDai ? 
-`arp-protect
-arp-protect vlan ${settings.vlanAuth || '1'}${settings.vlanGuest ? ',' + settings.vlanGuest : ''}${settings.vlanUnauth ? ',' + settings.vlanUnauth : ''}` : ''}
-!
-${settings.enableIpsg ? 'ip source-port-filter' : ''}
-!
-end`;
-        },
-        'default': function(platform, settings) {
-            return `! Aruba ${platform.toUpperCase()} 802.1X Configuration
-! Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-! Note: This is using a default Aruba template. For platform-specific optimizations, update vendorConfigGenerators.
-!
-! ================== GLOBAL CONFIGURATION ==================
-!
-aaa authentication port-access eap-radius
-!
-radius-server host ${settings.radiusServer || '10.1.1.100'} key ${settings.radiusKey || 'radiuskey'}
-${settings.secondaryServer ? 'radius-server host ' + settings.secondaryServer + ' key ' + (settings.secondaryKey || 'radiuskey') : ''}
-!
-! ================== INTERFACE CONFIGURATION ==================
-!
-interface ${settings.interface || '1/1'}
- description 802.1X Authenticated Port
-${settings.interfaceAdminShutdown ? ' shutdown' : ' no shutdown'}
- vlan access ${settings.vlanAuth || '1'}
-!
- ! Authentication settings
- aaa authentication port-access dot1x
- aaa authentication port-access dot1x port-control ${settings.authMode === 'open' ? 'auto' : 'force-authorized'}
-!
- ! Authentication timing
- aaa authentication port-access dot1x quiet-period ${settings.quietPeriod || '60'}
- aaa authentication port-access dot1x tx-period ${settings.txPeriod || '30'}
- aaa authentication port-access dot1x reauth-period ${settings.reauthPeriod || '3600'}
- aaa authentication port-access dot1x max-requests ${settings.maxReauth || '2'}
-!
-end`;
-        }
-    },
-    juniper: {
-        'junos': function(settings) {
-            // JunOS configuration is in a different format
-            return `# Juniper JunOS 802.1X Configuration
-# Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-
-# Authentication configuration
-set system authentication-order radius
-set system radius-server ${settings.radiusServer || '10.1.1.100'} port ${settings.radiusAuthPort || '1812'}
-set system radius-server ${settings.radiusServer || '10.1.1.100'} accounting-port ${settings.radiusAcctPort || '1813'}
-set system radius-server ${settings.radiusServer || '10.1.1.100'} secret ${settings.radiusKey || 'radiuskey'}
-set system radius-server ${settings.radiusServer || '10.1.1.100'} retry ${settings.radiusRetransmit || '3'}
-set system radius-server ${settings.radiusServer || '10.1.1.100'} timeout ${settings.radiusTimeout || '5'}
-${settings.secondaryServer ? 
-`set system radius-server ${settings.secondaryServer} port ${settings.secondaryAuthPort || '1812'}
-set system radius-server ${settings.secondaryServer} accounting-port ${settings.secondaryAcctPort || '1813'}
-set system radius-server ${settings.secondaryServer} secret ${settings.secondaryKey || 'radiuskey'}
-set system radius-server ${settings.secondaryServer} retry ${settings.radiusRetransmit || '3'}
-set system radius-server ${settings.secondaryServer} timeout ${settings.radiusTimeout || '5'}` : ''}
-
-# Enable 802.1X globally
-set protocols dot1x authenticator authentication-profile-name dot1x-auth
-
-# Configure RADIUS profile
-set access profile dot1x-auth authentication-order radius
-set access profile dot1x-auth radius authentication-server ${settings.radiusServer || '10.1.1.100'}
-${settings.secondaryServer ? 'set access profile dot1x-auth radius authentication-server ' + settings.secondaryServer : ''}
-
-${settings.enableAccounting ? 
-`set access profile dot1x-auth accounting order radius
-set access profile dot1x-auth radius accounting-server ${settings.radiusServer || '10.1.1.100'}
-${settings.secondaryServer ? 'set access profile dot1x-auth radius accounting-server ' + settings.secondaryServer : ''}` : ''}
-
-# Interface configuration
-set interfaces ${settings.interface || 'ge-0/0/1'} description "802.1X Authenticated Port"
-${settings.interfaceAdminShutdown ? 'set interfaces ' + (settings.interface || 'ge-0/0/1') + ' disable' : ''}
-${settings.interfaceMtu ? 'set interfaces ' + (settings.interface || 'ge-0/0/1') + ' mtu ' + settings.interfaceMtu : ''}
-set interfaces ${settings.interface || 'ge-0/0/1'} unit 0 family ethernet-switching vlan members ${settings.vlanAuth || '1'}
-
-# 802.1X authentication
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 supplicant ${settings.hostMode === 'single-host' ? 'single' : 
-                                                                                          settings.hostMode === 'multi-domain' ? 'multiple' : 
-                                                                                          settings.hostMode === 'multi-auth' ? 'multiple' : 'multiple'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 quiet-period ${settings.quietPeriod || '60'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 transmit-period ${settings.txPeriod || '30'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 reauthentication ${settings.reauthPeriod ? 'interval ' + settings.reauthPeriod : '3600'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 maximum-requests ${settings.maxReauth || '2'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 server-timeout 30
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 supplicant-timeout 30
-
-${settings.authMode === 'open' ? 
-'set protocols dot1x authenticator interface ' + (settings.interface || 'ge-0/0/1') + '.0 controlled-port auto' : ''}
-
-${settings.authMethod === 'mab' ? 
-`set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 mac-radius
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 mac-radius restrict` : ''}
-
-${settings.authMethod === 'dot1x-mab' ? 
-`set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 mac-radius
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 mac-radius restrict
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 eapol-block` : ''}
-
-${settings.vlanGuest ? 
-'set protocols dot1x authenticator interface ' + (settings.interface || 'ge-0/0/1') + '.0 guest-vlan ' + settings.vlanGuest : ''}
-
-${settings.vlanUnauth ? 
-'set protocols dot1x authenticator interface ' + (settings.interface || 'ge-0/0/1') + '.0 server-fail vlan-name ' + settings.vlanUnauth : ''}
-
-${settings.interfacePortfast ? 
-`set protocols rstp interface ${settings.interface || 'ge-0/0/1'} edge
-${settings.interfaceBpduGuard ? 'set protocols rstp bpdu-block-on-edge interface ' + (settings.interface || 'ge-0/0/1') : ''}` : ''}
-
-${settings.enableDhcpSnooping ? 
-`set forwarding-options dhcp-security group ${settings.vlanAuth || '1'} overrides client-idle-timeout 300
-set forwarding-options dhcp-security arp-inspection
-set ethernet-switching-options secure-access-port vlan ${settings.vlanAuth || '1'} dhcp-snooping` : ''}
-
-${settings.enableIpsg ? 
-'set ethernet-switching-options secure-access-port vlan ' + (settings.vlanAuth || '1') + ' ip-source-guard' : ''}
-
-${settings.enableStormControl ? 
-`set interfaces ${settings.interface || 'ge-0/0/1'} unit 0 family ethernet-switching storm-control bandwidth-percentage ${settings.stormControlBroadcast || '20'}` : ''}
-
-${settings.enablePortSecurity ? 
-`set ethernet-switching-options secure-access-port interface ${settings.interface || 'ge-0/0/1'} mac-limit ${settings.portSecurityMaxMac || '1'} action ${settings.portSecurityViolation === 'protect' ? 'none' : 
-                                                                                    settings.portSecurityViolation === 'restrict' ? 'drop' : 
-                                                                                    settings.portSecurityViolation === 'shutdown' ? 'shutdown' : 'shutdown'}` : ''}
-
-${settings.additionalCommands || '# No additional commands specified'}`;
-        },
-        'default': function(platform, settings) {
-            // Default Juniper template
-            return `# Juniper ${platform.toUpperCase()} 802.1X Configuration
-# Generated by Dot1Xer Supreme Enterprise Edition v4.1.0
-# Note: This is using a default Juniper template. For platform-specific optimizations, update vendorConfigGenerators.
-
-# Authentication configuration
-set system authentication-order radius
-set system radius-server ${settings.radiusServer || '10.1.1.100'} secret ${settings.radiusKey || 'radiuskey'}
-
-# Enable 802.1X globally
-set protocols dot1x authenticator authentication-profile-name dot1x-auth
-
-# Configure RADIUS profile
-set access profile dot1x-auth authentication-order radius
-set access profile dot1x-auth radius authentication-server ${settings.radiusServer || '10.1.1.100'}
-
-# Interface configuration
-set interfaces ${settings.interface || 'ge-0/0/1'} unit 0 family ethernet-switching vlan members ${settings.vlanAuth || '1'}
-
-# 802.1X authentication
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 supplicant multiple
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 quiet-period ${settings.quietPeriod || '60'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 transmit-period ${settings.txPeriod || '30'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 reauthentication interval ${settings.reauthPeriod || '3600'}
-set protocols dot1x authenticator interface ${settings.interface || 'ge-0/0/1'}.0 maximum-requests ${settings.maxReauth || '2'}`;
-        }
-    }
+// Global function to regenerate vendor logos if theme changes
+window.regenerateVendorLogos = function() {
+    initVendorLogos();
 };
 
-// Make the vendor functions available to the main script
-window.generateVendorConfig = generateVendorConfig;
+// Select default vendor when loaded
+setTimeout(selectDefaultVendor, 100);

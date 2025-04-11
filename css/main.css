@@ -886,3 +886,4 @@ body.dark-theme .ai-message.assistant {
     page-break-inside: avoid;
   }
 }
+@import url("vendor-cards.css");
