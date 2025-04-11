@@ -1,384 +1,141 @@
 <div class="checklist-wrapper">
-    <h2>802.1X Deployment Checklist</h2>
-    <p class="checklist-intro">Use this comprehensive checklist to ensure a successful 802.1X deployment. Check each item as you complete it.</p>
-    
-    <div class="checklist-section">
-        <h3>Planning Phase</h3>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-inventory">
-            <label for="check-inventory">Inventory network devices and verify 802.1X support</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-vlans">
-            <label for="check-vlans">Document existing VLAN assignments and network topology</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-radius-deploy">
-            <label for="check-radius-deploy">Deploy and configure RADIUS server(s)</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-policies">
-            <label for="check-policies">Create and test authentication policies on RADIUS server</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-mab-devices">
-            <label for="check-mab-devices">Identify devices that cannot support 802.1X and plan for MAB</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-client-config">
-            <label for="check-client-config">Prepare client supplicant configuration settings</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-backup">
-            <label for="check-backup">Back up all network device configurations</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-rollback">
-            <label for="check-rollback">Create rollback procedure in case of critical issues</label>
+    <div class="checklist-header">
+        <h2>802.1X Deployment Checklist</h2>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">0% complete</div>
         </div>
     </div>
     
     <div class="checklist-section">
-        <h3>Laboratory Testing</h3>
+        <h3>1. Planning Phase</h3>
         <div class="checklist-item">
-            <input type="checkbox" id="check-lab-test">
-            <label for="check-lab-test">Set up laboratory environment with representative switch and clients</label>
+            <input type="checkbox" id="check-requirements" class="checklist-checkbox">
+            <label for="check-requirements">Identify business requirements and scope</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-radius-test">
-            <label for="check-radius-test">Test RADIUS connectivity and authentication</label>
+            <input type="checkbox" id="check-inventory" class="checklist-checkbox">
+            <label for="check-inventory">Inventory network devices for 802.1X compatibility</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-eap-methods">
-            <label for="check-eap-methods">Test all required EAP methods</label>
+            <input type="checkbox" id="check-endpoints" class="checklist-checkbox">
+            <label for="check-endpoints">Identify endpoint types and authentication methods</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-mab-test">
-            <label for="check-mab-test">Test MAC Authentication Bypass for non-802.1X devices</label>
+            <input type="checkbox" id="check-exceptions" class="checklist-checkbox">
+            <label for="check-exceptions">Document exceptions and special devices</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-vlan-assignment">
-            <label for="check-vlan-assignment">Verify VLAN assignment works correctly</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-acl-assignment">
-            <label for="check-acl-assignment">Test ACL/dACL assignment if used</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-voice-vlan">
-            <label for="check-voice-vlan">Test IP phone authentication with voice VLAN if applicable</label>
+            <input type="checkbox" id="check-topology" class="checklist-checkbox">
+            <label for="check-topology">Document network topology and RADIUS server placement</label>
         </div>
     </div>
     
     <div class="checklist-section">
-        <h3>Monitor Mode Deployment</h3>
+        <h3>2. RADIUS Server Setup</h3>
         <div class="checklist-item">
-            <input type="checkbox" id="check-pilot-group">
-            <label for="check-pilot-group">Identify pilot group/location for initial deployment</label>
+            <input type="checkbox" id="check-radius-install" class="checklist-checkbox">
+            <label for="check-radius-install">Install RADIUS server (ISE, ClearPass, NPS, etc.)</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-monitor-config">
-            <label for="check-monitor-config">Configure test switch with 802.1X in monitor mode</label>
+            <input type="checkbox" id="check-radius-config" class="checklist-checkbox">
+            <label for="check-radius-config">Configure RADIUS server authentication methods</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-user-comm">
-            <label for="check-user-comm">Communicate with affected users about deployment plan</label>
+            <input type="checkbox" id="check-radius-policies" class="checklist-checkbox">
+            <label for="check-radius-policies">Create authorization policies</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-helpdesk">
-            <label for="check-helpdesk">Train help desk staff on common 802.1X issues</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-monitor-deploy">
-            <label for="check-monitor-deploy">Deploy 802.1X in monitor mode across target network</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-auth-logs">
-            <label for="check-auth-logs">Analyze authentication logs and address failures</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-monitor-period">
-            <label for="check-monitor-period">Run in monitor mode for at least 2-4 weeks</label>
+            <input type="checkbox" id="check-radius-test" class="checklist-checkbox">
+            <label for="check-radius-test">Test RADIUS server basic authentication</label>
         </div>
     </div>
     
     <div class="checklist-section">
-        <h3>Low-Impact Mode Deployment</h3>
+        <h3>3. Network Device Configuration</h3>
         <div class="checklist-item">
-            <input type="checkbox" id="check-guest-config">
-            <label for="check-guest-config">Configure guest and auth-fail VLANs</label>
+            <input type="checkbox" id="check-switch-config" class="checklist-checkbox">
+            <label for="check-switch-config">Configure global 802.1X settings on switches</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-low-impact-deploy">
-            <label for="check-low-impact-deploy">Transition to low-impact mode with fallback options</label>
+            <input type="checkbox" id="check-radius-clients" class="checklist-checkbox">
+            <label for="check-radius-clients">Add switches as RADIUS clients on server</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-mab-database">
-            <label for="check-mab-database">Ensure MAC authentication database is up-to-date</label>
+            <input type="checkbox" id="check-vlan-config" class="checklist-checkbox">
+            <label for="check-vlan-config">Configure VLANs (authenticated, unauthenticated, voice)</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-auth-validation">
-            <label for="check-auth-validation">Validate authentication success for all device types</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-vlan-validation">
-            <label for="check-vlan-validation">Validate correct VLAN assignment for authenticated devices</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-low-impact-period">
-            <label for="check-low-impact-period">Run in low-impact mode for at least 2 weeks</label>
+            <input type="checkbox" id="check-aaa" class="checklist-checkbox">
+            <label for="check-aaa">Configure AAA settings (authentication, authorization, accounting)</label>
         </div>
     </div>
     
     <div class="checklist-section">
-        <h3>Full Enforcement</h3>
+        <h3>4. Testing Phase</h3>
         <div class="checklist-item">
-            <input type="checkbox" id="check-closed-schedule">
-            <label for="check-closed-schedule">Schedule full enforcement transition during maintenance window</label>
+            <input type="checkbox" id="check-lab-test" class="checklist-checkbox">
+            <label for="check-lab-test">Perform lab testing with all device types</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-final-comm">
-            <label for="check-final-comm">Send final communications to users</label>
+            <input type="checkbox" id="check-monitor-test" class="checklist-checkbox">
+            <label for="check-monitor-test">Configure and test Monitor Mode</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-closed-mode">
-            <label for="check-closed-mode">Implement full enforcement on a phased schedule</label>
+            <input type="checkbox" id="check-logging" class="checklist-checkbox">
+            <label for="check-logging">Set up logging and monitoring</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-monitoring">
-            <label for="check-monitoring">Set up ongoing monitoring for authentication failures</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-documentation">
-            <label for="check-documentation">Document final configuration and deployment results</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-review-process">
-            <label for="check-review-process">Establish process for periodic review and updates</label>
+            <input type="checkbox" id="check-pilot" class="checklist-checkbox">
+            <label for="check-pilot">Conduct pilot deployment</label>
         </div>
     </div>
     
     <div class="checklist-section">
-        <h3>Additional Security Features</h3>
+        <h3>5. Deployment Phase</h3>
         <div class="checklist-item">
-            <input type="checkbox" id="check-dhcp-snooping">
-            <label for="check-dhcp-snooping">Implement DHCP snooping</label>
+            <input type="checkbox" id="check-notifications" class="checklist-checkbox">
+            <label for="check-notifications">Send user notifications</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-dai">
-            <label for="check-dai">Implement Dynamic ARP Inspection</label>
+            <input type="checkbox" id="check-monitor-mode" class="checklist-checkbox">
+            <label for="check-monitor-mode">Deploy in Monitor Mode</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-ipsg">
-            <label for="check-ipsg">Implement IP Source Guard</label>
+            <input type="checkbox" id="check-low-impact" class="checklist-checkbox">
+            <label for="check-low-impact">Transition to Low-Impact Mode</label>
         </div>
         <div class="checklist-item">
-            <input type="checkbox" id="check-port-security">
-            <label for="check-port-security">Configure port security where needed</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-storm-control">
-            <label for="check-storm-control">Configure storm control</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-radius-accounting">
-            <label for="check-radius-accounting">Enable RADIUS accounting</label>
-        </div>
-        <div class="checklist-item">
-            <input type="checkbox" id="check-macsec">
-            <label for="check-macsec">Implement MACsec where supported</label>
+            <input type="checkbox" id="check-closed-mode" class="checklist-checkbox">
+            <label for="check-closed-mode">Transition to Closed Mode (full enforcement)</label>
         </div>
     </div>
     
-    <div class="checklist-progress">
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 0%"></div>
+    <div class="checklist-section">
+        <h3>6. Post-Deployment</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-documentation" class="checklist-checkbox">
+            <label for="check-documentation">Update network documentation</label>
         </div>
-        <div class="progress-text">0% complete</div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-monitoring" class="checklist-checkbox">
+            <label for="check-monitoring">Set up ongoing monitoring</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-training" class="checklist-checkbox">
+            <label for="check-training">Conduct staff training</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-audit" class="checklist-checkbox">
+            <label for="check-audit">Schedule regular audits</label>
+        </div>
     </div>
     
     <div class="checklist-actions">
-        <button id="checklist-save" class="btn">Save Progress</button>
+        <button id="checklist-save" class="btn primary">Save Progress</button>
         <button id="checklist-print" class="btn">Print Checklist</button>
-        <button id="checklist-export" class="btn primary">Export as PDF</button>
+        <button id="checklist-export" class="btn">Export as PDF</button>
     </div>
 </div>
-
-<script>
-    // Checklist functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
-        const progressBar = document.querySelector('.progress-fill');
-        const progressText = document.querySelector('.progress-text');
-        const saveButton = document.getElementById('checklist-save');
-        const printButton = document.getElementById('checklist-print');
-        const exportButton = document.getElementById('checklist-export');
-        
-        // Load saved checklist state
-        loadChecklistState();
-        
-        // Update progress when checkboxes change
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', updateProgress);
-        });
-        
-        // Save checklist state
-        if (saveButton) {
-            saveButton.addEventListener('click', saveChecklistState);
-        }
-        
-        // Print checklist
-        if (printButton) {
-            printButton.addEventListener('click', printChecklist);
-        }
-        
-        // Export as PDF
-        if (exportButton) {
-            exportButton.addEventListener('click', exportAsPDF);
-        }
-        
-        // Update initial progress
-        updateProgress();
-        
-        // Update progress bar
-        function updateProgress() {
-            const total = checkboxes.length;
-            const checked = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
-            const percentage = Math.round((checked / total) * 100);
-            
-            progressBar.style.width = `${percentage}%`;
-            progressText.textContent = `${percentage}% complete`;
-        }
-        
-        // Save checklist state to localStorage
-        function saveChecklistState() {
-            const state = {};
-            checkboxes.forEach(checkbox => {
-                state[checkbox.id] = checkbox.checked;
-            });
-            
-            localStorage.setItem('dot1xer_checklist_state', JSON.stringify(state));
-            showAlert('Checklist progress saved!', 'success');
-        }
-        
-        // Load checklist state from localStorage
-        function loadChecklistState() {
-            try {
-                const state = JSON.parse(localStorage.getItem('dot1xer_checklist_state'));
-                if (state) {
-                    checkboxes.forEach(checkbox => {
-                        if (state[checkbox.id] !== undefined) {
-                            checkbox.checked = state[checkbox.id];
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading checklist state:', error);
-            }
-        }
-        
-        // Print checklist
-        function printChecklist() {
-            window.print();
-        }
-        
-        // Export as PDF
-        function exportAsPDF() {
-            // Check if jsPDF is available
-            if (typeof window.jspdf === 'undefined') {
-                showAlert('PDF export library not available. Please try again later.', 'warning');
-                return;
-            }
-            
-            try {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // Set document properties
-                doc.setProperties({
-                    title: '802.1X Deployment Checklist',
-                    subject: 'Deployment Checklist',
-                    author: 'Dot1Xer Supreme Enterprise Edition',
-                    keywords: '802.1X, Checklist, Deployment',
-                    creator: 'Dot1Xer Supreme'
-                });
-                
-                // Add title
-                doc.setFontSize(18);
-                doc.text('802.1X Deployment Checklist', 105, 20, { align: 'center' });
-                
-                // Add date
-                doc.setFontSize(12);
-                doc.text(`Generated: ${new Date().toLocaleDateString()}`, 105, 30, { align: 'center' });
-                
-                // Add sections
-                let y = 45;
-                
-                // Get all sections
-                const sections = document.querySelectorAll('.checklist-section');
-                
-                sections.forEach(section => {
-                    // Check if we need a new page
-                    if (y > 250) {
-                        doc.addPage();
-                        y = 20;
-                    }
-                    
-                    // Add section title
-                    const sectionTitle = section.querySelector('h3').textContent;
-                    doc.setFontSize(14);
-                    doc.setFont(undefined, 'bold');
-                    doc.text(sectionTitle, 20, y);
-                    y += 10;
-                    
-                    // Add section items
-                    doc.setFontSize(12);
-                    doc.setFont(undefined, 'normal');
-                    
-                    const items = section.querySelectorAll('.checklist-item');
-                    items.forEach(item => {
-                        // Check if we need a new page
-                        if (y > 275) {
-                            doc.addPage();
-                            y = 20;
-                        }
-                        
-                        const checkbox = item.querySelector('input[type="checkbox"]');
-                        const label = item.querySelector('label').textContent;
-                        
-                        // Draw checkbox
-                        doc.rect(20, y - 4, 4, 4);
-                        
-                        // Fill checkbox if checked
-                        if (checkbox.checked) {
-                            doc.setFillColor(0, 119, 204);
-                            doc.rect(20, y - 4, 4, 4, 'F');
-                        }
-                        
-                        // Add label text
-                        doc.text(label, 30, y);
-                        y += 8;
-                    });
-                    
-                    y += 10;
-                });
-                
-                // Add footer
-                const pageCount = doc.getNumberOfPages();
-                for (let i = 1; i <= pageCount; i++) {
-                    doc.setPage(i);
-                    doc.setFontSize(10);
-                    doc.text(`Dot1Xer Supreme Enterprise Edition - Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
-                }
-                
-                // Save the PDF
-                doc.save('802.1X_Deployment_Checklist.pdf');
-                
-                showAlert('Checklist exported as PDF successfully!', 'success');
-            } catch (error) {
-                console.error('Error exporting PDF:', error);
-                showAlert('Error exporting PDF: ' + error.message, 'danger');
-            }
-        }
-    });
-</script>
