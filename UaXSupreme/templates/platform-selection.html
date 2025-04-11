@@ -1,0 +1,66 @@
+<div class="platform-selection container">
+    <h2>Select Vendor and Platform</h2>
+    
+    <div class="section-info">
+        <p>Choose your network vendor and platform to generate a configuration. Select a deployment type to filter applicable platforms.</p>
+    </div>
+    
+    <div class="form-group">
+        <label for="deployment-type"><b>Deployment Type</b></label>
+        <select id="deployment-type" class="form-control">
+            <option value="wired">Wired 802.1X Authentication</option>
+            <option value="wireless">Wireless WPA Enterprise</option>
+            <option value="tacacs">TACACS+ Device Administration</option>
+            <option value="vpn">VPN Authentication</option>
+            <option value="uaac">User Authentication & Access Control</option>
+        </select>
+    </div>
+    
+    <h3>Vendor Selection</h3>
+    <div id="vendor-grid" class="vendor-selection">
+        <!-- Vendor cards will be dynamically populated here -->
+        <div class="loading">Loading vendors...</div>
+    </div>
+    
+    <div class="platform-details-container">
+        <div class="form-group">
+            <label for="platform-select"><b>Device Platform</b></label>
+            <select id="platform-select" class="form-control" disabled>
+                <option value="">Select a vendor first</option>
+            </select>
+        </div>
+        
+        <div id="platform-details" class="platform-details">
+            <p class="placeholder-text">Please select a vendor and platform to view details.</p>
+        </div>
+        
+        <div class="button-group">
+            <button id="platform-next" class="btn primary" disabled>Next: Authentication Settings</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Platform selection page loaded");
+    
+    // Initialize vendor grid
+    if (typeof initVendorGrid === 'function') {
+        initVendorGrid();
+        setupVendorSelection();
+        
+        // Wait a moment then select default vendor if available
+        setTimeout(function() {
+            // Get the saved vendor or default to Cisco
+            const savedVendor = localStorage.getItem('selectedVendor') || 'cisco';
+            
+            // Select the vendor if it exists in our vendors object
+            if (window.vendors && window.vendors[savedVendor]) {
+                selectVendor(savedVendor);
+            }
+        }, 300);
+    } else {
+        console.error("Vendor functions not available - check vendors.js loading");
+    }
+});
+</script>
