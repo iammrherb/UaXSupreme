@@ -1,0 +1,90 @@
+/* Help icon fixes */
+.panel {
+  position: relative !important;
+}
+
+.form-group {
+  position: relative !important;
+  margin-bottom: 25px !important;
+}
+
+.form-group label {
+  display: inline-block !important;
+  margin-bottom: 8px !important;
+  font-weight: 500 !important;
+  padding-right: 30px !important; /* Make room for help icon */
+  position: relative !important;
+}
+
+.help-text-overlay {
+  display: none !important;
+}
+
+.help-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  background-color: #0077cc !important;
+  color: white !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  margin-left: 5px !important;
+  position: absolute !important;
+  right: 5px !important;
+  top: 0 !important;
+}
+
+.help-tooltip {
+  position: absolute !important;
+  background-color: #333 !important;
+  color: #fff !important;
+  padding: 10px !important;
+  border-radius: 4px !important;
+  width: 250px !important;
+  z-index: 100 !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2) !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  top: -5px !important;
+  right: 30px !important;
+  text-align: left !important;
+}
+
+.help-icon:hover + .help-tooltip {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure tooltips don't get cut off at edges */
+.form-group:last-child .help-tooltip,
+.form-group:nth-last-child(2) .help-tooltip {
+  top: auto !important;
+  bottom: 25px !important;
+}
+
+/* Fix for form controls to ensure they're not overlapped */
+.form-control, select, input[type="text"], input[type="number"], input[type="password"] {
+  position: relative !important;
+  z-index: 1 !important;
+  background-color: white !important;
+}
+
+/* Fix for radio buttons and checkboxes */
+.radio, .checkbox {
+  position: relative !important;
+  z-index: 2 !important;
+  background-color: transparent !important;
+}
+
+.radio label, .checkbox label {
+  position: relative !important;
+  z-index: 2 !important;
+  background-color: transparent !important;
+}
