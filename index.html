@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot1Xer Supreme Enterprise Edition</title>
+    <link rel="stylesheet" href="css/main.css">
+    <!-- Include any other CSS files from the original project -->
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/logo.svg" alt="Dot1Xer Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%230077cc\' rx=\'5\'/%3E%3Ctext x=\'20\' y=\'25\' font-family=\'Arial\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\'%3E1X%3C/text%3E%3C/svg%3E';">
+                Dot1Xer Supreme
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#" id="questionnaire-link">Project Questionnaire</a></li>
+                    <li><a href="#" id="checklist-link">Deployment Checklist</a></li>
+                    <li><a href="#" id="help-link">Help</a></li>
+                    <li><a href="#" id="settings-link">Settings</a></li>
+                    <li><a href="#" id="about-link">About</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="video-banner" id="video-banner">
+            <!-- Video will be loaded here via JavaScript -->
+            <div class="video-overlay">
+                <h1 class="banner-title">Dot1Xer Supreme</h1>
+                <p class="banner-subtitle">Comprehensive 802.1X Configuration & Management Platform</p>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="card main-card">
+                <div class="tabs">
+                    <div class="tab active" data-tab="platform">Platform</div>
+                    <div class="tab" data-tab="authentication">Authentication</div>
+                    <div class="tab" data-tab="security">Security</div>
+                    <div class="tab" data-tab="network">Network</div>
+                    <div class="tab" data-tab="advanced">Advanced</div>
+                    <div class="tab" data-tab="preview">Preview</div>
+                </div>
+                
+                <div class="tab-content">
+                    <!-- Platform Tab -->
+                    <div class="tab-pane active" id="platform">
+                        <h2>Select Vendor and Platform</h2>
+                        
+                        <div class="panel">
+                            <h3>Vendor Selection</h3>
+                            <div id="vendor-grid" class="vendor-grid"></div>
+                        </div>
+                        
+                        <div class="panel">
+                            <h3>Platform Details</h3>
+                            <div class="form-group">
+                                <label for="platform-select">Device Platform</label>
+                                <select id="platform-select" class="form-control">
+                                    <option value="">Select a vendor first</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="software-version">Software Version</label>
+                                <input type="text" id="software-version" class="form-control" placeholder="e.g., 17.3.5">
+                            </div>
+                        </div>
+                        
+                        <div class="actions">
+                            <button id="platform-next" class="btn next">Next: Authentication</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Authentication Tab -->
+                    <div class="tab-pane" id="authentication">
+                        <!-- Authentication content will be dynamically populated -->
+                    </div>
+                    
+                    <!-- Security Tab -->
+                    <div class="tab-pane" id="security">
+                        <!-- Security content will be dynamically populated -->
+                    </div>
+                    
+                    <!-- Network Tab -->
+                    <div class="tab-pane" id="network">
+                        <!-- Network content will be dynamically populated -->
+                    </div>
+                    
+                    <!-- Advanced Tab -->
+                    <div class="tab-pane" id="advanced">
+                        <!-- Advanced content will be dynamically populated -->
+                    </div>
+                    
+                    <!-- Preview Tab -->
+                    <div class="tab-pane" id="preview">
+                        <!-- Preview content will be dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Dot1Xer Supreme Enterprise Edition. Version 4.2.0</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- New modular architecture entry point -->
+    <script type="module" src="src/index.js"></script>
+    
+    <!-- Legacy script references for compatibility during migration -->
+    <script>
+        // Create a global object to catch legacy global function calls
+        window.legacyCompat = {
+            showAlert: function(message, type) {
+                console.log('Legacy alert:', message, type);
+                // This will be replaced by the Alert component
+            }
+        };
+        
+        // Define showAlert as a global function for legacy compatibility
+        window.showAlert = function(message, type) {
+            window.legacyCompat.showAlert(message, type);
+        };
+    </script>
+    <!-- Best Practices Integration -->
+    <script src="js/bestPracticesIntegration.js"></script>
+    <!-- AI Review Modal -->
+    <div id="ai-review-modal" class="modal-overlay">
+        <div class="modal-container ai-assistant-review-modal">
+            <div class="modal-header">
+                <h2>AI Assistant Configuration Review</h2>
+                <button id="ai-review-modal-close" class="modal-close"></body>times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be added dynamically -->
+                <p>Analyzing configuration with AI assistant...</p>
+                <div class="loader"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="ai-review-close" class="btn">Close</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

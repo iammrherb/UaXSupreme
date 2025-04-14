@@ -1,0 +1,143 @@
+<div class="tab-pane" id="preview">
+    <h2>Configuration Preview</h2>
+    
+    <div class="action-bar">
+        <button id="generate-config" class="btn primary">Generate Configuration</button>
+        <button id="copy-config" class="btn">Copy to Clipboard</button>
+        <button id="download-config" class="btn">Download</button>
+        <button id="analyze-config" class="btn">Analyze</button>
+        <button id="optimize-config" class="btn">Optimize with AI</button>
+        <button id="save-config" class="btn">Save Config</button>
+    </div>
+    
+    <div class="subtabs">
+        <div class="subtab active" data-subtab="config-output-tab">Configuration</div>
+        <div class="subtab" data-subtab="config-analysis-tab">Analysis</div>
+        <div class="subtab" data-subtab="best-practices-tab">Best Practices</div>
+    </div>
+    
+    <div class="subtab-content">
+        <div class="subtab-pane active" id="config-output-tab">
+            <h3>Configuration Output</h3>
+            <pre id="config-output" class="code-block">
+# No configuration generated yet.
+# Click "Generate Configuration" to create a configuration based on your settings.
+            </pre>
+        </div>
+        
+        <div class="subtab-pane" id="config-analysis-tab">
+            <h3>Configuration Analysis</h3>
+            <div id="config-analysis">
+                <p>No analysis available yet. Click "Analyze" to analyze your configuration.</p>
+            </div>
+        </div>
+        
+        <div class="subtab-pane" id="best-practices-tab">
+            <h3>Best Practices Recommendations</h3>
+            <div class="best-practices-options">
+                <div class="form-group">
+                    <label for="best-practices-security-level">Security Level</label>
+                    <select id="best-practices-security-level" class="form-control">
+                        <option value="baseline">Baseline</option>
+                        <option value="standard" selected>Standard</option>
+                        <option value="high">High</option>
+                        <option value="highest">Highest</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="best-practices-industry">Industry</label>
+                    <select id="best-practices-industry" class="form-control">
+                        <option value="">General</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="finance">Financial Services</option>
+                        <option value="education">Education</option>
+                        <option value="government">Government</option>
+                        <option value="retail">Retail</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="energy">Energy</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Compliance Standards</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-pci" value="pci">
+                            <label for="compliance-pci">PCI DSS</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-hipaa" value="hipaa">
+                            <label for="compliance-hipaa">HIPAA</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-nist" value="nist">
+                            <label for="compliance-nist">NIST 800-53</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-iso27001" value="iso27001">
+                            <label for="compliance-iso27001">ISO 27001</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-gdpr" value="gdpr">
+                            <label for="compliance-gdpr">GDPR</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" id="compliance-fedramp" value="fedramp">
+                            <label for="compliance-fedramp">FedRAMP</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="generate-recommendations" class="btn primary">Generate Recommendations</button>
+                <button id="apply-recommendations" class="btn" disabled>Apply Recommendations</button>
+                <button id="ai-review-config" class="btn">AI Assistant Review</button>
+            </div>
+            
+            <div id="recommendations-container">
+                <div class="recommendations-summary">
+                    <div class="security-score">
+                        <div class="score-circle">
+                            <span id="security-score-value">--</span>
+                        </div>
+                        <div class="score-label">Security Score</div>
+                    </div>
+                    
+                    <div class="compliance-status">
+                        <div id="compliance-status-indicator" class="status-indicator">
+                            <span class="indicator"></span>
+                        </div>
+                        <div class="compliance-label">Compliance Status</div>
+                    </div>
+                </div>
+                
+                <div id="recommendations-list" class="expandable-list">
+                    <p>No recommendations generated yet. Click "Generate Recommendations" to analyze your configuration against best practices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h3>Diagram Generator</h3>
+        <div class="form-group">
+            <label for="diagram-type">Diagram Type</label>
+            <select id="diagram-type" class="form-control">
+                <option value="network-topology">Network Topology</option>
+                <option value="authentication-flow">Authentication Flow</option>
+                <option value="deployment-architecture">Deployment Architecture</option>
+                <option value="radius-communication">RADIUS Communication</option>
+            </select>
+        </div>
+        <button id="generate-diagram" class="btn">Generate Diagram</button>
+        
+        <div id="diagram-display" class="diagram-display">
+            <p>No diagram generated yet. Select a diagram type and click "Generate Diagram".</p>
+        </div>
+    </div>
+    
+    <div class="actions">
+        <button id="preview-prev" class="btn prev">Previous: Advanced</button>
+        <button id="export-documentation" class="btn primary">Export Documentation</button>
+    </div>
+</div>

@@ -1,0 +1,618 @@
+/**
+ * BaseEapComponent.js
+ * Base component for Extensible Authentication Protocol (EAP) configuration.
+ * Provides configurations for various EAP methods used in 802.1X authentication.
+ */
+
+import { EventEmitter } from '../../../core/events.js';
+import { ValidationService } from '../../utils/validation/ValidationService.js';
+
+export class BaseEapComponent extends EventEmitter {
+  constructor(options = {}) {
+    super();
+    this.options = {
+      enableValidation: true,
+      ...options
+    };
+    
+    // Initialize configuration with default values
+    this.config = {
+      // General EAP settings
+      enabled: true,
+      
+      // EAP methods
+      methods: {
+        peap: {
+          enabled: true,
+          innerMethod: 'mschapv2', // 'mschapv2', 'gtc'
+          validateServerCertificate: true,
+          tunnelPac: false,
+          version: 0, // 0, 1, auto
+          options: {
+            fastReconnect: true,
+            quarantine: false,
+            cryptoBinding: false
+          }
+        },
+        
+        'eap-tls': {
+          enabled: false,
+          validateServerCertificate: true,
+          clientCertificate: '',
+          clientKey: '',
+          clientKeyPassword: '',
+          caCertificate: '',
+          options: {
+            ocspCheck: false,
+            sessionResumption: true,
+            tlsVersion: 'tls1.2+', // 'tls1.2', 'tls1.3', 'tls1.2+'
+            cipherSuites: []
+          }
+        },
+        
+        'eap-ttls': {
+          enabled: false,
+          validateServerCertificate: true,
+          innerMethod: 'pap', // 'pap', 'chap', 'mschap', 'mschapv2'
+          anonymousIdentity: '',
+          options: {
+            fastReconnect: true,
+            sessionResumption: true
+          }
+        },
+        
+        'eap-fast': {
+          enabled: false,
+          validateServerCertificate: false,
+          innerMethod: 'mschapv2', // 'mschapv2', 'gtc'
+          anonymousIdentity: '',
+          provisionPac: true,
+          inBandProvisioning: true,
+          options: {
+            fastReconnect: true,
+            serverUnauthenticated: false, // Allow unauthenticated server provisioning
+            usePac: true
+          }
+        },
+        
+        'eap-md5': {
+          enabled: false,
+          options: {
+            // Limited options since EAP-MD5 is a simple protocol
+            challengeSize: 16 // Size of the challenge in bytes
+          }
+        },
+        
+        'eap-sim': {
+          enabled: false,
+          pseudonymIdentity: true,
+          fastReauthentication: true,
+          options: {
+            protectedResultIndication: true,
+            resultIndication: true
+          }
+        },
+        
+        'eap-aka': {
+          enabled: false,
+          pseudonymIdentity: true,
+          fastReauthentication: true,
+          options: {
+            protectedResultIndication: true,
+            resultIndication: true
+          }
+        }
+      },
+      
+      // Authentication server settings
+      server: {
+        primaryDomain: '',
+        secondaryDomain: '',
+        requestTimeout: 30, // seconds
+        maxAuthRetries: 3,
+        retryDelay: 5 // seconds
+      },
+      
+      // Identity settings
+      identity: {
+        anonymous: false,
+        anonymousIdentity: '',
+        useRealm: false,
+        realm: '',
+        useMachineName: false
+      },
+      
+      // Certificate settings
+      certificates: {
+        validateAll: true,
+        rootCertificates: [],
+        crlCheck: false,
+        ocspCheck: false,
+        tlsVersionMin: 'tls1.2',
+        serverCertValidation: {
+          verifyName: true,
+          verifyDate: true,
+          allowSelfSigned: false,
+          allowUntrusted: false,
+          allowExpired: false,
+          allowMismatch: false
+        }
+      },
+      
+      // Advanced settings
+      advanced: {
+        fragmentation: {
+          enabled: false,
+          maxFragmentSize: 1400
+        },
+        sessionResumption: {
+          enabled: true,
+          lifetime: 43200, // seconds (12 hours)
+          cacheSize: 100
+        },
+        fastReconnect: {
+          enabled: true,
+          maxAttempts: 3
+        },
+        channelBinding: {
+          enabled: false,
+          type: 'none' // 'none', 'nla', 'tls-server-endpoint', 'tls-unique'
+        },
+        logging: {
+          enabled: true,
+          level: 'info', // 'debug', 'info', 'warning', 'error'
+          includeEapPackets: false
+        }
+      }
+    };
+    
+    // Initialize validation if enabled
+    if (this.options.enableValidation) {
+      this.validator = new ValidationService();
+      this.registerValidations();
+    }
+  }
+  
+  /**
+   * Register validations for EAP configuration
+   * This can be extended by vendor-specific EAP components
+   */
+  registerValidations() {
+    // Validate server settings
+    this.validator.register('server.primaryDomain', {
+      required: true,
+      type: 'string',
+      message: 'Primary authentication server domain is required'
+    });
+    
+    this.validator.register('server.requestTimeout', {
+      type: 'number',
+      min: 1,
+      max: 300,
+      message: 'Request timeout must be between 1 and 300 seconds'
+    });
+    
+    // Validate EAP-TLS settings when enabled
+    this.validator.register('methods.eap-tls.clientCertificate', {
+      required: function(config) { 
+        return config.methods && config.methods['eap-tls'] && config.methods['eap-tls'].enabled; 
+      },
+      type: 'string',
+      message: 'Client certificate is required when EAP-TLS is enabled'
+    });
+    
+    this.validator.register('methods.eap-tls.clientKey', {
+      required: function(config) { 
+        return config.methods && config.methods['eap-tls'] && config.methods['eap-tls'].enabled; 
+      },
+      type: 'string',
+      message: 'Client key is required when EAP-TLS is enabled'
+    });
+    
+    // Validate anonymous identity when used
+    this.validator.register('identity.anonymousIdentity', {
+      required: function(config) { 
+        return config.identity && config.identity.anonymous; 
+      },
+      type: 'string',
+      message: 'Anonymous identity is required when anonymous mode is enabled'
+    });
+    
+    // Validate realm when used
+    this.validator.register('identity.realm', {
+      required: function(config) { 
+        return config.identity && config.identity.useRealm; 
+      },
+      type: 'string',
+      message: 'Realm is required when realm usage is enabled'
+    });
+    
+    // Validate certificate settings
+    this.validator.register('certificates.rootCertificates', {
+      required: function(config) { 
+        return config.certificates && 
+               config.certificates.validateAll && 
+               (config.methods['eap-tls']?.enabled || 
+                config.methods.peap?.enabled || 
+                config.methods['eap-ttls']?.enabled || 
+                config.methods['eap-fast']?.enabled); 
+      },
+      type: 'array',
+      message: 'Root certificates are required when certificate validation is enabled'
+    });
+  }
+  
+  /**
+   * Validate the current configuration
+   * @returns {Object} Validation result {valid, errors}
+   */
+  validate() {
+    if (!this.validator) {
+      return { valid: true, errors: [] };
+    }
+    
+    return this.validator.validate(this.config);
+  }
+  
+  /**
+   * Set configuration values
+   * @param {Object} config Configuration object to merge with current config
+   * @param {Boolean} validate Whether to validate the new configuration
+   * @returns {Object} Validation result if validate=true, otherwise null
+   */
+  setConfig(config, validate = true) {
+    // Deep merge the configurations
+    this.config = this.mergeDeep(this.config, config);
+    
+    // Emit change event
+    this.emit('configChanged', this.config);
+    
+    // Validate if requested
+    if (validate && this.validator) {
+      const validationResult = this.validate();
+      if (!validationResult.valid) {
+        this.emit('validationFailed', validationResult.errors);
+      }
+      return validationResult;
+    }
+    
+    return null;
+  }
+  
+  /**
+   * Get the current configuration
+   * @returns {Object} Current configuration
+   */
+  getConfig() {
+    return JSON.parse(JSON.stringify(this.config));
+  }
+  
+  /**
+   * Deep merge two objects
+   * @param {Object} target Target object
+   * @param {Object} source Source object
+   * @returns {Object} Merged object
+   */
+  mergeDeep(target, source) {
+    const output = Object.assign({}, target);
+    
+    if (this.isObject(target) && this.isObject(source)) {
+      Object.keys(source).forEach(key => {
+        if (this.isObject(source[key])) {
+          if (!(key in target)) {
+            Object.assign(output, { [key]: source[key] });
+          } else {
+            output[key] = this.mergeDeep(target[key], source[key]);
+          }
+        } else {
+          Object.assign(output, { [key]: source[key] });
+        }
+      });
+    }
+    
+    return output;
+  }
+  
+  /**
+   * Check if value is an object
+   * @param {*} item Item to check
+   * @returns {Boolean} True if object
+   */
+  isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
+  
+  /**
+   * Generate generic EAP configuration (abstract method to be implemented by subclasses)
+   * @returns {String} Configuration string
+   */
+  generateConfig() {
+    throw new Error('generateConfig method must be implemented by vendor-specific subclasses');
+  }
+  
+  /**
+   * Reset configuration to defaults
+   */
+  resetConfig() {
+    // Reset to initial default values - create a new instance of the default configuration
+    this.config = {
+      enabled: true,
+      methods: {
+        peap: {
+          enabled: true,
+          innerMethod: 'mschapv2',
+          validateServerCertificate: true,
+          tunnelPac: false,
+          version: 0,
+          options: {
+            fastReconnect: true,
+            quarantine: false,
+            cryptoBinding: false
+          }
+        },
+        'eap-tls': {
+          enabled: false,
+          validateServerCertificate: true,
+          clientCertificate: '',
+          clientKey: '',
+          clientKeyPassword: '',
+          caCertificate: '',
+          options: {
+            ocspCheck: false,
+            sessionResumption: true,
+            tlsVersion: 'tls1.2+',
+            cipherSuites: []
+          }
+        },
+        'eap-ttls': {
+          enabled: false,
+          validateServerCertificate: true,
+          innerMethod: 'pap',
+          anonymousIdentity: '',
+          options: {
+            fastReconnect: true,
+            sessionResumption: true
+          }
+        },
+        'eap-fast': {
+          enabled: false,
+          validateServerCertificate: false,
+          innerMethod: 'mschapv2',
+          anonymousIdentity: '',
+          provisionPac: true,
+          inBandProvisioning: true,
+          options: {
+            fastReconnect: true,
+            serverUnauthenticated: false,
+            usePac: true
+          }
+        },
+        'eap-md5': {
+          enabled: false,
+          options: {
+            challengeSize: 16
+          }
+        },
+        'eap-sim': {
+          enabled: false,
+          pseudonymIdentity: true,
+          fastReauthentication: true,
+          options: {
+            protectedResultIndication: true,
+            resultIndication: true
+          }
+        },
+        'eap-aka': {
+          enabled: false,
+          pseudonymIdentity: true,
+          fastReauthentication: true,
+          options: {
+            protectedResultIndication: true,
+            resultIndication: true
+          }
+        }
+      },
+      server: {
+        primaryDomain: '',
+        secondaryDomain: '',
+        requestTimeout: 30,
+        maxAuthRetries: 3,
+        retryDelay: 5
+      },
+      identity: {
+        anonymous: false,
+        anonymousIdentity: '',
+        useRealm: false,
+        realm: '',
+        useMachineName: false
+      },
+      certificates: {
+        validateAll: true,
+        rootCertificates: [],
+        crlCheck: false,
+        ocspCheck: false,
+        tlsVersionMin: 'tls1.2',
+        serverCertValidation: {
+          verifyName: true,
+          verifyDate: true,
+          allowSelfSigned: false,
+          allowUntrusted: false,
+          allowExpired: false,
+          allowMismatch: false
+        }
+      },
+      advanced: {
+        fragmentation: {
+          enabled: false,
+          maxFragmentSize: 1400
+        },
+        sessionResumption: {
+          enabled: true,
+          lifetime: 43200,
+          cacheSize: 100
+        },
+        fastReconnect: {
+          enabled: true,
+          maxAttempts: 3
+        },
+        channelBinding: {
+          enabled: false,
+          type: 'none'
+        },
+        logging: {
+          enabled: true,
+          level: 'info',
+          includeEapPackets: false
+        }
+      }
+    };
+    
+    // Emit change event
+    this.emit('configReset', this.config);
+  }
+  
+  /**
+   * Enable a specific EAP method
+   * @param {String} method EAP method name ('peap', 'eap-tls', 'eap-ttls', 'eap-fast', 'eap-md5', 'eap-sim', 'eap-aka')
+   * @param {Boolean} enable Whether to enable or disable the method
+   * @returns {Boolean} Success status
+   */
+  enableMethod(method, enable = true) {
+    if (!this.config.methods[method]) {
+      return false;
+    }
+    
+    this.config.methods[method].enabled = !!enable;
+    
+    // Emit change event
+    this.emit('methodChanged', { method, enabled: !!enable });
+    
+    return true;
+  }
+  
+  /**
+   * Get enabled EAP methods
+   * @returns {Array} Array of enabled method names
+   */
+  getEnabledMethods() {
+    return Object.entries(this.config.methods)
+      .filter(([_, config]) => config.enabled)
+      .map(([method]) => method);
+  }
+  
+  /**
+   * Set EAP identity options
+   * @param {Object} options Identity options
+   * @param {Boolean} options.anonymous Use anonymous identity
+   * @param {String} options.anonymousIdentity Anonymous identity value
+   * @param {Boolean} options.useRealm Use identity realm
+   * @param {String} options.realm Realm value
+   * @param {Boolean} options.useMachineName Use machine name for identity
+   * @returns {Boolean} Success status
+   */
+  setIdentityOptions(options) {
+    if (!options || typeof options !== 'object') {
+      return false;
+    }
+    
+    // Update identity options
+    if (options.anonymous !== undefined) {
+      this.config.identity.anonymous = !!options.anonymous;
+    }
+    
+    if (options.anonymousIdentity !== undefined) {
+      this.config.identity.anonymousIdentity = options.anonymousIdentity;
+    }
+    
+    if (options.useRealm !== undefined) {
+      this.config.identity.useRealm = !!options.useRealm;
+    }
+    
+    if (options.realm !== undefined) {
+      this.config.identity.realm = options.realm;
+    }
+    
+    if (options.useMachineName !== undefined) {
+      this.config.identity.useMachineName = !!options.useMachineName;
+    }
+    
+    // Emit change event
+    this.emit('identityChanged', this.config.identity);
+    
+    return true;
+  }
+  
+  /**
+   * Set certificate options
+   * @param {Object} options Certificate options
+   * @returns {Boolean} Success status
+   */
+  setCertificateOptions(options) {
+    if (!options || typeof options !== 'object') {
+      return false;
+    }
+    
+    // Update certificate options using deep merge
+    this.config.certificates = this.mergeDeep(this.config.certificates, options);
+    
+    // Emit change event
+    this.emit('certificatesChanged', this.config.certificates);
+    
+    return true;
+  }
+  
+  /**
+   * Add a root certificate
+   * @param {Object} cert Certificate object {name, value}
+   * @returns {Boolean} Success status
+   */
+  addRootCertificate(cert) {
+    if (!cert || !cert.name || !cert.value) {
+      return false;
+    }
+    
+    // Check if certificate already exists
+    const existingIndex = this.config.certificates.rootCertificates.findIndex(c => c.name === cert.name);
+    if (existingIndex >= 0) {
+      // Update existing certificate
+      this.config.certificates.rootCertificates[existingIndex] = {
+        name: cert.name,
+        value: cert.value
+      };
+    } else {
+      // Add new certificate
+      this.config.certificates.rootCertificates.push({
+        name: cert.name,
+        value: cert.value
+      });
+    }
+    
+    // Emit change event
+    this.emit('certificateAdded', { name: cert.name });
+    
+    return true;
+  }
+  
+  /**
+   * Remove a root certificate
+   * @param {String} certName Certificate name
+   * @returns {Boolean} Success status
+   */
+  removeRootCertificate(certName) {
+    const initialLength = this.config.certificates.rootCertificates.length;
+    
+    this.config.certificates.rootCertificates = 
+      this.config.certificates.rootCertificates.filter(cert => cert.name !== certName);
+    
+    const removed = initialLength > this.config.certificates.rootCertificates.length;
+    
+    if (removed) {
+      // Emit change event
+      this.emit('certificateRemoved', { name: certName });
+    }
+    
+    return removed;
+  }
+}
+
+export default BaseEapComponent;
