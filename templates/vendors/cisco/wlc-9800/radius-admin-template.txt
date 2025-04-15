@@ -1,0 +1,79 @@
+! Cisco WLC 9800 RADIUS Authentication Configuration
+! Based on best practices from wiresandwi.fi and Cisco documentation
+!
+! Local fallback account
+username {{ADMIN_USERNAME}} privilege 15 algorithm-type sha256 secret {{ADMIN_PASSWORD}}
+enable algorithm-type sha256 secret {{ENABLE_PASSWORD}}
+
+! Create non-usable account for RADIUS server probing
+username {{RADIUS_TEST_USER}} privilege 0 algorithm-type sha256 secret {{RADIUS_TEST_PASSWORD}}
+username {{RADIUS_TEST_USER}} autocommand exit
+
+! Enable AAA services
+aaa new-model
+
+! Configure RADIUS servers
+radius server {{RADIUS_SERVER_1}}
+ address ipv4 {{RADIUS_SERVER_1_IP}} auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 2
+ automate-tester username {{RADIUS_TEST_USER}} probe-on
+ key {{RADIUS_SERVER_1_KEY}}
+
+radius server {{RADIUS_SERVER_2}}
+ address ipv4 {{RADIUS_SERVER_2_IP}} auth-port 1812 acct-port 1813
+ timeout 2
+ retransmit 2
+ automate-tester username {{RADIUS_TEST_USER}} probe-on
+ key {{RADIUS_SERVER_2_KEY}}
+
+! Configure RADIUS Server Group
+aaa group server radius {{RADIUS_ADMIN_GROUP}}
+ server name {{RADIUS_SERVER_1}}
+ server name {{RADIUS_SERVER_2}}
+ deadtime 15
+
+! Configure source interface if needed
+! aaa group server radius {{RADIUS_ADMIN_GROUP}}
+!  ip vrf forwarding {{VRF_NAME}}
+!  ip radius source-interface {{SOURCE_INTERFACE}}
+! radius-server load-balance method least-outstanding
+! radius-server dead-criteria time 5 tries 3
+
+! Create Method List for RADIUS authentication (RADIUS first, then local fallback)
+aaa authentication login {{ADMIN_AUTH_METHOD}} group {{RADIUS_ADMIN_GROUP}} local
+aaa authorization exec {{ADMIN_AUTHZ_METHOD}} group {{RADIUS_ADMIN_GROUP}} local if-authenticated
+aaa authorization console
+
+! Configure Accounting
+aaa accounting exec default start-stop group {{RADIUS_ADMIN_GROUP}}
+
+! Activate AAA RADIUS for HTTPS Web GUI
+ip http authentication aaa login-authentication {{ADMIN_AUTH_METHOD}}
+ip http authentication aaa exec-authorization {{ADMIN_AUTHZ_METHOD}}
+
+! Activate AAA RADIUS for NETCONF/RESTCONF authentication
+yang-interfaces aaa authentication method-list {{ADMIN_AUTH_METHOD}}
+yang-interfaces aaa authorization method-list {{ADMIN_AUTHZ_METHOD}}
+
+! Restart HTTP/HTTPS services
+no ip http server
+no ip http secure-server
+ip http server
+ip http secure-server
+
+! Activate AAA RADIUS authentication for SSH sessions
+line vty 0 97
+ exec-timeout 30 0
+ login authentication {{ADMIN_AUTH_METHOD}}
+ authorization exec {{ADMIN_AUTHZ_METHOD}}
+ transport preferred none
+ transport input ssh
+ transport output none
+
+! Activate AAA RADIUS authentication for the Console port
+line con 0
+ exec-timeout 15 0
+ transport preferred none
+ login authentication {{ADMIN_AUTH_METHOD}}
+ authorization exec {{ADMIN_AUTHZ_METHOD}}
