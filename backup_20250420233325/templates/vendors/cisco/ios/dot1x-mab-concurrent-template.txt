@@ -1,0 +1,85 @@
+! Cisco IOS IBNS 2.0 Concurrent 802.1X and MAB Authentication Configuration
+! Based on best practices from wiresandwi.fi
+!
+! NOTE: This template is focused on the policy-map for concurrent authentication.
+! The rest of the global configuration is identical to the sequential template.
+! Use this policy-map in conjunction with the standard global config.
+
+! Policy Map for Concurrent 802.1X and MAB Authentication
+policy-map type control subscriber CONCURRENT_DOT1X_MAB_POLICY
+ event session-started match-all
+  10 class always do-all
+   10 authenticate using dot1x priority 10
+   20 authenticate using mab priority 20
+ event authentication-failure match-first
+  5 class DOT1X_FAILED do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  10 class AAA_SVR_DOWN_UNAUTHD_HOST do-until-failure
+   10 clear-authenticated-data-hosts-on-port
+   20 activate service-template CRITICAL_DATA_ACCESS
+   30 activate service-template CRITICAL_VOICE_ACCESS
+   40 authorize
+   50 pause reauthentication
+  20 class AAA_SVR_DOWN_AUTHD_HOST do-until-failure
+   10 pause reauthentication
+   20 authorize
+  30 class DOT1X_NO_RESP do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  40 class DOT1X_TIMEOUT do-until-failure
+   10 terminate dot1x
+   20 authenticate using mab priority 20
+  50 class always do-until-failure
+   10 terminate dot1x
+   20 terminate mab
+   30 authentication-restart 60
+ event agent-found match-all
+  10 class always do-until-failure
+   10 terminate mab
+   20 authenticate using dot1x priority 10
+ event aaa-available match-all
+  10 class IN_CRITICAL_AUTH do-until-failure
+   10 clear-session
+  20 class NOT_IN_CRITICAL_AUTH do-until-failure
+   10 resume reauthentication
+ event inactivity-timeout match-all
+  10 class always do-until-failure
+   10 clear-session
+ event authentication-success match-all
+  10 class always do-until-failure
+   10 activate service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE
+ event violation match-all
+  10 class always do-until-failure
+   10 restrict
+ event authorization-failure match-all
+  10 class AUTHC_SUCCESS-AUTHZ_FAIL do-until-failure
+   10 authentication-restart 60
+
+! Port Templates for Concurrent Authentication
+template WIRED_DOT1X_OPEN_CONCURRENT
+ dot1x pae authenticator
+ dot1x timeout tx-period {{TX_PERIOD}}
+ dot1x max-reauth-req 2
+ mab
+ subscriber aging inactivity-timer 60 probe
+ access-session control-direction in
+ access-session host-mode {{HOST_MODE}}
+ access-session port-control auto
+ authentication periodic
+ authentication timer reauthenticate {{REAUTH_PERIOD}}
+ service-policy type control subscriber CONCURRENT_DOT1X_MAB_POLICY
+
+template WIRED_DOT1X_CLOSED_CONCURRENT
+ dot1x pae authenticator
+ dot1x timeout tx-period {{TX_PERIOD}}
+ dot1x max-reauth-req 2
+ mab
+ subscriber aging inactivity-timer 60 probe
+ access-session control-direction in
+ access-session host-mode {{HOST_MODE}}
+ access-session closed
+ access-session port-control auto
+ authentication periodic
+ authentication timer reauthenticate {{REAUTH_PERIOD}}
+ service-policy type control subscriber CONCURRENT_DOT1X_MAB_POLICY

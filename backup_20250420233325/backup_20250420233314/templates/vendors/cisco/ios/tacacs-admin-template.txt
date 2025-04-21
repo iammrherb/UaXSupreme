@@ -1,0 +1,58 @@
+! Cisco IOS TACACS+ Configuration for Device Administration
+! Based on best practices for TACACS+ device administration
+!
+! Local fallback account (use complex passwords in production)
+username {{ADMIN_USERNAME}} privilege 15 algorithm-type sha256 secret {{ADMIN_PASSWORD}}
+enable algorithm-type sha256 secret {{ENABLE_PASSWORD}}
+
+! AAA Configuration
+aaa new-model
+aaa session-id common
+
+! TACACS+ Server Configuration
+tacacs server {{TACACS_SERVER_1}}
+ address ipv4 {{TACACS_SERVER_1_IP}}
+ key {{TACACS_SERVER_1_KEY}}
+ timeout 5
+ single-connection
+
+tacacs server {{TACACS_SERVER_2}}
+ address ipv4 {{TACACS_SERVER_2_IP}}
+ key {{TACACS_SERVER_2_KEY}}
+ timeout 5
+ single-connection
+
+! TACACS+ Server Group
+aaa group server tacacs+ {{TACACS_GROUP}}
+ server name {{TACACS_SERVER_1}}
+ server name {{TACACS_SERVER_2}}
+ ip tacacs source-interface {{MANAGEMENT_INTERFACE}}
+
+! Authentication Method Lists
+aaa authentication login default group {{TACACS_GROUP}} local
+aaa authentication enable default group {{TACACS_GROUP}} enable
+
+! Authorization Method Lists
+aaa authorization config-commands
+aaa authorization commands 0 default group {{TACACS_GROUP}} local 
+aaa authorization commands 1 default group {{TACACS_GROUP}} local
+aaa authorization commands 15 default group {{TACACS_GROUP}} local
+aaa authorization console
+
+! Accounting Method Lists
+aaa accounting commands 0 default start-stop group {{TACACS_GROUP}}
+aaa accounting commands 1 default start-stop group {{TACACS_GROUP}}
+aaa accounting commands 15 default start-stop group {{TACACS_GROUP}}
+aaa accounting exec default start-stop group {{TACACS_GROUP}}
+
+! Line Configuration
+line con 0
+ login authentication default
+ authorization commands 15 default
+ accounting commands 15 default
+
+line vty 0 15
+ login authentication default
+ authorization commands 15 default
+ accounting commands 15 default
+ transport input ssh

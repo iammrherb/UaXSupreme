@@ -1,0 +1,38 @@
+! -----------------------------------------------------
+! Aruba AOS-CX 802.1X Authentication Configuration
+! -----------------------------------------------------
+
+! Configure RADIUS servers
+radius-server host {{RADIUS_SERVER_1}} key {{RADIUS_KEY}}
+radius-server host {{RADIUS_SERVER_2}} key {{RADIUS_KEY}} 
+
+! Configure RADIUS server group 
+aaa group radius {{RADIUS_GROUP}}
+ server {{RADIUS_SERVER_1}}
+ server {{RADIUS_SERVER_2}}
+
+! Configure authentication method
+aaa authentication dot1x default group {{RADIUS_GROUP}}
+aaa authorization network default group {{RADIUS_GROUP}}
+aaa accounting dot1x default start-stop group {{RADIUS_GROUP}}
+
+! Enable 802.1X globally
+aaa authentication port-access dot1x authenticator
+
+! Configure interface settings for 802.1X
+interface {{INTERFACE}}
+ no shutdown
+ aaa authentication port-access dot1x authenticator
+ aaa port-access authenticator
+ aaa port-access authenticator {{INTERFACE}} client-limit 3
+ aaa port-access authenticator {{INTERFACE}} logoff-period 300
+ aaa port-access authenticator {{INTERFACE}} max-requests 2
+ aaa port-access authenticator {{INTERFACE}} max-retries 2
+ aaa port-access authenticator {{INTERFACE}} quiet-period 60
+ aaa port-access authenticator {{INTERFACE}} server-timeout 30
+ aaa port-access authenticator {{INTERFACE}} reauth-period 3600 
+ aaa port-access authenticator {{INTERFACE}} unauth-vid {{GUEST_VLAN}}
+ aaa port-access authenticator {{INTERFACE}} auth-vid {{AUTH_VLAN}}
+ aaa port-access authenticator {{INTERFACE}} auth-vlan {{AUTH_VLAN}}
+ aaa port-access authenticator {{INTERFACE}} initialize
+ aaa port-access authenticator active

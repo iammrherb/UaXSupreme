@@ -1,0 +1,115 @@
+/* Dot1Xer Supreme Enterprise Edition - Vendor-specific Styles */
+
+/* Cisco */
+.cisco-theme {
+  --vendor-primary: #049fd9;
+  --vendor-secondary: #00bceb;
+  --vendor-accent: #fbab18;
+}
+
+/* Aruba */
+.aruba-theme {
+  --vendor-primary: #f26334;
+  --vendor-secondary: #949300;
+  --vendor-accent: #8dc63f;
+}
+
+/* Juniper */
+.juniper-theme {
+  --vendor-primary: #84b135;
+  --vendor-secondary: #6a737b;
+  --vendor-accent: #a5ce3a;
+}
+
+/* HP */
+.hp-theme {
+  --vendor-primary: #0096d6;
+  --vendor-secondary: #d7410b;
+  --vendor-accent: #425563;
+}
+
+/* Fortinet */
+.fortinet-theme {
+  --vendor-primary: #ee3124;
+  --vendor-secondary: #5b5f97;
+  --vendor-accent: #ff9900;
+}
+
+/* Extreme */
+.extreme-theme {
+  --vendor-primary: #00c340;
+  --vendor-secondary: #222222;
+  --vendor-accent: #8dc63f;
+}
+
+/* Dell */
+.dell-theme {
+  --vendor-primary: #007db8;
+  --vendor-secondary: #444444;
+  --vendor-accent: #00447c;
+}
+
+/* Huawei */
+.huawei-theme {
+  --vendor-primary: #e40521;
+  --vendor-secondary: #000000;
+  --vendor-accent: #a5a5a5;
+}
+
+/* Ruckus */
+.ruckus-theme {
+  --vendor-primary: #c41230;
+  --vendor-secondary: #a2aaad;
+  --vendor-accent: #535353;
+}
+
+/* Ubiquiti */
+.ubiquiti-theme {
+  --vendor-primary: #0559c9;
+  --vendor-secondary: #2c323c;
+  --vendor-accent: #aaaaaa;
+}
+
+/* Meraki */
+.meraki-theme {
+  --vendor-primary: #78be20;
+  --vendor-secondary: #00a2df;
+  --vendor-accent: #383838;
+}
+
+/* Checkpoint */
+.checkpoint-theme {
+  --vendor-primary: #e66400;
+  --vendor-secondary: #ff9e18;
+  --vendor-accent: #2c2c2c;
+}
+
+/* Palo Alto */
+.paloalto-theme {
+  --vendor-primary: #fa582d;
+  --vendor-secondary: #383838;
+  --vendor-accent: #01b1ea;
+}
+
+/* Vendor-specific UI adjustments */
+[data-vendor-theme] .card {
+  border-top: 3px solid var(--vendor-primary);
+}
+
+[data-vendor-theme] .btn.primary {
+  background-color: var(--vendor-primary);
+}
+
+[data-vendor-theme] .btn.primary:hover {
+  background-color: var(--vendor-secondary);
+}
+
+[data-vendor-theme] .tab.active {
+  border-bottom-color: var(--vendor-primary);
+  color: var(--vendor-primary);
+}
+
+[data-vendor-theme] .form-control:focus {
+  border-color: var(--vendor-primary);
+  box-shadow: 0 0 0 3px rgba(var(--vendor-primary), 0.2);
+}

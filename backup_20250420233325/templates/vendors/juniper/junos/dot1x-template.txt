@@ -1,0 +1,138 @@
+# Juniper JunOS 802.1X Configuration Template
+# Based on best practices for 802.1X deployments
+#
+# RADIUS Configuration
+system {
+    radius-server {
+        {{RADIUS_SERVER_1_IP}} {
+            secret "{{RADIUS_SERVER_1_KEY}}";
+            timeout 5;
+            retry 3;
+            source-address {{MGMT_IP}};
+            port 1812;
+            accounting-port 1813;
+        }
+        {{RADIUS_SERVER_2_IP}} {
+            secret "{{RADIUS_SERVER_2_KEY}}";
+            timeout 5;
+            retry 3;
+            source-address {{MGMT_IP}};
+            port 1812;
+            accounting-port 1813;
+        }
+    }
+}
+
+# Authentication Configuration
+access {
+    radius-server {
+        {{RADIUS_SERVER_1_IP}} {
+            secret "{{RADIUS_SERVER_1_KEY}}";
+            timeout 5;
+            retry 3;
+            source-address {{MGMT_IP}};
+            port 1812;
+            accounting-port 1813;
+        }
+        {{RADIUS_SERVER_2_IP}} {
+            secret "{{RADIUS_SERVER_2_KEY}}";
+            timeout 5;
+            retry 3;
+            source-address {{MGMT_IP}};
+            port 1812;
+            accounting-port 1813;
+        }
+    }
+    profile dot1x-profile {
+        authentication-order [dot1x mac-radius];
+        radius {
+            authentication-server [{{RADIUS_SERVER_1_IP}} {{RADIUS_SERVER_2_IP}}];
+            accounting-server [{{RADIUS_SERVER_1_IP}} {{RADIUS_SERVER_2_IP}}];
+        }
+        accounting {
+            order radius;
+            accounting-stop-on-failure;
+            accounting-stop-on-access-deny;
+        }
+    }
+}
+
+# 802.1X Protocol Configuration
+protocols {
+    dot1x {
+        authenticator {
+            authentication-profile-name dot1x-profile;
+            interface {
+                {{INTERFACE_NAME}} {
+                    supplicant multiple;
+                    retries 2;
+                    quiet-period {{QUIET_PERIOD}};
+                    max-requests 2;
+                    transmit-period {{TX_PERIOD}};
+                    mac-radius {
+                        restrict;
+                    }
+                    server-timeout 30;
+                    supplicant-timeout 30;
+                    reauthentication {{REAUTH_PERIOD}};
+                    guest-vlan {{GUEST_VLAN}};
+                    server-fail vlan-name {{CRITICAL_VLAN}};
+                    server-reject-vlan {{AUTH_FAIL_VLAN}};
+                }
+            }
+        }
+    }
+}
+
+# VLAN Configuration
+vlans {
+    auth-vlan {
+        vlan-id {{AUTH_VLAN_ID}};
+    }
+    unauth-vlan {
+        vlan-id {{UNAUTH_VLAN_ID}};
+    }
+    guest-vlan {
+        vlan-id {{GUEST_VLAN_ID}};
+    }
+    critical-vlan {
+        vlan-id {{CRITICAL_VLAN_ID}};
+    }
+    auth-fail-vlan {
+        vlan-id {{AUTH_FAIL_VLAN_ID}};
+    }
+    voice-vlan {
+        vlan-id {{VOICE_VLAN_ID}};
+    }
+}
+
+# Interface Configuration (Access Ports)
+interfaces {
+    {{ACCESS_INTERFACE}} {
+        unit 0 {
+            family ethernet-switching {
+                interface-mode access;
+                vlan {
+                    members unauth-vlan;
+                }
+                voip {
+                    vlan voice-vlan;
+                }
+            }
+        }
+    }
+}
+
+# Interface Configuration (Trunk Ports)
+interfaces {
+    {{TRUNK_INTERFACE}} {
+        unit 0 {
+            family ethernet-switching {
+                interface-mode trunk;
+                vlan {
+                    members [ {{ALLOWED_VLAN_LIST}} ];
+                }
+            }
+        }
+    }
+}

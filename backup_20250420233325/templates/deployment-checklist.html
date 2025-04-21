@@ -1,0 +1,141 @@
+<div class="checklist-wrapper">
+    <div class="checklist-header">
+        <h2>802.1X Deployment Checklist</h2>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text">0% complete</div>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>1. Planning Phase</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-requirements" class="checklist-checkbox">
+            <label for="check-requirements">Identify business requirements and scope</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-inventory" class="checklist-checkbox">
+            <label for="check-inventory">Inventory network devices for 802.1X compatibility</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-endpoints" class="checklist-checkbox">
+            <label for="check-endpoints">Identify endpoint types and authentication methods</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-exceptions" class="checklist-checkbox">
+            <label for="check-exceptions">Document exceptions and special devices</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-topology" class="checklist-checkbox">
+            <label for="check-topology">Document network topology and RADIUS server placement</label>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>2. RADIUS Server Setup</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-radius-install" class="checklist-checkbox">
+            <label for="check-radius-install">Install RADIUS server (ISE, ClearPass, NPS, etc.)</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-radius-config" class="checklist-checkbox">
+            <label for="check-radius-config">Configure RADIUS server authentication methods</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-radius-policies" class="checklist-checkbox">
+            <label for="check-radius-policies">Create authorization policies</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-radius-test" class="checklist-checkbox">
+            <label for="check-radius-test">Test RADIUS server basic authentication</label>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>3. Network Device Configuration</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-switch-config" class="checklist-checkbox">
+            <label for="check-switch-config">Configure global 802.1X settings on switches</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-radius-clients" class="checklist-checkbox">
+            <label for="check-radius-clients">Add switches as RADIUS clients on server</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-vlan-config" class="checklist-checkbox">
+            <label for="check-vlan-config">Configure VLANs (authenticated, unauthenticated, voice)</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-aaa" class="checklist-checkbox">
+            <label for="check-aaa">Configure AAA settings (authentication, authorization, accounting)</label>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>4. Testing Phase</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-lab-test" class="checklist-checkbox">
+            <label for="check-lab-test">Perform lab testing with all device types</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-monitor-test" class="checklist-checkbox">
+            <label for="check-monitor-test">Configure and test Monitor Mode</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-logging" class="checklist-checkbox">
+            <label for="check-logging">Set up logging and monitoring</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-pilot" class="checklist-checkbox">
+            <label for="check-pilot">Conduct pilot deployment</label>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>5. Deployment Phase</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-notifications" class="checklist-checkbox">
+            <label for="check-notifications">Send user notifications</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-monitor-mode" class="checklist-checkbox">
+            <label for="check-monitor-mode">Deploy in Monitor Mode</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-low-impact" class="checklist-checkbox">
+            <label for="check-low-impact">Transition to Low-Impact Mode</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-closed-mode" class="checklist-checkbox">
+            <label for="check-closed-mode">Transition to Closed Mode (full enforcement)</label>
+        </div>
+    </div>
+    
+    <div class="checklist-section">
+        <h3>6. Post-Deployment</h3>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-documentation" class="checklist-checkbox">
+            <label for="check-documentation">Update network documentation</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-monitoring" class="checklist-checkbox">
+            <label for="check-monitoring">Set up ongoing monitoring</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-training" class="checklist-checkbox">
+            <label for="check-training">Conduct staff training</label>
+        </div>
+        <div class="checklist-item">
+            <input type="checkbox" id="check-audit" class="checklist-checkbox">
+            <label for="check-audit">Schedule regular audits</label>
+        </div>
+    </div>
+    
+    <div class="checklist-actions">
+        <button id="checklist-save" class="btn primary">Save Progress</button>
+        <button id="checklist-print" class="btn">Print Checklist</button>
+        <button id="checklist-export" class="btn">Export as PDF</button>
+    </div>
+</div>

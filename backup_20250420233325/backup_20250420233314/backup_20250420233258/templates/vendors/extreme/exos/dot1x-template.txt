@@ -1,0 +1,61 @@
+# Extreme EXOS 802.1X Configuration Template
+# Based on best practices for 802.1X deployments
+
+# RADIUS Server Configuration
+configure radius netlogin primary server {{RADIUS_SERVER_1_IP}} client-ip {{CLIENT_IP}} vr VR-Mgmt
+configure radius netlogin primary shared-secret {{RADIUS_SERVER_1_KEY}}
+
+configure radius netlogin secondary server {{RADIUS_SERVER_2_IP}} client-ip {{CLIENT_IP}} vr VR-Mgmt
+configure radius netlogin secondary shared-secret {{RADIUS_SERVER_2_KEY}}
+
+# Configure RADIUS attributes
+configure radius netlogin "Filter-Id" vlan-name
+configure radius-accounting netlogin primary server {{RADIUS_SERVER_1_IP}} client-ip {{CLIENT_IP}} vr VR-Mgmt
+configure radius-accounting netlogin primary shared-secret {{RADIUS_SERVER_1_KEY}}
+
+# Configure Network Login
+enable netlogin dot1x
+enable netlogin mac
+configure netlogin add mac-list "allowed-macs.txt"
+configure netlogin mac timers reauth-period {{REAUTH_PERIOD}}
+configure netlogin dot1x timers quiet-period {{QUIET_PERIOD}}
+configure netlogin dot1x timers tx-period {{TX_PERIOD}}
+configure netlogin dot1x timers auth-hold-period 60
+configure netlogin dot1x timers handshake-timeout 60
+configure netlogin dot1x timers supplicant-response 30
+configure netlogin dot1x timers server-timeout 30
+configure netlogin dot1x timers reauthentication {{REAUTH_PERIOD}}
+
+# VLAN Configuration
+create vlan "auth" tag {{AUTH_VLAN_ID}}
+create vlan "unauth" tag {{UNAUTH_VLAN_ID}}
+create vlan "guest" tag {{GUEST_VLAN_ID}}
+create vlan "voice" tag {{VOICE_VLAN_ID}}
+
+# Configure NetLogin VLANs
+configure netlogin vlan unauth
+configure netlogin authentication failure vlan unauth
+configure netlogin authentication service-unavailable vlan unauth
+
+# Authentication Order and Mode
+configure netlogin authentication mode {{AUTH_MODE}}
+configure netlogin authentication protocol-order dot1x mac
+configure netlogin authentication dot1x protocol eap-md5
+configure netlogin guest-vlan enable guest
+
+# Port Configuration
+# Access ports
+configure port {{ACCESS_PORTS}} display-string "802.1X Ports"
+enable netlogin dot1x port {{ACCESS_PORTS}}
+enable netlogin mac port {{ACCESS_PORTS}}
+enable netlogin port {{ACCESS_PORTS}}
+configure netlogin port {{ACCESS_PORTS}} mode mac-dot1x
+configure netlogin port {{ACCESS_PORTS}} authentication mode {{AUTH_MODE}}
+configure port {{ACCESS_PORTS}} vlan unauth
+configure port {{ACCESS_PORTS}} tag-dot1q-mode tag-all
+
+# Trunk ports
+configure port {{TRUNK_PORTS}} display-string "Trunk Port"
+disable netlogin port {{TRUNK_PORTS}}
+configure port {{TRUNK_PORTS}} vlan add {{TRUNK_VLANS}} tagged
+configure port {{TRUNK_PORTS}} vlan add {{NATIVE_VLAN}} untagged

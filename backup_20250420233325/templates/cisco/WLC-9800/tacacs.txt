@@ -1,0 +1,68 @@
+! -----------------------------------------------------
+! Cisco WLC 9800 TACACS+ Authentication Configuration
+! -----------------------------------------------------
+
+! Create local fallback account:
+username {{ADMIN_USERNAME}} privilege 15 algorithm-type sha256 secret {{ADMIN_PASSWORD}}
+enable algorithm-type sha256 secret {{ENABLE_PASSWORD}}
+
+! Enable AAA services:
+aaa new-model
+
+! Configure TACACS+ servers:
+tacacs server {{TACACS_SERVER_1_NAME}}
+ address ipv4 {{TACACS_SERVER_1}}
+ key {{TACACS_KEY}}
+ timeout 1
+
+tacacs server {{TACACS_SERVER_2_NAME}}
+ address ipv4 {{TACACS_SERVER_2}}
+ key {{TACACS_KEY}}
+ timeout 1
+
+! Configure TACACS+ Server Group:
+aaa group server tacacs+ {{TACACS_GROUP}}
+ server name {{TACACS_SERVER_1_NAME}}
+ server name {{TACACS_SERVER_2_NAME}}
+ {{TACACS_SOURCE_INTERFACE}}
+
+! Create Method List to use TACACS+ logins primarily.
+! Fallback to Local User Accounts ONLY if all TACACS+ servers fail.
+aaa authentication login {{TACACS_AUTH_METHOD_LIST}} group {{TACACS_GROUP}} local
+aaa authorization exec {{TACACS_AUTHZ_METHOD_LIST}} group {{TACACS_GROUP}} local if-authenticated
+aaa authorization console
+
+! Configure Accounting
+aaa accounting commands 0 default start-stop group {{TACACS_GROUP}}
+aaa accounting commands 1 default start-stop group {{TACACS_GROUP}}
+aaa accounting commands 15 default start-stop group {{TACACS_GROUP}}
+
+! Activate AAA TACACS+ for HTTPS Web GUI:
+ip http authentication aaa login-authentication {{TACACS_AUTH_METHOD_LIST}}
+ip http authentication aaa exec-authorization {{TACACS_AUTHZ_METHOD_LIST}}
+
+! Activate AAA TACACS+ for NETCONF/RESTCONF authentication
+yang-interfaces aaa authentication method-list {{TACACS_AUTH_METHOD_LIST}}
+yang-interfaces aaa authorization method-list {{TACACS_AUTHZ_METHOD_LIST}}
+
+! Restart HTTP/HTTPS services:
+no ip http server
+no ip http secure-server
+ip http server
+ip http secure-server
+
+! Activate AAA TACACS+ authentication for SSH sessions:
+line vty 0 97
+ exec-timeout 30 0
+ login authentication {{TACACS_AUTH_METHOD_LIST}}
+ authorization exec {{TACACS_AUTHZ_METHOD_LIST}}
+ transport preferred none
+ transport input ssh
+ transport output none
+
+! Activate AAA TACACS+ authentication for the Console port:
+line con 0
+ exec-timeout 15 0
+ transport preferred none
+ login authentication {{TACACS_AUTH_METHOD_LIST}}
+ authorization exec {{TACACS_AUTHZ_METHOD_LIST}}
