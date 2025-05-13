@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="60" viewBox="0 0 100 60">
+  <rect x="5" y="5" width="90" height="50" rx="5" ry="5" fill="#43A047" stroke="#1B5E20" stroke-width="2"/>
+  <text x="50" y="30" font-family="Arial" font-size="12" text-anchor="middle" fill="white">Portnox</text>
+  <text x="50" y="45" font-family="Arial" font-size="12" text-anchor="middle" fill="white">RADIUS</text>
+</svg>

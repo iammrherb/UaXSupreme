@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UaXSupreme Script Bleed Fixer</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+    h1, h2 { color: #2c3e50; }
+    pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    .issue { color: #e74c3c; }
+    .success { color: #27ae60; }
+    button { padding: 10px 15px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+    button:hover { background-color: #2980b9; }
+    textarea { width: 100%; height: 300px; margin: 10px 0; padding: 10px; font-family: monospace; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>UaXSupreme Script Bleed Fixer</h1>
+  <p>This tool helps clean script content from your HTML file.</p>
+  
+  <div>
+    <button id="load-button">Load Current HTML</button>
+    <button id="fix-button">Clean Script Content</button>
+    <button id="save-button">Generate Clean HTML</button>
+  </div>
+  
+  <h2>HTML Content</h2>
+  <textarea id="html-content"></textarea>
+  
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('load-button').addEventListener('click', function() {
+      fetch(window.location.origin + '/index.html')
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('html-content').value = html;
+        })
+        .catch(error => {
+          document.getElementById('results').innerHTML = `
+            <p class="issue">Error loading HTML: ${error}</p>
+          `;
+        });
+    });
+    
+    document.getElementById('fix-button').addEventListener('click', function() {
+      const htmlContent = document.getElementById('html-content').value;
+      const resultsDiv = document.getElementById('results');
+      
+      // Find the closing HTML tag position
+      const htmlEndPos = htmlContent.indexOf('</html>');
+      
+      if (htmlEndPos !== -1) {
+        // Keep only content up to </html>
+        const cleanedHTML = htmlContent.substring(0, htmlEndPos + 7);
+        document.getElementById('html-content').value = cleanedHTML;
+        
+        resultsDiv.innerHTML = `
+          <p class="success">HTML cleaned! All content after closing HTML tag has been removed.</p>
+        `;
+      } else {
+        // If </html> tag not found, try to clean common script patterns
+        let cleanedHTML = htmlContent;
+        
+        // Remove shell script patterns
+        const shellPatterns = [
+          '#!/bin/bash',
+          'print_message\\([^)]*\\)',
+          'print_success\\([^)]*\\)',
+          'print_warning\\([^)]*\\)',
+          'print_error\\([^)]*\\)',
+          'function [a-zA-Z0-9_]+\\(\\)',
+          'echo -e',
+          'if \\[',
+          'for \\(',
+          'while \\[',
+          'cat >',
+          'EOF'
+        ];
+        
+        shellPatterns.forEach(pattern => {
+          cleanedHTML = cleanedHTML.replace(new RegExp(pattern, 'g'), '');
+        });
+        
+        document.getElementById('html-content').value = cleanedHTML;
+        
+        resultsDiv.innerHTML = `
+          <p class="issue">No closing HTML tag found. Basic script pattern removal applied.</p>
+          <p>You may need to manually add closing tags:</p>
+          <pre>&lt;/body&gt;
+&lt;/html&gt;</pre>
+        `;
+      }
+    });
+    
+    document.getElementById('save-button').addEventListener('click', function() {
+      const htmlContent = document.getElementById('html-content').value;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'clean-index.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      document.getElementById('results').innerHTML = `
+        <p class="success">Clean HTML file generated. Download should start automatically.</p>
+        <p>Save this file as index.html in your UaXSupreme directory to replace the current version.</p>
+      `;
+    });
+  </script>
+</body>
+</html>

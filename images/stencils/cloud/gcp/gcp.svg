@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <rect x="10" y="10" width="40" height="40" rx="4" ry="4" fill="#4285F4" stroke="#3367D6" stroke-width="2"/>
+  <text x="30" y="32" font-family="Arial" font-size="10" font-weight="bold" text-anchor="middle" fill="white">GCP</text>
+</svg>

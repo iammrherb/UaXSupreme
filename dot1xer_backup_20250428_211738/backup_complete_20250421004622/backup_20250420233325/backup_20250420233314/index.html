@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UaXSupreme - Advanced Network Authentication Configuration Platform</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <h1>UaXSupreme</h1>
+                <span>Advanced Network Authentication Configuration Platform</span>
+            </div>
+            <div class="header-controls">
+                <button id="helpBtn" class="btn-icon" title="Help"><i class="fas fa-question-circle"></i></button>
+                <button id="aiAssistBtn" class="btn-icon" title="AI Assistant"><i class="fas fa-robot"></i></button>
+                <button id="settingsBtn" class="btn-icon" title="Settings"><i class="fas fa-cog"></i></button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-header">Configuration Process</div>
+                <ul class="nav-steps">
+                    <li class="active" data-step="vendor-selection"><i class="fas fa-server"></i> Vendor Selection</li>
+                    <li data-step="authentication-methods"><i class="fas fa-shield-alt"></i> Authentication Methods</li>
+                    <li data-step="radius-config"><i class="fas fa-network-wired"></i> RADIUS Configuration</li>
+                    <li data-step="tacacs-config"><i class="fas fa-lock"></i> TACACS+ Configuration</li>
+                    <li data-step="advanced-features"><i class="fas fa-sliders-h"></i> Advanced Features</li>
+                    <li data-step="interface-config"><i class="fas fa-ethernet"></i> Interface Configuration</li>
+                    <li data-step="generate-config"><i class="fas fa-file-code"></i> Generate Configuration</li>
+                    <li data-step="documentation"><i class="fas fa-file-alt"></i> Documentation</li>
+                </ul>
+                <div class="sidebar-footer">
+                    <button id="saveConfigBtn" class="btn-primary"><i class="fas fa-save"></i> Save Progress</button>
+                    <button id="loadConfigBtn" class="btn-secondary"><i class="fas fa-folder-open"></i> Load Configuration</button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Vendor Selection Section -->
+                <section id="vendor-selection" class="config-section active">
+                    <h2><i class="fas fa-server"></i> Vendor Selection</h2>
+                    <div class="section-content">
+                        <div class="form-group">
+                            <label for="vendor">Network Vendor:</label>
+                            <select id="vendor" class="form-control">
+                                <option value="">-- Select Vendor --</option>
+                                <option value="cisco" selected>Cisco</option>
+                                <option value="aruba">Aruba/HP</option>
+                                <option value="juniper">Juniper</option>
+                                <option value="fortinet">Fortinet</option>
+                                <option value="extreme">Extreme</option>
+                                <option value="dell">Dell</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="platform">Platform:</label>
+                            <select id="platform" class="form-control" disabled>
+                                <option value="">-- Select Platform --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="softwareVersion">Software Version:</label>
+                            <input type="text" id="softwareVersion" class="form-control" placeholder="e.g., 17.9.5">
+                        </div>
+                        
+                        <div class="platform-info hidden">
+                            <h3>Platform Information</h3>
+                            <div id="platformInfoContent"></div>
+                        </div>
+                    </div>
+                    <div class="section-footer">
+                        <button id="nextVendorBtn" class="btn-primary btn-next">Next <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </section>
+
+                <!-- Authentication Methods Section -->
+                <section id="authentication-methods" class="config-section">
+                    <h2><i class="fas fa-shield-alt"></i> Authentication Methods</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="auth-methods">Methods</div>
+                            <div class="tab" data-tab="auth-deployment">Deployment Type</div>
+                            <div class="tab" data-tab="auth-security">Security Features</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="auth-methods">
+                            <div class="form-group">
+                                <label>Select Authentication Methods:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="dot1x" name="authMethod" value="dot1x">
+                                        <label for="dot1x">802.1X Authentication</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="mab" name="authMethod" value="mab">
+                                        <label for="mab">MAC Authentication Bypass (MAB)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="webauth" name="authMethod" value="webauth">
+                                        <label for="webauth">Web Authentication</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radsec" name="authMethod" value="radsec">
+                                        <label for="radsec">RadSec (Secure RADIUS)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacs" name="authMethod" value="tacacs">
+                                        <label for="tacacs">TACACS+</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="macsec" name="authMethod" value="macsec">
+                                        <label for="macsec">MACsec Encryption</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="auth-deployment">
+                            <div class="form-group">
+                                <label for="deploymentType">Select Deployment Type:</label>
+                                <select id="deploymentType" class="form-control">
+                                    <option value="monitor">Monitor Mode (Open)</option>
+                                    <option value="closed">Closed Mode</option>
+                                    <option value="standard">Standard (802.1X then MAB)</option>
+                                    <option value="concurrent">Concurrent (802.1X and MAB)</option>
+                                    <option value="highsec">High Security Mode</option>
+                                </select>
+                            </div>
+                            
+                            <div class="deployment-info">
+                                <h3>Deployment Type Information</h3>
+                                <div id="deploymentInfoContent">
+                                    <p>Monitor Mode (Open): Authentication is performed but not enforced. This is ideal for initial testing.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="auth-security">
+                            <div class="form-group">
+                                <label>Select Security Features:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="dhcpSnooping" name="securityFeature" value="dhcpSnooping">
+                                        <label for="dhcpSnooping">DHCP Snooping</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="arpInspection" name="securityFeature" value="arpInspection">
+                                        <label for="arpInspection">Dynamic ARP Inspection</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="ipSourceGuard" name="securityFeature" value="ipSourceGuard">
+                                        <label for="ipSourceGuard">IP Source Guard</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portSecurity" name="securityFeature" value="portSecurity">
+                                        <label for="portSecurity">Port Security</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="stormControl" name="securityFeature" value="stormControl">
+                                        <label for="stormControl">Storm Control</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- RADIUS Configuration Section -->
+                <section id="radius-config" class="config-section">
+                    <h2><i class="fas fa-network-wired"></i> RADIUS Configuration</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="radius-servers">Servers</div>
+                            <div class="tab" data-tab="radius-attrs">Attributes</div>
+                            <div class="tab" data-tab="radius-advanced">Advanced</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="radius-servers">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="radiusServerGroup">RADIUS Server Group Name:</label>
+                                    <input type="text" id="radiusServerGroup" class="form-control" value="RAD-SERVERS">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="radiusTimeout">Timeout (seconds):</label>
+                                    <input type="number" id="radiusTimeout" class="form-control" value="2" min="1" max="60">
+                                </div>
+                            </div>
+
+                            <div class="server-container">
+                                <h3>Primary RADIUS Server</h3>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="radiusServer1Name">Server Name:</label>
+                                        <input type="text" id="radiusServer1Name" class="form-control" value="RAD-ISE-PSN-1">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="radiusServer1">Server IP Address:</label>
+                                        <input type="text" id="radiusServer1" class="form-control" placeholder="e.g., 10.10.10.101">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusPort1">Authentication Port:</label>
+                                        <input type="number" id="radiusPort1" class="form-control" value="1812">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusAcctPort1">Accounting Port:</label>
+                                        <input type="number" id="radiusAcctPort1" class="form-control" value="1813">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusKey1">Shared Secret:</label>
+                                        <input type="password" id="radiusKey1" class="form-control" placeholder="Enter shared secret">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="server-container">
+                                <h3>Secondary RADIUS Server</h3>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="radiusServer2Name">Server Name:</label>
+                                        <input type="text" id="radiusServer2Name" class="form-control" value="RAD-ISE-PSN-2">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="radiusServer2">Server IP Address:</label>
+                                        <input type="text" id="radiusServer2" class="form-control" placeholder="e.g., 10.10.10.102">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusPort2">Authentication Port:</label>
+                                        <input type="number" id="radiusPort2" class="form-control" value="1812">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusAcctPort2">Accounting Port:</label>
+                                        <input type="number" id="radiusAcctPort2" class="form-control" value="1813">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="radiusKey2">Shared Secret:</label>
+                                        <input type="password" id="radiusKey2" class="form-control" placeholder="Enter shared secret">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="radius-attrs">
+                            <div class="form-group">
+                                <label>RADIUS Attributes:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusNasId" name="radiusAttr" value="nasId" checked>
+                                        <label for="radiusNasId">Include NAS-Identifier</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusNasIp" name="radiusAttr" value="nasIp" checked>
+                                        <label for="radiusNasIp">Include NAS-IP-Address</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusServiceType" name="radiusAttr" value="serviceType" checked>
+                                        <label for="radiusServiceType">Include Service-Type</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusCalledStationId" name="radiusAttr" value="calledStationId" checked>
+                                        <label for="radiusCalledStationId">Include Called-Station-ID</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusCallingStationId" name="radiusAttr" value="callingStationId" checked>
+                                        <label for="radiusCallingStationId">Include Calling-Station-ID</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="radiusMacFormat">MAC Address Format:</label>
+                                <select id="radiusMacFormat" class="form-control">
+                                    <option value="ietf-upper">IETF Upper Case (AA-BB-CC-DD-EE-FF)</option>
+                                    <option value="ietf-lower">IETF Lower Case (aa-bb-cc-dd-ee-ff)</option>
+                                    <option value="cisco" selected>Cisco Format (aabb.ccdd.eeff)</option>
+                                    <option value="no-separator-upper">No Separator Upper (AABBCCDDEEFF)</option>
+                                    <option value="no-separator-lower">No Separator Lower (aabbccddeeff)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nasIdentifier">NAS-Identifier Value:</label>
+                                <input type="text" id="nasIdentifier" class="form-control" placeholder="Enter NAS-Identifier">
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="radius-advanced">
+                            <div class="form-group">
+                                <label>Advanced RADIUS Options:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusLoadBalance" name="radiusAdvanced" value="loadBalance" checked>
+                                        <label for="radiusLoadBalance">Enable Load Balancing</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusDeadtime" name="radiusAdvanced" value="deadtime" checked>
+                                        <label for="radiusDeadtime">Enable Deadtime</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusSourceInterface" name="radiusAdvanced" value="sourceInterface" checked>
+                                        <label for="radiusSourceInterface">Specify Source Interface</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusCoA" name="radiusAdvanced" value="coa" checked>
+                                        <label for="radiusCoA">Enable Change of Authorization (CoA)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="radiusServerProbe" name="radiusAdvanced" value="serverProbe" checked>
+                                        <label for="radiusServerProbe">Enable Server Probing</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="radiusDeadtimeValue">Deadtime (minutes):</label>
+                                    <input type="number" id="radiusDeadtimeValue" class="form-control" value="15" min="1" max="60">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="radiusRetransmit">Retransmit Count:</label>
+                                    <input type="number" id="radiusRetransmit" class="form-control" value="2" min="1" max="10">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="radiusSourceInterfaceValue">Source Interface:</label>
+                                <input type="text" id="radiusSourceInterfaceValue" class="form-control" value="Vlan 10">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="radiusTestUsername">Test Username:</label>
+                                    <input type="text" id="radiusTestUsername" class="form-control" value="SW-RAD-TEST">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="radiusDeadCriteria">Dead Criteria:</label>
+                                    <input type="text" id="radiusDeadCriteria" class="form-control" value="time 5 tries 3">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="radiusLoadBalanceMethod">Load Balance Method:</label>
+                                <select id="radiusLoadBalanceMethod" class="form-control">
+                                    <option value="least-outstanding">Least Outstanding</option>
+                                    <option value="batch">Batch</option>
+                                    <option value="host-hash">Host Hash</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- TACACS+ Configuration Section -->
+                <section id="tacacs-config" class="config-section">
+                    <h2><i class="fas fa-lock"></i> TACACS+ Configuration</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="tacacs-servers">Servers</div>
+                            <div class="tab" data-tab="tacacs-authz">Authorization</div>
+                            <div class="tab" data-tab="tacacs-acct">Accounting</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="tacacs-servers">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="tacacsServerGroup">TACACS+ Server Group Name:</label>
+                                    <input type="text" id="tacacsServerGroup" class="form-control" value="SG-TAC-SERVERS">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="tacacsTimeout">Timeout (seconds):</label>
+                                    <input type="number" id="tacacsTimeout" class="form-control" value="1" min="1" max="60">
+                                </div>
+                            </div>
+
+                            <div class="server-container">
+                                <h3>Primary TACACS+ Server</h3>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsServer1Name">Server Name:</label>
+                                        <input type="text" id="tacacsServer1Name" class="form-control" value="TAC-SERVER-1">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsServer1">Server IP Address:</label>
+                                        <input type="text" id="tacacsServer1" class="form-control" placeholder="e.g., 10.10.10.101">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsPort1">Port:</label>
+                                        <input type="number" id="tacacsPort1" class="form-control" value="49">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsKey1">Shared Secret:</label>
+                                        <input type="password" id="tacacsKey1" class="form-control" placeholder="Enter shared secret">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="server-container">
+                                <h3>Secondary TACACS+ Server</h3>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsServer2Name">Server Name:</label>
+                                        <input type="text" id="tacacsServer2Name" class="form-control" value="TAC-SERVER-2">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsServer2">Server IP Address:</label>
+                                        <input type="text" id="tacacsServer2" class="form-control" placeholder="e.g., 10.10.10.102">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsPort2">Port:</label>
+                                        <input type="number" id="tacacsPort2" class="form-control" value="49">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tacacsKey2">Shared Secret:</label>
+                                        <input type="password" id="tacacsKey2" class="form-control" placeholder="Enter shared secret">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tacacsSourceInterface">Source Interface:</label>
+                                <input type="text" id="tacacsSourceInterface" class="form-control" value="Vlan 10">
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="tacacs-authz">
+                            <div class="form-group">
+                                <label for="tacacsAuthMethod">Authentication Method List:</label>
+                                <input type="text" id="tacacsAuthMethod" class="form-control" value="ML-TACACS-AUTHC">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tacacsAuthzMethod">Authorization Method List:</label>
+                                <input type="text" id="tacacsAuthzMethod" class="form-control" value="ML-TACACS-AUTHZ">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Authentication Options:</label>
+                                <div class="radio-group">
+                                    <div class="radio-item">
+                                        <input type="radio" id="tacacsAuthMethod1" name="tacacsAuthMethodType" value="tacacsFirst" checked>
+                                        <label for="tacacsAuthMethod1">TACACS+ first, then local</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" id="tacacsAuthMethod2" name="tacacsAuthMethodType" value="localFirst">
+                                        <label for="tacacsAuthMethod2">Local first, then TACACS+</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" id="tacacsAuthMethod3" name="tacacsAuthMethodType" value="tacacsOnly">
+                                        <label for="tacacsAuthMethod3">TACACS+ only</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Authorization Options:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAuthzConsole" name="tacacsAuthz" value="console" checked>
+                                        <label for="tacacsAuthzConsole">Enable Console Authorization</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAuthzCommands" name="tacacsAuthz" value="commands">
+                                        <label for="tacacsAuthzCommands">Enable Per-Command Authorization</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAuthzConfig" name="tacacsAuthz" value="config">
+                                        <label for="tacacsAuthzConfig">Enable Configuration Authorization</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tacacsAuthzIfAuthenticated">If-Authenticated Fallback:</label>
+                                <select id="tacacsAuthzIfAuthenticated" class="form-control">
+                                    <option value="if-authenticated">Enable if-authenticated fallback</option>
+                                    <option value="none">No fallback</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="tacacs-acct">
+                            <div class="form-group">
+                                <label>Accounting Options:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAcctCommands" name="tacacsAcct" value="commands" checked>
+                                        <label for="tacacsAcctCommands">Enable Command Accounting</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAcctExec" name="tacacsAcct" value="exec" checked>
+                                        <label for="tacacsAcctExec">Enable EXEC Accounting</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="tacacsAcctSystem" name="tacacsAcct" value="system">
+                                        <label for="tacacsAcctSystem">Enable System Accounting</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tacacsAcctCommandLevel">Command Levels for Accounting:</label>
+                                <select id="tacacsAcctCommandLevel" class="form-control" multiple>
+                                    <option value="0">Level 0 (Default)</option>
+                                    <option value="1">Level 1 (User EXEC)</option>
+                                    <option value="15">Level 15 (Privileged EXEC)</option>
+                                </select>
+                                <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple levels</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tacacsAcctMethod">Accounting Method:</label>
+                                <select id="tacacsAcctMethod" class="form-control">
+                                    <option value="start-stop">Start-Stop</option>
+                                    <option value="stop-only">Stop-Only</option>
+                                    <option value="none">None</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- Advanced Features Section -->
+                <section id="advanced-features" class="config-section">
+                    <h2><i class="fas fa-sliders-h"></i> Advanced Features</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="adv-security">Security</div>
+                            <div class="tab" data-tab="adv-access">Access Control</div>
+                            <div class="tab" data-tab="adv-guest">Guest Access</div>
+                            <div class="tab" data-tab="adv-byod">BYOD & Onboarding</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="adv-security">
+                            <div class="form-group">
+                                <label>Security Features:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureCriticalAuth" name="securityFeature" value="criticalAuth" checked>
+                                        <label for="featureCriticalAuth">Critical Authentication</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureMacSec" name="securityFeature" value="macSec">
+                                        <label for="featureMacSec">MACsec Encryption</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureRadSec" name="securityFeature" value="radSec">
+                                        <label for="featureRadSec">RadSec</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureCoa" name="securityFeature" value="coa" checked>
+                                        <label for="featureCoa">Change of Authorization (CoA)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="criticalAuthSettings">
+                                <h3>Critical Authentication Settings</h3>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="criticalDataVlan">Critical Data VLAN:</label>
+                                        <input type="number" id="criticalDataVlan" class="form-control" value="999">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="criticalVoiceVlan">Critical Voice VLAN:</label>
+                                        <input type="number" id="criticalVoiceVlan" class="form-control" value="999">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="criticalRecoveryDelay">Recovery Delay (ms):</label>
+                                    <input type="number" id="criticalRecoveryDelay" class="form-control" value="2000">
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="macSecSettings" style="display:none;">
+                                <h3>MACsec Settings</h3>
+                                <div class="form-group">
+                                    <label for="macSecPolicy">MACsec Policy:</label>
+                                    <select id="macSecPolicy" class="form-control">
+                                        <option value="should-secure">Should Secure (Prefer encryption)</option>
+                                        <option value="must-secure">Must Secure (Require encryption)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="macSecCipherSuite">Cipher Suite:</label>
+                                    <select id="macSecCipherSuite" class="form-control">
+                                        <option value="gcm-aes-128">GCM-AES-128</option>
+                                        <option value="gcm-aes-256">GCM-AES-256</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="radSecSettings" style="display:none;">
+                                <h3>RadSec Settings</h3>
+                                <div class="form-group">
+                                    <label for="radSecServer">RadSec Server:</label>
+                                    <input type="text" id="radSecServer" class="form-control" value="radsec.example.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="radSecPort">Port:</label>
+                                    <input type="number" id="radSecPort" class="form-control" value="2083">
+                                </div>
+                                <div class="form-group">
+                                    <label for="radSecCertPath">Certificate Path:</label>
+                                    <input type="text" id="radSecCertPath" class="form-control" value="bootflash:radsec-cert.pem">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="adv-access">
+                            <div class="form-group">
+                                <label>Access Control Features:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureDacl" name="accessFeature" value="dacl" checked>
+                                        <label for="featureDacl">Downloadable ACLs</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureSgt" name="accessFeature" value="sgt">
+                                        <label for="featureSgt">Security Group Tags (SGT)</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureVlan" name="accessFeature" value="vlan" checked>
+                                        <label for="featureVlan">Dynamic VLAN Assignment</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featurePosture" name="accessFeature" value="posture">
+                                        <label for="featurePosture">Posture Assessment</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureProfiling" name="accessFeature" value="profiling" checked>
+                                        <label for="featureProfiling">Device Profiling</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="daclSettings">
+                                <h3>Downloadable ACL Settings</h3>
+                                <div class="form-group">
+                                    <label for="daclFallback">Fallback ACL Name:</label>
+                                    <input type="text" id="daclFallback" class="form-control" value="ACL-DEFAULT">
+                                </div>
+                                <div class="form-group">
+                                    <label for="daclTimeout">ACL Download Timeout (seconds):</label>
+                                    <input type="number" id="daclTimeout" class="form-control" value="5">
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="sgtSettings" style="display:none;">
+                                <h3>Security Group Tag Settings</h3>
+                                <div class="form-group">
+                                    <label for="sgtPropagation">SGT Propagation:</label>
+                                    <select id="sgtPropagation" class="form-control">
+                                        <option value="enable">Enable</option>
+                                        <option value="disable">Disable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="profilingSettings">
+                                <h3>Device Profiling Settings</h3>
+                                <div class="form-group">
+                                    <label>Device Sensor Protocol:</label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="sensorDhcp" name="sensorProtocol" value="dhcp" checked>
+                                            <label for="sensorDhcp">DHCP</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="sensorCdp" name="sensorProtocol" value="cdp" checked>
+                                            <label for="sensorCdp">CDP</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="sensorLldp" name="sensorProtocol" value="lldp" checked>
+                                            <label for="sensorLldp">LLDP</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sensorAccounting">Accounting:</label>
+                                    <select id="sensorAccounting" class="form-control">
+                                        <option value="enable">Include in accounting</option>
+                                        <option value="disable">Do not include in accounting</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="adv-guest">
+                            <div class="form-group">
+                                <label>Guest Access Features:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureWebAuth" name="guestFeature" value="webauth">
+                                        <label for="featureWebAuth">Web Authentication</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureGuestVlan" name="guestFeature" value="guestVlan">
+                                        <label for="featureGuestVlan">Guest VLAN</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureRedirect" name="guestFeature" value="redirect">
+                                        <label for="featureRedirect">URL Redirection</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="webAuthSettings" style="display:none;">
+                                <h3>Web Authentication Settings</h3>
+                                <div class="form-group">
+                                    <label for="webAuthType">Web Authentication Type:</label>
+                                    <select id="webAuthType" class="form-control">
+                                        <option value="local">Local</option>
+                                        <option value="external">External</option>
+                                        <option value="auto">Auto</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="webAuthPortal">Portal URL:</label>
+                                    <input type="text" id="webAuthPortal" class="form-control" value="https://example.com/guest">
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="guestVlanSettings" style="display:none;">
+                                <h3>Guest VLAN Settings</h3>
+                                <div class="form-group">
+                                    <label for="guestVlanId">Guest VLAN ID:</label>
+                                    <input type="number" id="guestVlanId" class="form-control" value="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="guestTimeout">Session Timeout (seconds):</label>
+                                    <input type="number" id="guestTimeout" class="form-control" value="3600">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="adv-byod">
+                            <div class="form-group">
+                                <label>BYOD & Onboarding Features:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureProvisioning" name="byodFeature" value="provisioning">
+                                        <label for="featureProvisioning">Auto Provisioning</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureDeviceReg" name="byodFeature" value="deviceReg">
+                                        <label for="featureDeviceReg">Device Registration</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="featureCertOnboard" name="byodFeature" value="certOnboard">
+                                        <label for="featureCertOnboard">Certificate Onboarding</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="provisioningSettings" style="display:none;">
+                                <h3>Auto Provisioning Settings</h3>
+                                <div class="form-group">
+                                    <label for="provisioningVlan">Provisioning VLAN:</label>
+                                    <input type="number" id="provisioningVlan" class="form-control" value="20">
+                                </div>
+                                <div class="form-group">
+                                    <label for="provisioningUrl">Provisioning URL:</label>
+                                    <input type="text" id="provisioningUrl" class="form-control" value="https://example.com/provision">
+                                </div>
+                            </div>
+                            
+                            <div class="feature-settings" id="certOnboardSettings" style="display:none;">
+                                <h3>Certificate Onboarding Settings</h3>
+                                <div class="form-group">
+                                    <label for="certProvider">Certificate Provider:</label>
+                                    <select id="certProvider" class="form-control">
+                                        <option value="scep">SCEP</option>
+                                        <option value="est">EST</option>
+                                        <option value="manual">Manual</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="certUrl">Certificate URL:</label>
+                                    <input type="text" id="certUrl" class="form-control" value="https://example.com/scep">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- Interface Configuration Section -->
+                <section id="interface-config" class="config-section">
+                    <h2><i class="fas fa-ethernet"></i> Interface Configuration</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="if-access">Access Ports</div>
+                            <div class="tab" data-tab="if-trunk">Trunk Ports</div>
+                            <div class="tab" data-tab="if-specific">Specific Interfaces</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="if-access">
+                            <div class="form-group">
+                                <label for="accessInterfaceRange">Access Port Range:</label>
+                                <input type="text" id="accessInterfaceRange" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="accessVlan">Access VLAN:</label>
+                                    <input type="number" id="accessVlan" class="form-control" value="10">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="voiceVlan">Voice VLAN:</label>
+                                    <input type="number" id="voiceVlan" class="form-control" value="20">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Port Settings:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portNonegotiate" name="portSetting" value="nonegotiate" checked>
+                                        <label for="portNonegotiate">Nonegotiate</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portPortfast" name="portSetting" value="portfast" checked>
+                                        <label for="portPortfast">PortFast</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portBpduguard" name="portSetting" value="bpduguard" checked>
+                                        <label for="portBpduguard">BPDU Guard</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portRootguard" name="portSetting" value="rootguard" checked>
+                                        <label for="portRootguard">Root Guard</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="portStormControl" name="portSetting" value="stormcontrol" checked>
+                                        <label for="portStormControl">Storm Control</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Authentication Port Settings:</label>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="dot1xHostMode">Host Mode:</label>
+                                        <select id="dot1xHostMode" class="form-control">
+                                            <option value="multi-auth">Multi-Auth</option>
+                                            <option value="multi-domain">Multi-Domain</option>
+                                            <option value="single-host">Single-Host</option>
+                                            <option value="multi-host">Multi-Host</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="dot1xControlDirection">Control Direction:</label>
+                                        <select id="dot1xControlDirection" class="form-control">
+                                            <option value="in">In (Ingress)</option>
+                                            <option value="both">Both (Ingress & Egress)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="dot1xTxPeriod">Tx Period (seconds):</label>
+                                        <input type="number" id="dot1xTxPeriod" class="form-control" value="7">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="dot1xMaxReauthReq">Max Reauth Requests:</label>
+                                        <input type="number" id="dot1xMaxReauthReq" class="form-control" value="2">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="inactivityTimer">Inactivity Timer (seconds):</label>
+                                        <input type="number" id="inactivityTimer" class="form-control" value="60">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="if-trunk">
+                            <div class="form-group">
+                                <label for="trunkInterfaceRange">Trunk Port Range:</label>
+                                <input type="text" id="trunkInterfaceRange" class="form-control" placeholder="e.g., GigabitEthernet1/0/25-48">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="nativeVlan">Native VLAN:</label>
+                                    <input type="number" id="nativeVlan" class="form-control" value="1">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="allowedVlans">Allowed VLANs:</label>
+                                    <input type="text" id="allowedVlans" class="form-control" value="1-4094">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Trunk Port Settings:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trunkNonegotiate" name="trunkSetting" value="nonegotiate" checked>
+                                        <label for="trunkNonegotiate">Nonegotiate</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trunkDhcpSnooping" name="trunkSetting" value="dhcpSnooping" checked>
+                                        <label for="trunkDhcpSnooping">DHCP Snooping Trust</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trunkArpInspection" name="trunkSetting" value="arpInspection" checked>
+                                        <label for="trunkArpInspection">ARP Inspection Trust</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trunkDisableTrackingIp" name="trunkSetting" value="disableTracking" checked>
+                                        <label for="trunkDisableTrackingIp">Disable IP Tracking</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="trunkNoMonitor" name="trunkSetting" value="noMonitor" checked>
+                                        <label for="trunkNoMonitor">No Access-Session Monitor</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="if-specific">
+                            <div class="form-group">
+                                <label for="specificInterfaces">Specific Interfaces (one per line):</label>
+                                <textarea id="specificInterfaces" class="form-control" rows="5" placeholder="Enter specific interfaces with configuration, e.g.:&#10;interface GigabitEthernet1/0/1&#10;switchport mode access&#10;switchport access vlan 10"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Add Interface Template:</label>
+                                <div class="template-buttons">
+                                    <button id="templateAp" class="btn-secondary">Access Point</button>
+                                    <button id="templateIpPhone" class="btn-secondary">IP Phone</button>
+                                    <button id="templatePrinter" class="btn-secondary">Printer</button>
+                                    <button id="templateServer" class="btn-secondary">Server</button>
+                                    <button id="templateUplink" class="btn-secondary">Uplink</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- Generate Configuration Section -->
+                <section id="generate-config" class="config-section">
+                    <h2><i class="fas fa-file-code"></i> Generate Configuration</h2>
+                    
+                    <div class="tab-content active">
+                        <div class="form-group">
+                            <label for="configOutput">Configuration Output:</label>
+                            <textarea id="configOutput" class="form-control code-output" rows="20" readonly></textarea>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button id="generateConfigBtn" class="btn-primary"><i class="fas fa-cog"></i> Generate Configuration</button>
+                            <button id="copyConfigBtn" class="btn-secondary"><i class="fas fa-copy"></i> Copy to Clipboard</button>
+                            <button id="downloadConfigBtn" class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+                        </div>
+                        
+                        <div class="config-validation hidden">
+                            <h3>Configuration Validation</h3>
+                            <div id="validationResults"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-next">Next</button>
+                    </div>
+                </section>
+
+                <!-- Documentation Section -->
+                <section id="documentation" class="config-section">
+                    <h2><i class="fas fa-file-alt"></i> Documentation</h2>
+                    
+                    <div class="tabs-container">
+                        <div class="tabs">
+                            <div class="tab active" data-tab="doc-project">Project Documentation</div>
+                            <div class="tab" data-tab="doc-diagrams">Network Diagrams</div>
+                            <div class="tab" data-tab="doc-checklist">Deployment Checklist</div>
+                        </div>
+                        
+                        <div class="tab-content active" id="doc-project">
+                            <div class="form-group">
+                                <label for="projectTitle">Project Title:</label>
+                                <input type="text" id="projectTitle" class="form-control" placeholder="Enter project title">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="projectDescription">Project Description:</label>
+                                <textarea id="projectDescription" class="form-control" rows="4" placeholder="Enter project description"></textarea>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="projectOrganization">Organization:</label>
+                                    <input type="text" id="projectOrganization" class="form-control" placeholder="Enter organization name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="projectOwner">Project Owner:</label>
+                                    <input type="text" id="projectOwner" class="form-control" placeholder="Enter project owner name">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="docExportFormat">Export Format:</label>
+                                <select id="docExportFormat" class="form-control">
+                                    <option value="html">HTML</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="word">Word Document</option>
+                                    <option value="ppt">PowerPoint</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Include in Documentation:</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="includeConfigs" name="docInclude" value="configs" checked>
+                                        <label for="includeConfigs">Configurations</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="includeDiagrams" name="docInclude" value="diagrams" checked>
+                                        <label for="includeDiagrams">Network Diagrams</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="includeChecklist" name="docInclude" value="checklist" checked>
+                                        <label for="includeChecklist">Deployment Checklist</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="includeBestPractices" name="docInclude" value="bestPractices" checked>
+                                        <label for="includeBestPractices">Best Practices</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="includeTroubleshooting" name="docInclude" value="troubleshooting" checked>
+                                        <label for="includeTroubleshooting">Troubleshooting Guide</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="generateDocBtn" class="btn-primary"><i class="fas fa-file-alt"></i> Generate Documentation</button>
+                                <button id="downloadDocBtn" class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="doc-diagrams">
+                            <div class="form-group">
+                                <label for="diagramType">Diagram Type:</label>
+                                <select id="diagramType" class="form-control">
+                                    <option value="logical">Logical Network Diagram</option>
+                                    <option value="physical">Physical Network Diagram</option>
+                                    <option value="authentication">Authentication Flow Diagram</option>
+                                    <option value="all">All Diagrams</option>
+                                </select>
+                            </div>
+                            
+                            <div class="diagram-preview">
+                                <h3>Diagram Preview</h3>
+                                <div id="diagramPreview" class="diagram-canvas">
+                                    <div class="placeholder-text">Select a diagram type and click "Generate Diagram" to preview</div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="generateDiagramBtn" class="btn-primary"><i class="fas fa-project-diagram"></i> Generate Diagram</button>
+                                <button id="downloadDiagramBtn" class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="doc-checklist">
+                            <div class="form-group">
+                                <label for="checklistType">Checklist Type:</label>
+                                <select id="checklistType" class="form-control">
+                                    <option value="deployment">Deployment Checklist</option>
+                                    <option value="testing">Testing Checklist</option>
+                                    <option value="validation">Validation Checklist</option>
+                                    <option value="all">Complete Checklist</option>
+                                </select>
+                            </div>
+                            
+                            <div id="checklistPreview" class="checklist-preview">
+                                <div class="placeholder-text">Select a checklist type and click "Generate Checklist" to preview</div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button id="generateChecklistBtn" class="btn-primary"><i class="fas fa-tasks"></i> Generate Checklist</button>
+                                <button id="downloadChecklistBtn" class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-footer">
+                        <button class="btn-secondary btn-back">Back</button>
+                        <button class="btn-primary btn-finish">Finish</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for AI Assistant -->
+    <div id="aiAssistantModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-robot"></i> AI Assistant</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="ai-message">
+                            <div class="message-avatar"><i class="fas fa-robot"></i></div>
+                            <div class="message-content">
+                                <p>Hello! I'm your UaXSupreme AI Assistant. I can help you with:</p>
+                                <ul>
+                                    <li>Configuration recommendations</li>
+                                    <li>Troubleshooting suggestions</li>
+                                    <li>Best practices</li>
+                                    <li>Vendor-specific information</li>
+                                </ul>
+                                <p>How can I assist you today?</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="userMessage" placeholder="Type your question here...">
+                        <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+                <div class="ai-suggestions">
+                    <div class="suggestion-title">Suggested Questions:</div>
+                    <div class="suggestion-buttons">
+                        <button class="suggestion-btn">What's the difference between Closed and Monitor mode?</button>
+                        <button class="suggestion-btn">How do I troubleshoot 802.1X authentication failures?</button>
+                        <button class="suggestion-btn">What are the best practices for RADIUS server redundancy?</button>
+                        <button class="suggestion-btn">How do I configure MAB for printers?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Help -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-question-circle"></i> UaXSupreme Help</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="help-navigation">
+                    <div class="help-search">
+                        <input type="text" id="helpSearch" placeholder="Search help topics...">
+                    </div>
+                    <ul class="help-topics">
+                        <li class="active" data-topic="overview">Overview</li>
+                        <li data-topic="vendorSelection">Vendor Selection</li>
+                        <li data-topic="authentication">Authentication Methods</li>
+                        <li data-topic="radius">RADIUS Configuration</li>
+                        <li data-topic="tacacs">TACACS+ Configuration</li>
+                        <li data-topic="advanced">Advanced Features</li>
+                        <li data-topic="interfaces">Interface Configuration</li>
+                        <li data-topic="generation">Configuration Generation</li>
+                        <li data-topic="documentation">Documentation</li>
+                        <li data-topic="troubleshooting">Troubleshooting</li>
+                    </ul>
+                </div>
+                <div class="help-content">
+                    <div id="helpContentArea">
+                        <h3>UaXSupreme Help</h3>
+                        <p>UaXSupreme is a comprehensive platform for configuring 802.1X, MAB, RADIUS, TACACS+, and advanced authentication features for all major network vendors.</p>
+                        <p>Select a topic from the left navigation menu to view detailed help information.</p>
+                        
+                        <h4>Getting Started</h4>
+                        <ol>
+                            <li>Begin by selecting your network vendor and platform in the Vendor Selection section.</li>
+                            <li>Choose authentication methods that you want to implement.</li>
+                            <li>Configure RADIUS and/or TACACS+ servers as needed.</li>
+                            <li>Set up advanced features for your implementation.</li>
+                            <li>Configure interfaces for authentication.</li>
+                            <li>Generate and review the configuration.</li>
+                            <li>Generate documentation for your implementation.</li>
+                        </ol>
+                        
+                        <p>For additional assistance, use the AI Assistant by clicking the robot icon in the top navigation bar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/template-generator.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/documentation.js"></script>
+</body>
+</html>

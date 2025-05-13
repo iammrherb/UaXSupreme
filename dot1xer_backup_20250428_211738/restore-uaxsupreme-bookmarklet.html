@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UaXSupreme Restore Bookmarklet</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+    h1, h2 { color: #2c3e50; }
+    .bookmarklet { display: inline-block; padding: 10px 15px; background-color: #3498db; color: white; border-radius: 4px; text-decoration: none; margin: 10px 0; }
+    .instructions { background-color: #f8f9fa; padding: 15px; border-radius: 4px; }
+    code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>UaXSupreme Restore Bookmarklet</h1>
+  <p>This bookmarklet will rebuild the UaXSupreme interface directly in the browser.</p>
+  
+  <a class="bookmarklet" href="javascript:(function(){
+    // Create clean HTML structure
+    document.body.innerHTML = `
+    <header>
+      <nav class='navbar navbar-expand-lg navbar-dark bg-primary'>
+        <div class='container-fluid'>
+          <a class='navbar-brand' href='#'>UaXSupreme</a>
+          <small class='text-light'>Ultimate Authentication Platform</small>
+          <div class='d-flex'>
+            <button class='btn btn-light btn-sm mr-2 ai-assistant-button' title='AI Assistant'>
+              <i class='fas fa-robot'></i>
+            </button>
+            <button class='btn btn-light btn-sm mr-2 help-button' title='Help'>
+              <i class='fas fa-question-circle'></i>
+            </button>
+            <button class='btn btn-light btn-sm mr-2 settings-button' title='Settings'>
+              <i class='fas fa-cog'></i>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class='container-fluid'>
+      <div class='row'>
+        <!-- Sidebar Navigation -->
+        <nav class='col-md-3 col-lg-2 d-md-block bg-light sidebar'>
+          <div class='sidebar-sticky'>
+            <h6 class='sidebar-heading'>Configuration Steps</h6>
+            <ul class='nav flex-column'>
+              <li class='nav-item'>
+                <a class='nav-link active' href='#vendor-selection'>
+                  <i class='fas fa-server'></i> Vendor Selection
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#authentication-methods'>
+                  <i class='fas fa-key'></i> Authentication Methods
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#radius-configuration'>
+                  <i class='fas fa-broadcast-tower'></i> RADIUS Configuration
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#tacacs-configuration'>
+                  <i class='fas fa-user-shield'></i> TACACS+ Configuration
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#advanced-features'>
+                  <i class='fas fa-sliders-h'></i> Advanced Features
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#interfaces'>
+                  <i class='fas fa-network-wired'></i> Interfaces
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#generate-configuration'>
+                  <i class='fas fa-code'></i> Generate Configuration
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#ai-analysis'>
+                  <i class='fas fa-brain'></i> AI Analysis
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#optimization'>
+                  <i class='fas fa-bolt'></i> Optimization
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#documentation'>
+                  <i class='fas fa-file-alt'></i> Documentation
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#deployment'>
+                  <i class='fas fa-upload'></i> Deployment
+                </a>
+              </li>
+              <li class='nav-item'>
+                <a class='nav-link' href='#troubleshooting'>
+                  <i class='fas fa-bug'></i> Troubleshooting
+                </a>
+              </li>
+            </ul>
+            
+            <div class='mt-4 text-center'>
+              <button id='clear-config' class='btn btn-sm btn-outline-danger'>
+                <i class='fas fa-trash'></i> Clear Configuration
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class='col-md-9 ml-sm-auto col-lg-10 px-md-4 py-4'>
+          <div id='main-content'>
+            <!-- Content will be loaded here -->
+            <h2>Loading content...</h2>
+            <p>Please wait while the interface is being restored.</p>
+          </div>
+        </main>
+      </div>
+    </div>
+    `;
+    
+    // Create notification
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '10px 15px';
+    notification.style.backgroundColor = '#27ae60';
+    notification.style.color = 'white';
+    notification.style.borderRadius = '4px';
+    notification.style.zIndex = '9999';
+    notification.innerHTML = 'UaXSupreme interface restored!<br>Reload the page to fully restore functionality.';
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 5000);
+  })();">Restore UaXSupreme UI</a>
+  
+  <h2>Instructions</h2>
+  <div class="instructions">
+    <ol>
+      <li>Drag the "Restore UaXSupreme UI" bookmarklet to your bookmarks bar</li>
+      <li>When the UaXSupreme page is broken or showing script content, click the bookmarklet</li>
+      <li>The script will rebuild the basic interface structure</li>
+      <li>For full functionality, reload the page after applying the permanent fix with <code>clean-index.html.sh</code></li>
+    </ol>
+  </div>
+</body>
+</html>

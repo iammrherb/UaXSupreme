@@ -1,0 +1,28 @@
+! Example Aruba Switch Configuration with 802.1X and MAB
+
+! RADIUS Server Configuration
+radius-server host 10.1.1.10 key "ISEsecretKey123"
+radius-server host 10.1.1.11 key "ISEsecretKey123"
+radius-server timeout 5
+radius-server retransmit 3
+radius-server deadtime 15
+
+aaa authentication port-access eap-radius server-group radius
+aaa authentication mac-auth server-group radius
+
+! Global Authentication Settings
+aaa port-access authenticator active
+aaa port-access authenticator cached-reauth
+aaa port-access authenticator logoff-period 300
+aaa port-access mac-auth
+
+! Interface Configuration
+interface 1-24
+ aaa port-access authenticator
+ aaa port-access authenticator auth-mode 1x
+ aaa port-access authenticator reauthentication
+ aaa port-access authenticator reauth-period server
+ aaa port-access mac-auth
+ aaa port-access authenticator client-limit 32
+ spanning-tree port-type admin-edge
+ spanning-tree bpdu-guard

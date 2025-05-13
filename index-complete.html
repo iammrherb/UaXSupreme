@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot1Xer Supreme Enterprise Edition - 802.1X Configuration</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vendor-cards.css">
+    <link rel="stylesheet" href="css/help.css">
+    <link rel="stylesheet" href="css/wizard-complete.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                Dot1Xer Supreme Enterprise Edition
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#" id="settings-link">Settings</a></li>
+                    <li><a href="https://github.com/dot1xer/supreme" target="_blank">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="card main-card">
+                <div class="tabs">
+                    <div class="tab active" data-tab="platform">1. Platform</div>
+                    <div class="tab" data-tab="authentication">2. Authentication</div>
+                    <div class="tab" data-tab="security">3. Security</div>
+                    <div class="tab" data-tab="network">4. Network</div>
+                    <div class="tab" data-tab="advanced">5. Advanced</div>
+                    <div class="tab" data-tab="preview">6. Preview</div>
+                </div>
+                <div class="tab-content">
+                    <!-- Platform Tab -->
+                    <div id="platform" class="tab-pane active">
+                        <h2>Select Network Platform</h2>
+                        <p>Choose your network device vendor and platform to generate 802.1X configuration.</p>
+                        
+                        <div id="vendor-grid" class="vendor-grid">
+                            <!-- Vendor icons will be inserted here by JavaScript -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="platform-select">Select Platform:</label>
+                            <select id="platform-select" class="form-control" disabled>
+                                <option value="">Select a vendor first</option>
+                            </select>
+                        </div>
+                        
+                        <div id="platform-details">
+                            <p>Please select a vendor and platform to view details.</p>
+                        </div>
+                        
+                        <div class="actions">
+                            <div></div>
+                            <button id="platform-next" class="btn next">Next</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Authentication Tab -->
+                    <div id="authentication" class="tab-pane">
+                        <h2>Authentication Settings</h2>
+                        
+                        <!-- Wizard will be injected here -->
+                        
+                        <div class="form-group">
+                            <label for="auth-method">Authentication Method:</label>
+                            <select id="auth-method" class="form-control">
+                                <option value="dot1x">802.1X Authentication Only</option>
+                                <option value="mab">MAC Authentication Bypass Only</option>
+                                <option value="dot1x-mab">802.1X with MAB Fallback</option>
+                                <option value="concurrent">802.1X and MAB Concurrent</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Authentication Mode:</label>
+                            <div class="radio-group">
+                                <div class="radio">
+                                    <input type="radio" id="auth-mode-closed" name="auth-mode" value="closed" checked>
+                                    <label for="auth-mode-closed">Closed Mode (Secure)</label>
+                                </div>
+                                <div class="radio">
+                                    <input type="radio" id="auth-mode-open" name="auth-mode" value="open">
+                                    <label for="auth-mode-open">Open Mode (Permissive)</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="host-mode">Host Mode:</label>
+                            <select id="host-mode" class="form-control">
+                                <option value="single-host">Single-Host (One device per port)</option>
+                                <option value="multi-host">Multi-Host (Multiple devices, single authentication)</option>
+                                <option value="multi-auth" selected>Multi-Auth (Multiple devices, individual authentication)</option>
+                                <option value="multi-domain">Multi-Domain (Data + Voice)</option>
+                            </select>
+                        </div>
+                        
+                        <h3>RADIUS Server Settings</h3>
+                        
+                        <div class="form-group">
+                            <label for="radius-server-1">Primary RADIUS Server:</label>
+                            <input type="text" id="radius-server-1" class="form-control" placeholder="e.g., 10.1.1.1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="radius-key-1">RADIUS Secret Key:</label>
+                            <input type="password" id="radius-key-1" class="form-control" placeholder="Enter RADIUS shared secret">
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group">
+                                <label for="radius-auth-port-1">Authentication Port:</label>
+                                <input type="number" id="radius-auth-port-1" class="form-control" value="1812">
+                            </div>
+                            <div class="form-group">
+                                <label for="radius-acct-port-1">Accounting Port:</label>
+                                <input type="number" id="radius-acct-port-1" class="form-control" value="1813">
+                            </div>
+                        </div>
+                        
+                        <div class="actions">
+                            <button id="auth-prev" class="btn prev">Previous</button>
+                            <button id="auth-next" class="btn next">Next</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Other tabs... -->
+                    
+                    <!-- Preview Tab -->
+                    <div id="preview" class="tab-pane">
+                        <h2>Configuration Preview</h2>
+                        
+                        <div class="action-bar">
+                            <button id="generate-config" class="btn primary">Generate Configuration</button>
+                            <button id="copy-config" class="btn">Copy to Clipboard</button>
+                            <button id="download-config" class="btn">Download</button>
+                        </div>
+                        
+                        <pre id="config-output" class="code-block">No configuration generated yet. Click "Generate Configuration" to create the configuration.</pre>
+                        
+                        <div class="actions">
+                            <button id="preview-prev" class="btn prev">Previous</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Alert container -->
+    <div id="alert-container"></div>
+
+    <!-- Modals -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="settings-modal-close" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="theme-select">Theme:</label>
+                    <select id="theme-select" class="form-control">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="system">System Default</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="settings-cancel" class="btn">Cancel</button>
+                <button id="settings-save" class="btn primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/alert-fix.js"></script>
+    <script src="js/vendors-fixed.js"></script>
+    <script src="js/vendor-wizard-complete.js"></script>
+    <script src="js/vendor-config-generator.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

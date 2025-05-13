@@ -1,0 +1,126 @@
+{
+  "aos-cx": {
+    "radius": {
+      "serverConfig": "radius-server host {{radius.servers[0].ip}} key {{radius.servers[0].key}}\nradius-server host {{radius.servers[1].ip}} key {{radius.servers[1].key}}",
+      "serverGroupConfig": "aaa group radius {{radius.serverGroup}}\n server {{radius.servers[0].ip}}\n server {{radius.servers[1].ip}}",
+      "authenticationConfig": "aaa authentication dot1x default group {{radius.serverGroup}}",
+      "authorizationConfig": "aaa authorization network default group {{radius.serverGroup}}",
+      "accountingConfig": "aaa accounting dot1x default start-stop group {{radius.serverGroup}}"
+    },
+    "dot1x": {
+      "globalConfig": "aaa authentication port-access dot1x authenticator",
+      "interfaceConfig": "interface {{interfaces.access.range}}\n no shutdown\n aaa authentication port-access dot1x authenticator\n aaa port-access authenticator\n aaa port-access authenticator {{interfaces.access.range}} client-limit 3\n aaa port-access authenticator {{interfaces.access.range}} logoff-period 300\n aaa port-access authenticator {{interfaces.access.range}} max-requests 2\n aaa port-access authenticator {{interfaces.access.range}} max-retries {{interfaces.access.dot1x.maxReauthReq}}\n aaa port-access authenticator {{interfaces.access.range}} quiet-period 60\n aaa port-access authenticator {{interfaces.access.range}} server-timeout 30\n aaa port-access authenticator {{interfaces.access.range}} reauth-period 3600\n aaa port-access authenticator {{interfaces.access.range}} unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}\n aaa port-access authenticator {{interfaces.access.range}} auth-vid {{interfaces.access.vlan}}\n aaa port-access authenticator {{interfaces.access.range}} auth-vlan {{interfaces.access.vlan}}\n aaa port-access authenticator {{interfaces.access.range}} initialize\n aaa port-access authenticator active"
+    },
+    "mab": {
+      "enabled": true,
+      "description": "MAC Authentication",
+      "config": "aaa authentication mac-based enable\naaa authentication mac-based address-format no-delimiter uppercase\naaa authentication mac-based auth-vid {{interfaces.access.vlan}}\naaa authentication mac-based unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}",
+      "interfaceConfig": "interface {{interfaces.access.range}}\n aaa authentication port-access mac-based enable\n aaa authentication port-access mac-based {{interfaces.access.range}} addr-format no-delimiter uppercase\n aaa authentication port-access mac-based {{interfaces.access.range}} auth-vid {{interfaces.access.vlan}}\n aaa authentication port-access mac-based {{interfaces.access.range}} unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}"
+    },
+    "deploymentModes": [
+      {
+        "id": "monitor",
+        "name": "Monitor Mode",
+        "description": "Authentication is performed but not enforced",
+        "config": "aaa authentication port-access auth-mode {{interfaces.access.range}} monitor"
+      },
+      {
+        "id": "active",
+        "name": "Active Mode",
+        "description": "Authentication is enforced",
+        "config": "aaa authentication port-access auth-mode {{interfaces.access.range}} active"
+      }
+    ],
+    "securityFeatures": [
+      {
+        "id": "bpdu-guard",
+        "name": "BPDU Guard",
+        "description": "Protect against Layer 2 loops",
+        "enabled": true,
+        "config": "spanning-tree bpdu-guard"
+      },
+      {
+        "id": "dhcp-snooping",
+        "name": "DHCP Snooping",
+        "description": "Protect against rogue DHCP servers",
+        "enabled": true,
+        "config": "dhcp-snooping\ndhcp-snooping vlan {{interfaces.access.vlan}}"
+      },
+      {
+        "id": "arp-protect",
+        "name": "ARP Protection",
+        "description": "Protect against ARP spoofing",
+        "enabled": true,
+        "config": "arp-protect\narp-protect vlan {{interfaces.access.vlan}}"
+      },
+      {
+        "id": "loop-protect",
+        "name": "Loop Protection",
+        "description": "Additional protection against Layer 2 loops",
+        "enabled": true,
+        "config": "loop-protect"
+      }
+    ]
+  },
+  "aos-switch": {
+    "radius": {
+      "serverConfig": "radius-server host {{radius.servers[0].ip}} key {{radius.servers[0].key}}\nradius-server host {{radius.servers[1].ip}} key {{radius.servers[1].key}}\nradius-server retransmit {{radius.advanced.retransmit}}\nradius-server timeout {{radius.timeout}}",
+      "authenticationConfig": "aaa authentication port-access eap-radius",
+      "authorizationConfig": "aaa authorization network radius"
+    },
+    "dot1x": {
+      "globalConfig": "aaa port-access authenticator active",
+      "interfaceConfig": "interface {{interfaces.access.range}}\n aaa authentication port-access eap-radius\n aaa authentication port-access authenticator {{interfaces.access.range}}\n aaa authentication port-access authenticator {{interfaces.access.range}} client-limit 32\n aaa authentication port-access authenticator {{interfaces.access.range}} quiet-period 60\n aaa authentication port-access authenticator {{interfaces.access.range}} tx-period {{interfaces.access.dot1x.txPeriod}}\n aaa authentication port-access authenticator {{interfaces.access.range}} supplicant-timeout 30\n aaa authentication port-access authenticator {{interfaces.access.range}} server-timeout 30\n aaa authentication port-access authenticator {{interfaces.access.range}} reauth-period 28800\n aaa authentication port-access authenticator {{interfaces.access.range}} auth-vid {{interfaces.access.vlan}}\n aaa authentication port-access authenticator {{interfaces.access.range}} unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}"
+    },
+    "mab": {
+      "enabled": true,
+      "description": "MAC Authentication",
+      "config": "aaa authentication mac-based enable\naaa authentication mac-based address-format no-delimiter uppercase\naaa authentication mac-based auth-vid {{interfaces.access.vlan}}\naaa authentication mac-based unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}",
+      "interfaceConfig": "interface {{interfaces.access.range}}\n aaa authentication port-access mac-based {{interfaces.access.range}}\n aaa authentication port-access mac-based {{interfaces.access.range}} addr-format no-delimiter uppercase\n aaa authentication port-access mac-based {{interfaces.access.range}} auth-vid {{interfaces.access.vlan}}\n aaa authentication port-access mac-based {{interfaces.access.range}} unauth-vid {{advancedFeatures.guest.guestVlanSettings.id}}"
+    },
+    "deploymentModes": [
+      {
+        "id": "monitor",
+        "name": "Monitor Mode",
+        "description": "Authentication is performed but not enforced",
+        "config": "aaa port-access authenticator {{interfaces.access.range}} control auto\naaa port-access authenticator {{interfaces.access.range}} unauthorized-vlan {{interfaces.access.vlan}}"
+      },
+      {
+        "id": "active",
+        "name": "Active Mode",
+        "description": "Authentication is enforced",
+        "config": "aaa port-access authenticator {{interfaces.access.range}} control auto"
+      }
+    ],
+    "securityFeatures": [
+      {
+        "id": "bpdu-guard",
+        "name": "BPDU Guard",
+        "description": "Protect against Layer 2 loops",
+        "enabled": true,
+        "config": "spanning-tree {{interfaces.access.range}} bpdu-protection"
+      },
+      {
+        "id": "dhcp-snooping",
+        "name": "DHCP Snooping",
+        "description": "Protect against rogue DHCP servers",
+        "enabled": true,
+        "config": "dhcp-snooping\ndhcp-snooping vlan {{interfaces.access.vlan}}"
+      },
+      {
+        "id": "arp-protect",
+        "name": "ARP Protection",
+        "description": "Protect against ARP spoofing",
+        "enabled": true,
+        "config": "arp-protect\narp-protect vlan {{interfaces.access.vlan}}"
+      },
+      {
+        "id": "port-security",
+        "name": "Port Security",
+        "description": "Limit MAC addresses on a port",
+        "enabled": true,
+        "config": "port-security {{interfaces.access.range}} learn-mode static action send-disable\nport-security {{interfaces.access.range}} address-limit 1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60">
+  <rect x="10" y="15" width="40" height="30" rx="2" ry="2" fill="#FFECB3" stroke="#FF6F00" stroke-width="2"/>
+  <path d="M15,25 L45,25" stroke="#FF6F00" stroke-width="1"/>
+  <path d="M15,30 L45,30" stroke="#FF6F00" stroke-width="1"/>
+  <path d="M15,35 L35,35" stroke="#FF6F00" stroke-width="1"/>
+  <circle cx="40" cy="37" r="7" fill="#FF9800" stroke="#FF6F00" stroke-width="1"/>
+  <text x="40" y="40" font-family="Arial" font-size="8" font-weight="bold" text-anchor="middle" fill="white">CA</text>
+</svg>

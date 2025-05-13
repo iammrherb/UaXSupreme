@@ -1,0 +1,69 @@
+<div class="platform-selection container">
+    <h2>Select Vendor and Platform</h2>
+    
+    <div class="section-info">
+        <p>Choose your network vendor and platform to generate a tailored configuration. Select from wired 802.1X, wireless authentication, TACACS+, VPN, or user authentication options.</p>
+    </div>
+    
+    <div class="form-group">
+        <label for="deployment-type">Deployment Type</label>
+        <select id="deployment-type" class="form-control">
+            <option value="wired">Wired 802.1X Authentication</option>
+            <option value="wireless">Wireless WPA Enterprise</option>
+            <option value="tacacs">TACACS+ Device Administration</option>
+            <option value="vpn">VPN Authentication</option>
+            <option value="uaac">User Authentication & Access Control</option>
+        </select>
+    </div>
+    
+    <h3>Vendor Selection</h3>
+    <div id="vendor-grid" class="vendor-selection">
+        <!-- Vendor cards will be dynamically populated here -->
+        <div class="loading">Loading vendors...</div>
+    </div>
+    
+    <div class="platform-details-container">
+        <h3>Platform Details</h3>
+        
+        <div class="form-group">
+            <label for="platform-select">Device Platform</label>
+            <select id="platform-select" class="form-control" disabled>
+                <option value="">Select a vendor first</option>
+            </select>
+        </div>
+        
+        <div id="platform-details" class="platform-details">
+            <p>Please select a vendor and platform.</p>
+        </div>
+        
+        <div class="button-group">
+            <button id="platform-next" class="btn primary" disabled>Next: Authentication</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // This ensures vendor grid is populated on this page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize vendor grid directly if it exists on this page
+        const vendorGrid = document.getElementById('vendor-grid');
+        if (vendorGrid) {
+            setTimeout(function() {
+                if (typeof initVendorGrid === 'function') {
+                    console.log('Initializing vendor grid from embedded script...');
+                    initVendorGrid();
+                    setupVendorSelection();
+                    
+                    // Select default vendor if one is saved
+                    const savedVendor = localStorage.getItem('selectedVendor');
+                    if (savedVendor && window.vendors && window.vendors[savedVendor]) {
+                        selectVendor(savedVendor);
+                    } else {
+                        // Default to Cisco
+                        selectVendor('cisco');
+                    }
+                }
+            }, 500);
+        }
+    });
+</script>

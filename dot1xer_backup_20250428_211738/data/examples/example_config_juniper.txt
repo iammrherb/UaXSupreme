@@ -1,0 +1,57 @@
+# Example Juniper Switch Configuration with 802.1X
+
+system {
+    radius-server {
+        10.1.1.10 {
+            secret "$9$example-secret-key"; ## SECRET-DATA
+            source-address 10.1.10.1;
+            retry 3;
+            timeout 5;
+        }
+        10.1.1.11 {
+            secret "$9$example-secret-key"; ## SECRET-DATA
+            source-address 10.1.10.1;
+            retry 3;
+            timeout 5;
+        }
+    }
+}
+
+access {
+    radius-server {
+        10.1.1.10 {
+            port 1812;
+            secret "$9$example-secret-key"; ## SECRET-DATA
+            source-address 10.1.10.1;
+        }
+        10.1.1.11 {
+            port 1812;
+            secret "$9$example-secret-key"; ## SECRET-DATA
+            source-address 10.1.10.1;
+        }
+    }
+    profile dot1x-profile {
+        authentication-protocol eap-peap;
+        radius-authentication-server {
+            10.1.1.10;
+            10.1.1.11;
+        }
+    }
+}
+
+protocols {
+    dot1x {
+        authenticator {
+            authentication-profile-name dot1x-profile;
+            interface {
+                ge-0/0/[1-24] {
+                    supplicant multiple;
+                    transmit-period 5;
+                    maximum-requests 3;
+                    server-timeout 30;
+                    reauthentication 3600;
+                }
+            }
+        }
+    }
+}

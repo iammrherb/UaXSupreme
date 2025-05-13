@@ -1,0 +1,1759 @@
+{
+  "ios": {
+    "tacacs": {
+      "authenticationMethods": [
+        {
+          "id": "group-local",
+          "name": "TACACS+ Group then Local",
+          "description": "Authenticate using TACACS+ server group first, then fallback to local database if server unreachable",
+          "recommended": true,
+          "config": "aaa authentication login default group {{tacacs.serverGroup}} local"
+        },
+        {
+          "id": "local-group",
+          "name": "Local then TACACS+ Group",
+          "description": "Authenticate using local database first, then try TACACS+ server group",
+          "recommended": false,
+          "config": "aaa authentication login default local group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "group-only",
+          "name": "TACACS+ Group Only",
+          "description": "Authenticate using TACACS+ server group only, no fallback (warning: may lock out access)",
+          "recommended": false,
+          "config": "aaa authentication login default group {{tacacs.serverGroup}}"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "commands-15",
+          "name": "Command Authorization (Privilege 15)",
+          "description": "Authorize EXEC commands at privilege level 15 through TACACS+",
+          "recommended": true,
+          "config": "aaa authorization commands 15 default group {{tacacs.serverGroup}} if-authenticated local"
+        },
+        {
+          "id": "commands-all",
+          "name": "Command Authorization (All Levels)",
+          "description": "Authorize EXEC commands at all privilege levels through TACACS+",
+          "recommended": false,
+          "config": "aaa authorization commands 0 default group {{tacacs.serverGroup}} if-authenticated local\naaa authorization commands 1 default group {{tacacs.serverGroup}} if-authenticated local\naaa authorization commands 15 default group {{tacacs.serverGroup}} if-authenticated local"
+        },
+        {
+          "id": "exec-only",
+          "name": "EXEC Authorization Only",
+          "description": "Authorize EXEC sessions without per-command authorization",
+          "recommended": false,
+          "config": "aaa authorization exec default group {{tacacs.serverGroup}} if-authenticated local"
+        }
+      ],
+      "accountingMethods": [
+        {
+          "id": "commands-15",
+          "name": "Command Accounting (Privilege 15)",
+          "description": "Log all commands at privilege level 15 to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting commands 15 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "commands-all",
+          "name": "Command Accounting (All Levels)",
+          "description": "Log all commands at all privilege levels to TACACS+ server",
+          "recommended": false,
+          "config": "aaa accounting commands 0 default start-stop group {{tacacs.serverGroup}}\naaa accounting commands 1 default start-stop group {{tacacs.serverGroup}}\naaa accounting commands 15 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "exec-accounting",
+          "name": "EXEC Session Accounting",
+          "description": "Log EXEC session start and stop to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting exec default start-stop group {{tacacs.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 5,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for TACACS+ server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        },
+        {
+          "id": "single-connection",
+          "name": "Single Connection",
+          "description": "Maintain a single TCP connection for all TACACS+ communication",
+          "default": true,
+          "config": "single-connection"
+        }
+      ]
+    },
+    "radius": {
+      "authenticationMethods": [
+        {
+          "id": "dot1x-default",
+          "name": "802.1X Default",
+          "description": "Authentication method for 802.1X",
+          "recommended": true,
+          "config": "aaa authentication dot1x default group {{radius.serverGroup}}"
+        },
+        {
+          "id": "login-radius-local",
+          "name": "Login RADIUS then Local",
+          "description": "Login using RADIUS server group first, then fallback to local database",
+          "recommended": true,
+          "config": "aaa authentication login default group {{radius.serverGroup}} local"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "network-default",
+          "name": "Network Authorization",
+          "description": "Authorization for network services (VLAN, dACL, etc.)",
+          "recommended": true,
+          "config": "aaa authorization network default group {{radius.serverGroup}}"
+        },
+        {
+          "id": "auth-proxy",
+          "name": "Auth-Proxy Authorization",
+          "description": "Authorization for authentication proxy",
+          "recommended": false,
+          "config": "aaa authorization auth-proxy default group {{radius.serverGroup}}"
+        }
+      ],
+      "accountingMethods": [
+        {
+          "id": "network-acct",
+          "name": "Network Accounting",
+          "description": "Accounting for network services",
+          "recommended": true,
+          "config": "aaa accounting network default start-stop group {{radius.serverGroup}}"
+        },
+        {
+          "id": "dot1x-acct",
+          "name": "802.1X Accounting",
+          "description": "Accounting for 802.1X sessions",
+          "recommended": true,
+          "config": "aaa accounting dot1x default start-stop group {{radius.serverGroup}}"
+        },
+        {
+          "id": "identity-acct",
+          "name": "Identity Accounting",
+          "description": "Accounting for identity sessions (authentication manager)",
+          "recommended": true,
+          "config": "aaa accounting identity default start-stop group {{radius.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 5,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "retransmit",
+          "name": "Retransmit Count",
+          "description": "Number of times to retransmit request to server",
+          "default": 2,
+          "min": 1,
+          "max": 10,
+          "config": "retransmit {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for RADIUS server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        },
+        {
+          "id": "source-interface",
+          "name": "Source Interface",
+          "description": "Interface to use for RADIUS packets",
+          "default": "Vlan10",
+          "config": "ip radius source-interface {{value}}"
+        },
+        {
+          "id": "server-probe",
+          "name": "Server Test",
+          "description": "Probe radius server periodically to verify it's available",
+          "default": true,
+          "config": "automate-tester username {{testUsername}} probe-on"
+        }
+      ],
+      "loadBalancingMethods": [
+        {
+          "id": "none",
+          "name": "No Load Balancing",
+          "description": "Primary/Secondary server model",
+          "recommended": false
+        },
+        {
+          "id": "least-outstanding",
+          "name": "Least Outstanding",
+          "description": "Send new requests to the server with the fewest pending requests",
+          "recommended": true,
+          "config": "radius-server load-balance method least-outstanding"
+        },
+        {
+          "id": "host-hash",
+          "name": "Host Hash",
+          "description": "Distribute based on a hash of the client IP",
+          "recommended": false,
+          "config": "radius-server load-balance method host-hash"
+        },
+        {
+          "id": "batch",
+          "name": "Batch",
+          "description": "Send batches of requests to each server in round-robin fashion",
+          "recommended": false,
+          "config": "radius-server load-balance method batch"
+        }
+      ],
+      "deadtimeSettings": {
+        "enabled": true,
+        "description": "Time in minutes to skip unresponsive servers",
+        "default": 15,
+        "min": 1,
+        "max": 60,
+        "config": "deadtime {{value}}"
+      },
+      "deadCriteriaSettings": {
+        "enabled": true,
+        "time": {
+          "description": "Time in seconds without response to mark server as dead",
+          "default": 5,
+          "min": 1,
+          "max": 120
+        },
+        "tries": {
+          "description": "Number of consecutive timeouts to mark server as dead",
+          "default": 3,
+          "min": 1,
+          "max": 10
+        },
+        "config": "radius-server dead-criteria time {{time}} tries {{tries}}"
+      }
+    },
+    "dot1x": {
+      "portSettings": [
+        {
+          "id": "host-mode",
+          "name": "Host Mode",
+          "description": "How many and what type of devices can authenticate on a port",
+          "options": [
+            {
+              "id": "single-host",
+              "name": "Single Host",
+              "description": "Only one MAC address can authenticate on the port",
+              "recommended": false,
+              "config": "authentication host-mode single-host"
+            },
+            {
+              "id": "multi-auth",
+              "name": "Multi-Auth",
+              "description": "Multiple devices can authenticate independently",
+              "recommended": true,
+              "config": "authentication host-mode multi-auth"
+            },
+            {
+              "id": "multi-domain",
+              "name": "Multi-Domain",
+              "description": "One device in data domain and one in voice domain",
+              "recommended": false,
+              "config": "authentication host-mode multi-domain"
+            },
+            {
+              "id": "multi-host",
+              "name": "Multi-Host",
+              "description": "One device authenticates and others get access (not secure)",
+              "recommended": false,
+              "config": "authentication host-mode multi-host"
+            }
+          ]
+        },
+        {
+          "id": "control-direction",
+          "name": "Control Direction",
+          "description": "Direction of traffic control during authentication",
+          "options": [
+            {
+              "id": "both",
+              "name": "Both",
+              "description": "Block both directions before authentication",
+              "recommended": false,
+              "config": "authentication control-direction both"
+            },
+            {
+              "id": "in",
+              "name": "In",
+              "description": "Only block inbound traffic before authentication",
+              "recommended": true,
+              "config": "authentication control-direction in"
+            }
+          ]
+        },
+        {
+          "id": "port-control",
+          "name": "Port Control",
+          "description": "How 802.1X controls the port",
+          "options": [
+            {
+              "id": "auto",
+              "name": "Auto",
+              "description": "Authentication required for network access",
+              "recommended": true,
+              "config": "authentication port-control auto"
+            },
+            {
+              "id": "force-authorized",
+              "name": "Force Authorized",
+              "description": "Always allow access (no authentication)",
+              "recommended": false,
+              "config": "authentication port-control force-authorized"
+            },
+            {
+              "id": "force-unauthorized",
+              "name": "Force Unauthorized",
+              "description": "Never allow access (always block)",
+              "recommended": false,
+              "config": "authentication port-control force-unauthorized"
+            }
+          ]
+        },
+        {
+          "id": "open-auth",
+          "name": "Open Authentication",
+          "description": "Allow network access before authentication (monitor mode)",
+          "options": [
+            {
+              "id": "disabled",
+              "name": "Disabled (Closed Mode)",
+              "description": "Block access until authentication succeeds",
+              "recommended": true,
+              "config": ""
+            },
+            {
+              "id": "enabled",
+              "name": "Enabled (Open/Monitor Mode)",
+              "description": "Allow access regardless of authentication result",
+              "recommended": false,
+              "config": "authentication open"
+            }
+          ]
+        },
+        {
+          "id": "periodic-reauthentication",
+          "name": "Periodic Re-Authentication",
+          "description": "Require clients to re-authenticate periodically",
+          "enabled": true,
+          "config": "authentication periodic\nauthentication timer reauthenticate server"
+        },
+        {
+          "id": "inactivity-timeout",
+          "name": "Inactivity Timeout",
+          "description": "Remove authenticated clients after period of inactivity",
+          "enabled": true,
+          "value": 60,
+          "config": "authentication timer inactivity {{value}}"
+        }
+      ],
+      "dot1xSettings": [
+        {
+          "id": "tx-period",
+          "name": "Tx Period",
+          "description": "How often to send EAP requests to clients",
+          "default": 7,
+          "min": 1,
+          "max": 65535,
+          "config": "dot1x timeout tx-period {{value}}"
+        },
+        {
+          "id": "max-reauth-req",
+          "name": "Max Re-Auth Requests",
+          "description": "Number of re-authentication attempts before failing",
+          "default": 2,
+          "min": 1,
+          "max": 10,
+          "config": "dot1x max-reauth-req {{value}}"
+        },
+        {
+          "id": "quiet-period",
+          "name": "Quiet Period",
+          "description": "Time in seconds to wait after authentication failure",
+          "default": 60,
+          "min": 1,
+          "max": 65535,
+          "config": "dot1x timeout quiet-period {{value}}"
+        },
+        {
+          "id": "critical-eapol",
+          "name": "Critical EAPOL",
+          "description": "Send EAPOL success when entering critical authentication mode",
+          "enabled": true,
+          "config": "dot1x critical eapol"
+        }
+      ],
+      "mabSettings": [
+        {
+          "id": "auth-type",
+          "name": "MAB Authentication Type",
+          "description": "How MAB formats the authentication request",
+          "options": [
+            {
+              "id": "eap",
+              "name": "EAP",
+              "description": "Send as EAP credential (recommended for ISE)",
+              "recommended": true,
+              "config": "mab request format attribute 1 groupsize 12"
+            },
+            {
+              "id": "pap",
+              "name": "PAP",
+              "description": "Send as PAP credential",
+              "recommended": false,
+              "config": "mab request format attribute 1 groupsize 12 separator -"
+            },
+            {
+              "id": "chap",
+              "name": "CHAP",
+              "description": "Send as CHAP credential",
+              "recommended": false,
+              "config": "mab request format attribute 1 groupsize 12 separator - chap"
+            }
+          ]
+        }
+      ],
+      "deploymentOptions": [
+        {
+          "id": "sequential",
+          "name": "Sequential",
+          "description": "Try 802.1X first, then MAB if 802.1X fails",
+          "recommended": false,
+          "policyMap": "policy-map type control subscriber DOT1X_MAB_POLICY\n event session-started match-all\n  10 class always do-until-failure\n   10 authenticate using dot1x priority 10\n event authentication-failure match-first\n  5 class DOT1X_FAILED do-until-failure\n   10 terminate dot1x\n   20 authenticate using mab priority 20\n  ..."
+        },
+        {
+          "id": "concurrent",
+          "name": "Concurrent",
+          "description": "Try 802.1X and MAB simultaneously (unofficial)",
+          "recommended": true,
+          "policyMap": "policy-map type control subscriber CONCURRENT_DOT1X_MAB_POLICY\n event session-started match-all\n  10 class always do-all\n   10 authenticate using dot1x priority 10\n   20 authenticate using mab priority 20\n  ..."
+        }
+      ],
+      "securityFeatures": [
+        {
+          "id": "bpdu-guard",
+          "name": "BPDU Guard",
+          "description": "Protect against Layer 2 loops by disabling port if BPDU received",
+          "enabled": true,
+          "config": "spanning-tree bpduguard enable"
+        },
+        {
+          "id": "port-fast",
+          "name": "PortFast",
+          "description": "Bypass spanning-tree listening and learning states",
+          "enabled": true,
+          "config": "spanning-tree portfast"
+        },
+        {
+          "id": "storm-control",
+          "name": "Storm Control",
+          "description": "Limit broadcast, multicast, or unicast storms",
+          "enabled": true,
+          "threshold": 100,
+          "config": "storm-control broadcast level pps {{threshold}} 80\nstorm-control action trap"
+        },
+        {
+          "id": "dhcp-snooping",
+          "name": "DHCP Snooping",
+          "description": "Protect against rogue DHCP servers and DHCP starvation attacks",
+          "enabled": true,
+          "config": "ip dhcp snooping\nip dhcp snooping vlan 1-4094\nip dhcp snooping information option\nip dhcp snooping limit rate 20"
+        },
+        {
+          "id": "arp-inspection",
+          "name": "Dynamic ARP Inspection",
+          "description": "Protect against ARP spoofing and man-in-the-middle attacks",
+          "enabled": true,
+          "config": "ip arp inspection vlan 1-4094\nip arp inspection validate src-mac dst-mac ip"
+        },
+        {
+          "id": "ip-source-guard",
+          "name": "IP Source Guard",
+          "description": "Restrict IP traffic based on DHCP snooping database",
+          "enabled": true,
+          "config": "ip verify source"
+        }
+      ],
+      "criticalAuthSettings": {
+        "enabled": true,
+        "dataVlan": 999,
+        "voiceVlan": 999,
+        "recoveryDelay": 2000,
+        "config": "service-template CRITICAL_DATA_ACCESS\n vlan {{dataVlan}}\n access-group ACL-OPEN\nservice-template CRITICAL_VOICE_ACCESS\n voice vlan {{voiceVlan}}\n access-group ACL-OPEN\nauthentication critical recovery delay {{recoveryDelay}}"
+      }
+    },
+    "ibns": {
+      "classMapDot1x": {
+        "description": "Class maps for 802.1X authentication",
+        "config": "class-map type control subscriber match-all DOT1X\n match method dot1x\n\nclass-map type control subscriber match-all DOT1X_FAILED\n match method dot1x\n match result-type method dot1x authoritative\n\nclass-map type control subscriber match-all DOT1X_NO_RESP\n match method dot1x\n match result-type method dot1x agent-not-found\n\nclass-map type control subscriber match-all DOT1X_TIMEOUT\n match method dot1x\n match result-type method dot1x method-timeout\n match result-type method-timeout"
+      },
+      "classMapMab": {
+        "description": "Class maps for MAC Authentication Bypass",
+        "config": "class-map type control subscriber match-all MAB\n match method mab\n\nclass-map type control subscriber match-all MAB_FAILED\n match method mab\n match result-type method mab authoritative"
+      },
+      "classMapCritical": {
+        "description": "Class maps for Critical Authentication",
+        "config": "class-map type control subscriber match-all AAA_SVR_DOWN_AUTHD_HOST\n match result-type aaa-timeout\n match authorization-status authorized\n\nclass-map type control subscriber match-all AAA_SVR_DOWN_UNAUTHD_HOST\n match result-type aaa-timeout\n match authorization-status unauthorized\n\nclass-map type control subscriber match-any IN_CRITICAL_AUTH\n match activated-service-template CRITICAL_DATA_ACCESS\n match activated-service-template CRITICAL_VOICE_ACCESS\n\nclass-map type control subscriber match-none NOT_IN_CRITICAL_AUTH\n match activated-service-template CRITICAL_DATA_ACCESS\n match activated-service-template CRITICAL_VOICE_ACCESS"
+      },
+      "classMapMisc": {
+        "description": "Miscellaneous class maps",
+        "config": "class-map type control subscriber match-all AUTHC_SUCCESS-AUTHZ_FAIL\n match authorization-status unauthorized\n match result-type success"
+      },
+      "policyMapEvents": [
+        {
+          "id": "session-started",
+          "name": "Session Started Event",
+          "description": "Actions when a new session is detected",
+          "options": [
+            {
+              "id": "sequential",
+              "name": "Sequential Authentication",
+              "description": "Try 802.1X first, then MAB if 802.1X fails",
+              "config": "event session-started match-all\n 10 class always do-until-failure\n  10 authenticate using dot1x priority 10"
+            },
+            {
+              "id": "concurrent",
+              "name": "Concurrent Authentication",
+              "description": "Try 802.1X and MAB simultaneously",
+              "recommended": true,
+              "config": "event session-started match-all\n 10 class always do-all\n  10 authenticate using dot1x priority 10\n  20 authenticate using mab priority 20"
+            }
+          ]
+        },
+        {
+          "id": "authentication-failure",
+          "name": "Authentication Failure Event",
+          "description": "Actions when authentication fails",
+          "config": "event authentication-failure match-first\n 5 class DOT1X_FAILED do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 10 class AAA_SVR_DOWN_UNAUTHD_HOST do-until-failure\n  10 clear-authenticated-data-hosts-on-port\n  20 activate service-template CRITICAL_DATA_ACCESS\n  30 activate service-template CRITICAL_VOICE_ACCESS\n  40 authorize\n  50 pause reauthentication\n 20 class AAA_SVR_DOWN_AUTHD_HOST do-until-failure\n  10 pause reauthentication\n  20 authorize\n 30 class DOT1X_NO_RESP do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 40 class DOT1X_TIMEOUT do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 50 class always do-until-failure\n  10 terminate dot1x\n  20 terminate mab\n  30 authentication-restart 60"
+        },
+        {
+          "id": "agent-found",
+          "name": "Agent Found Event",
+          "description": "Actions when 802.1X supplicant is detected after MAB started",
+          "config": "event agent-found match-all\n 10 class always do-until-failure\n  10 terminate mab\n  20 authenticate using dot1x priority 10"
+        },
+        {
+          "id": "aaa-available",
+          "name": "AAA Available Event",
+          "description": "Actions when AAA server becomes available after being down",
+          "config": "event aaa-available match-all\n 10 class IN_CRITICAL_AUTH do-until-failure\n  10 clear-session\n 20 class NOT_IN_CRITICAL_AUTH do-until-failure\n  10 resume reauthentication"
+        },
+        {
+          "id": "inactivity-timeout",
+          "name": "Inactivity Timeout Event",
+          "description": "Actions when session is inactive for configured time",
+          "config": "event inactivity-timeout match-all\n 10 class always do-until-failure\n  10 clear-session"
+        },
+        {
+          "id": "authentication-success",
+          "name": "Authentication Success Event",
+          "description": "Actions when authentication succeeds",
+          "options": [
+            {
+              "id": "standard",
+              "name": "Standard",
+              "description": "No additional actions",
+              "config": "event authentication-success match-all\n 10 class always do-until-failure\n  10 no-op"
+            },
+            {
+              "id": "macsec",
+              "name": "MACSec Encryption",
+              "description": "Enable MACSec encryption if supported",
+              "config": "event authentication-success match-all\n 10 class always do-until-failure\n  10 activate service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE"
+            }
+          ]
+        }
+      ]
+    },
+    "deviceTracking": {
+      "enabled": true,
+      "description": "IP Device Tracking for IBNS 2.0",
+      "trackingOptions": [
+        {
+          "id": "access-policy",
+          "name": "Access Port Policy",
+          "description": "Device tracking policy for access ports",
+          "config": "device-tracking policy IP-TRACKING\n limit address-count 4\n security-level glean\n no protocol ndp\n no protocol dhcp6\n tracking enable reachable-lifetime 30"
+        },
+        {
+          "id": "trunk-policy",
+          "name": "Trunk Port Policy",
+          "description": "Device tracking policy for trunk ports",
+          "config": "device-tracking policy DISABLE-IP-TRACKING\n tracking disable\n trusted-port\n device-role switch"
+        }
+      ],
+      "globalConfig": "device-tracking tracking auto-source"
+    },
+    "deviceSensor": {
+      "enabled": true,
+      "description": "Device Sensor for Profiling",
+      "protocols": [
+        {
+          "id": "dhcp",
+          "name": "DHCP",
+          "enabled": true,
+          "options": [
+            "host-name",
+            "requested-address",
+            "parameter-request-list",
+            "class-identifier",
+            "client-identifier"
+          ],
+          "config": "device-sensor filter-list dhcp list DS_DHCP_LIST\n option name host-name\n option name requested-address\n option name parameter-request-list\n option name class-identifier\n option name client-identifier\ndevice-sensor filter-spec dhcp include list DS_DHCP_LIST"
+        },
+        {
+          "id": "cdp",
+          "name": "CDP",
+          "enabled": true,
+          "options": [
+            "device-name",
+            "address-type",
+            "capabilities-type",
+            "platform-type",
+            "version-type"
+          ],
+          "config": "cdp run\ndevice-sensor filter-list cdp list DS_CDP_LIST\n tlv name device-name\n tlv name address-type\n tlv name capabilities-type\n tlv name platform-type\n tlv name version-type\ndevice-sensor filter-spec cdp include list DS_CDP_LIST"
+        },
+        {
+          "id": "lldp",
+          "name": "LLDP",
+          "enabled": true,
+          "options": [
+            "system-name",
+            "system-description",
+            "system-capabilities"
+          ],
+          "config": "lldp run\ndevice-sensor filter-list lldp list DS_LLDP_LIST\n tlv name system-name\n tlv name system-description\n tlv name system-capabilities\ndevice-sensor filter-spec lldp include list DS_LLDP_LIST"
+        }
+      ],
+      "globalConfig": "device-sensor notify all-changes\naccess-session attributes filter-list list DS_SEND_LIST\n cdp\n lldp\n dhcp\naccess-session accounting attributes filter-spec include list DS_SEND_LIST\naccess-session authentication attributes filter-spec include list DS_SEND_LIST"
+    },
+    "acls": [
+      {
+        "id": "acl-open",
+        "name": "ACL-OPEN",
+        "description": "Open access ACL for pre-authentication or critical authentication",
+        "config": "ip access-list extended ACL-OPEN\n permit ip any any"
+      },
+      {
+        "id": "acl-default",
+        "name": "ACL-DEFAULT",
+        "description": "Default restrictive ACL",
+        "config": "ip access-list extended ACL-DEFAULT\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit icmp any any echo-reply\n permit icmp any any time-exceeded\n permit icmp any any unreachable\n deny ip any any"
+      },
+      {
+        "id": "acl-auth-server",
+        "name": "ACL-AUTH-SERVER",
+        "description": "ACL to allow access to authentication servers only",
+        "config": "ip access-list extended ACL-AUTH-SERVER\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit ip any host {{radius.servers[0].ip}}\n permit ip any host {{radius.servers[1].ip}}\n deny ip any any"
+      },
+      {
+        "id": "acl-guest",
+        "name": "ACL-GUEST",
+        "description": "ACL for guest access",
+        "config": "ip access-list extended ACL-GUEST\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit tcp any any eq www\n permit tcp any any eq 443\n permit tcp any any eq 8080\n deny ip any any"
+      }
+    ],
+    "radsec": {
+      "enabled": false,
+      "description": "RadSec (RADIUS over TLS)",
+      "serverConfig": "radius server {{radsec.serverName}}\n address ipv4 {{radsec.serverIP}} auth-port 2083 acct-port 2083\n tls connectiontimeout 5\n tls trustpoint client {{radsec.clientTrustpoint}}\n tls trustpoint server {{radsec.serverTrustpoint}}\n key {{radsec.serverKey}}",
+      "serverGroupConfig": "aaa group server radius {{radsec.serverGroup}}\n server name {{radsec.serverName}}"
+    },
+    "macsec": {
+      "enabled": false,
+      "description": "MACsec (802.1AE)",
+      "policy": [
+        {
+          "id": "should-secure",
+          "name": "Should Secure",
+          "description": "Prefer encryption but allow non-encrypted traffic",
+          "recommended": true,
+          "serviceName": "DEFAULT_LINKSEC_POLICY_SHOULD_SECURE"
+        },
+        {
+          "id": "must-secure",
+          "name": "Must Secure",
+          "description": "Require encryption (blocks non-encrypted traffic)",
+          "recommended": false,
+          "serviceName": "DEFAULT_LINKSEC_POLICY_MUST_SECURE"
+        }
+      ]
+    }
+  },
+  "ios-xe": {
+    "tacacs": {
+      "authenticationMethods": [
+        {
+          "id": "group-local",
+          "name": "TACACS+ Group then Local",
+          "description": "Authenticate using TACACS+ server group first, then fallback to local database if server unreachable",
+          "recommended": true,
+          "config": "aaa authentication login default group {{tacacs.serverGroup}} local"
+        },
+        {
+          "id": "local-group",
+          "name": "Local then TACACS+ Group",
+          "description": "Authenticate using local database first, then try TACACS+ server group",
+          "recommended": false,
+          "config": "aaa authentication login default local group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "group-only",
+          "name": "TACACS+ Group Only",
+          "description": "Authenticate using TACACS+ server group only, no fallback (warning: may lock out access)",
+          "recommended": false,
+          "config": "aaa authentication login default group {{tacacs.serverGroup}}"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "commands-15",
+          "name": "Command Authorization (Privilege 15)",
+          "description": "Authorize EXEC commands at privilege level 15 through TACACS+",
+          "recommended": true,
+          "config": "aaa authorization commands 15 default group {{tacacs.serverGroup}} if-authenticated local"
+        },
+        {
+          "id": "commands-all",
+          "name": "Command Authorization (All Levels)",
+          "description": "Authorize EXEC commands at all privilege levels through TACACS+",
+          "recommended": false,
+          "config": "aaa authorization commands 0 default group {{tacacs.serverGroup}} if-authenticated local\naaa authorization commands 1 default group {{tacacs.serverGroup}} if-authenticated local\naaa authorization commands 15 default group {{tacacs.serverGroup}} if-authenticated local"
+        },
+        {
+          "id": "exec-only",
+          "name": "EXEC Authorization Only",
+          "description": "Authorize EXEC sessions without per-command authorization",
+          "recommended": false,
+          "config": "aaa authorization exec default group {{tacacs.serverGroup}} if-authenticated local"
+        }
+      ],
+      "accountingMethods": [
+        {
+          "id": "commands-15",
+          "name": "Command Accounting (Privilege 15)",
+          "description": "Log all commands at privilege level 15 to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting commands 15 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "commands-all",
+          "name": "Command Accounting (All Levels)",
+          "description": "Log all commands at all privilege levels to TACACS+ server",
+          "recommended": false,
+          "config": "aaa accounting commands 0 default start-stop group {{tacacs.serverGroup}}\naaa accounting commands 1 default start-stop group {{tacacs.serverGroup}}\naaa accounting commands 15 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "exec-accounting",
+          "name": "EXEC Session Accounting",
+          "description": "Log EXEC session start and stop to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting exec default start-stop group {{tacacs.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 5,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for TACACS+ server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        },
+        {
+          "id": "single-connection",
+          "name": "Single Connection",
+          "description": "Maintain a single TCP connection for all TACACS+ communication",
+          "default": true,
+          "config": "single-connection"
+        }
+      ]
+    },
+    "radius": {
+      "authenticationMethods": [
+        {
+          "id": "dot1x-default",
+          "name": "802.1X Default",
+          "description": "Authentication method for 802.1X",
+          "recommended": true,
+          "config": "aaa authentication dot1x default group {{radius.serverGroup}}"
+        },
+        {
+          "id": "login-radius-local",
+          "name": "Login RADIUS then Local",
+          "description": "Login using RADIUS server group first, then fallback to local database",
+          "recommended": true,
+          "config": "aaa authentication login default group {{radius.serverGroup}} local"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "network-default",
+          "name": "Network Authorization",
+          "description": "Authorization for network services (VLAN, dACL, etc.)",
+          "recommended": true,
+          "config": "aaa authorization network default group {{radius.serverGroup}}"
+        },
+        {
+          "id": "auth-proxy",
+          "name": "Auth-Proxy Authorization",
+          "description": "Authorization for authentication proxy",
+          "recommended": false,
+          "config": "aaa authorization auth-proxy default group {{radius.serverGroup}}"
+        }
+      ],
+      "accountingMethods": [
+        {
+          "id": "network-acct",
+          "name": "Network Accounting",
+          "description": "Accounting for network services",
+          "recommended": true,
+          "config": "aaa accounting network default start-stop group {{radius.serverGroup}}"
+        },
+        {
+          "id": "dot1x-acct",
+          "name": "802.1X Accounting",
+          "description": "Accounting for 802.1X sessions",
+          "recommended": true,
+          "config": "aaa accounting dot1x default start-stop group {{radius.serverGroup}}"
+        },
+        {
+          "id": "identity-acct",
+          "name": "Identity Accounting",
+          "description": "Accounting for identity sessions (authentication manager)",
+          "recommended": true,
+          "config": "aaa accounting identity default start-stop group {{radius.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 5,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "retransmit",
+          "name": "Retransmit Count",
+          "description": "Number of times to retransmit request to server",
+          "default": 2,
+          "min": 1,
+          "max": 10,
+          "config": "retransmit {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for RADIUS server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        },
+        {
+          "id": "source-interface",
+          "name": "Source Interface",
+          "description": "Interface to use for RADIUS packets",
+          "default": "Vlan10",
+          "config": "ip radius source-interface {{value}}"
+        },
+        {
+          "id": "server-probe",
+          "name": "Server Test",
+          "description": "Probe radius server periodically to verify it's available",
+          "default": true,
+          "config": "automate-tester username {{testUsername}} probe-on"
+        }
+      ],
+      "loadBalancingMethods": [
+        {
+          "id": "none",
+          "name": "No Load Balancing",
+          "description": "Primary/Secondary server model",
+          "recommended": false
+        },
+        {
+          "id": "least-outstanding",
+          "name": "Least Outstanding",
+          "description": "Send new requests to the server with the fewest pending requests",
+          "recommended": true,
+          "config": "radius-server load-balance method least-outstanding"
+        },
+        {
+          "id": "host-hash",
+          "name": "Host Hash",
+          "description": "Distribute based on a hash of the client IP",
+          "recommended": false,
+          "config": "radius-server load-balance method host-hash"
+        },
+        {
+          "id": "batch",
+          "name": "Batch",
+          "description": "Send batches of requests to each server in round-robin fashion",
+          "recommended": false,
+          "config": "radius-server load-balance method batch"
+        }
+      ],
+      "deadtimeSettings": {
+        "enabled": true,
+        "description": "Time in minutes to skip unresponsive servers",
+        "default": 15,
+        "min": 1,
+        "max": 60,
+        "config": "deadtime {{value}}"
+      },
+      "deadCriteriaSettings": {
+        "enabled": true,
+        "time": {
+          "description": "Time in seconds without response to mark server as dead",
+          "default": 5,
+          "min": 1,
+          "max": 120
+        },
+        "tries": {
+          "description": "Number of consecutive timeouts to mark server as dead",
+          "default": 3,
+          "min": 1,
+          "max": 10
+        },
+        "config": "radius-server dead-criteria time {{time}} tries {{tries}}"
+      }
+    },
+    "dot1x": {
+      "portSettings": [
+        {
+          "id": "host-mode",
+          "name": "Host Mode",
+          "description": "How many and what type of devices can authenticate on a port",
+          "options": [
+            {
+              "id": "single-host",
+              "name": "Single Host",
+              "description": "Only one MAC address can authenticate on the port",
+              "recommended": false,
+              "config": "access-session host-mode single-host"
+            },
+            {
+              "id": "multi-auth",
+              "name": "Multi-Auth",
+              "description": "Multiple devices can authenticate independently",
+              "recommended": true,
+              "config": "access-session host-mode multi-auth"
+            },
+            {
+              "id": "multi-domain",
+              "name": "Multi-Domain",
+              "description": "One device in data domain and one in voice domain",
+              "recommended": false,
+              "config": "access-session host-mode multi-domain"
+            },
+            {
+              "id": "multi-host",
+              "name": "Multi-Host",
+              "description": "One device authenticates and others get access (not secure)",
+              "recommended": false,
+              "config": "access-session host-mode multi-host"
+            }
+          ]
+        },
+        {
+          "id": "control-direction",
+          "name": "Control Direction",
+          "description": "Direction of traffic control during authentication",
+          "options": [
+            {
+              "id": "both",
+              "name": "Both",
+              "description": "Block both directions before authentication",
+              "recommended": false,
+              "config": "access-session control-direction both"
+            },
+            {
+              "id": "in",
+              "name": "In",
+              "description": "Only block inbound traffic before authentication",
+              "recommended": true,
+              "config": "access-session control-direction in"
+            }
+          ]
+        },
+        {
+          "id": "port-control",
+          "name": "Port Control",
+          "description": "How 802.1X controls the port",
+          "options": [
+            {
+              "id": "auto",
+              "name": "Auto",
+              "description": "Authentication required for network access",
+              "recommended": true,
+              "config": "access-session port-control auto"
+            },
+            {
+              "id": "force-authorized",
+              "name": "Force Authorized",
+              "description": "Always allow access (no authentication)",
+              "recommended": false,
+              "config": "access-session port-control force-authorized"
+            },
+            {
+              "id": "force-unauthorized",
+              "name": "Force Unauthorized",
+              "description": "Never allow access (always block)",
+              "recommended": false,
+              "config": "access-session port-control force-unauthorized"
+            }
+          ]
+        },
+        {
+          "id": "open-auth",
+          "name": "Open Authentication",
+          "description": "Allow network access before authentication (monitor mode)",
+          "options": [
+            {
+              "id": "disabled",
+              "name": "Disabled (Closed Mode)",
+              "description": "Block access until authentication succeeds",
+              "recommended": true,
+              "config": "access-session closed"
+            },
+            {
+              "id": "enabled",
+              "name": "Enabled (Open/Monitor Mode)",
+              "description": "Allow access regardless of authentication result",
+              "recommended": false,
+              "config": ""
+            }
+          ]
+        },
+        {
+          "id": "periodic-reauthentication",
+          "name": "Periodic Re-Authentication",
+          "description": "Require clients to re-authenticate periodically",
+          "enabled": true,
+          "config": "authentication periodic\nauthentication timer reauthenticate server"
+        },
+        {
+          "id": "inactivity-timeout",
+          "name": "Inactivity Timeout",
+          "description": "Remove authenticated clients after period of inactivity",
+          "enabled": true,
+          "value": 60,
+          "config": "subscriber aging inactivity-timer {{value}} probe"
+        }
+      ],
+      "dot1xSettings": [
+        {
+          "id": "tx-period",
+          "name": "Tx Period",
+          "description": "How often to send EAP requests to clients",
+          "default": 7,
+          "min": 1,
+          "max": 65535,
+          "config": "dot1x timeout tx-period {{value}}"
+        },
+        {
+          "id": "max-reauth-req",
+          "name": "Max Re-Auth Requests",
+          "description": "Number of re-authentication attempts before failing",
+          "default": 2,
+          "min": 1,
+          "max": 10,
+          "config": "dot1x max-reauth-req {{value}}"
+        },
+        {
+          "id": "quiet-period",
+          "name": "Quiet Period",
+          "description": "Time in seconds to wait after authentication failure",
+          "default": 60,
+          "min": 1,
+          "max": 65535,
+          "config": "dot1x timeout quiet-period {{value}}"
+        },
+        {
+          "id": "critical-eapol",
+          "name": "Critical EAPOL",
+          "description": "Send EAPOL success when entering critical authentication mode",
+          "enabled": true,
+          "config": "dot1x critical eapol"
+        }
+      ],
+      "mabSettings": [
+        {
+          "id": "auth-type",
+          "name": "MAB Authentication Type",
+          "description": "How MAB formats the authentication request",
+          "options": [
+            {
+              "id": "eap",
+              "name": "EAP",
+              "description": "Send as EAP credential (recommended for ISE)",
+              "recommended": true,
+              "config": "mab request format attribute 1 groupsize 12"
+            },
+            {
+              "id": "pap",
+              "name": "PAP",
+              "description": "Send as PAP credential",
+              "recommended": false,
+              "config": "mab request format attribute 1 groupsize 12 separator -"
+            },
+            {
+              "id": "chap",
+              "name": "CHAP",
+              "description": "Send as CHAP credential",
+              "recommended": false,
+              "config": "mab request format attribute 1 groupsize 12 separator - chap"
+            }
+          ]
+        }
+      ],
+      "deploymentOptions": [
+        {
+          "id": "sequential",
+          "name": "Sequential",
+          "description": "Try 802.1X first, then MAB if 802.1X fails",
+          "recommended": false,
+          "policyMap": "policy-map type control subscriber DOT1X_MAB_POLICY\n event session-started match-all\n  10 class always do-until-failure\n   10 authenticate using dot1x priority 10\n event authentication-failure match-first\n  5 class DOT1X_FAILED do-until-failure\n   10 terminate dot1x\n   20 authenticate using mab priority 20\n  ..."
+        },
+        {
+          "id": "concurrent",
+          "name": "Concurrent",
+          "description": "Try 802.1X and MAB simultaneously (unofficial)",
+          "recommended": true,
+          "policyMap": "policy-map type control subscriber CONCURRENT_DOT1X_MAB_POLICY\n event session-started match-all\n  10 class always do-all\n   10 authenticate using dot1x priority 10\n   20 authenticate using mab priority 20\n  ..."
+        }
+      ],
+      "securityFeatures": [
+        {
+          "id": "bpdu-guard",
+          "name": "BPDU Guard",
+          "description": "Protect against Layer 2 loops by disabling port if BPDU received",
+          "enabled": true,
+          "config": "spanning-tree bpduguard enable"
+        },
+        {
+          "id": "port-fast",
+          "name": "PortFast",
+          "description": "Bypass spanning-tree listening and learning states",
+          "enabled": true,
+          "config": "spanning-tree portfast"
+        },
+        {
+          "id": "storm-control",
+          "name": "Storm Control",
+          "description": "Limit broadcast, multicast, or unicast storms",
+          "enabled": true,
+          "threshold": 100,
+          "config": "storm-control broadcast level pps {{threshold}} 80\nstorm-control action trap"
+        },
+        {
+          "id": "dhcp-snooping",
+          "name": "DHCP Snooping",
+          "description": "Protect against rogue DHCP servers and DHCP starvation attacks",
+          "enabled": true,
+          "config": "ip dhcp snooping\nip dhcp snooping vlan 1-4094\nip dhcp snooping information option\nip dhcp snooping limit rate 20"
+        },
+        {
+          "id": "arp-inspection",
+          "name": "Dynamic ARP Inspection",
+          "description": "Protect against ARP spoofing and man-in-the-middle attacks",
+          "enabled": true,
+          "config": "ip arp inspection vlan 1-4094\nip arp inspection validate src-mac dst-mac ip"
+        },
+        {
+          "id": "ip-source-guard",
+          "name": "IP Source Guard",
+          "description": "Restrict IP traffic based on DHCP snooping database",
+          "enabled": true,
+          "config": "ip verify source"
+        }
+      ],
+      "criticalAuthSettings": {
+        "enabled": true,
+        "dataVlan": 999,
+        "voiceVlan": 999,
+        "recoveryDelay": 2000,
+        "config": "service-template CRITICAL_DATA_ACCESS\n vlan {{dataVlan}}\n access-group ACL-OPEN\nservice-template CRITICAL_VOICE_ACCESS\n voice vlan {{voiceVlan}}\n access-group ACL-OPEN\nauthentication critical recovery delay {{recoveryDelay}}"
+      }
+    },
+    "ibns": {
+      "classMapDot1x": {
+        "description": "Class maps for 802.1X authentication",
+        "config": "class-map type control subscriber match-all DOT1X\n match method dot1x\n\nclass-map type control subscriber match-all DOT1X_FAILED\n match method dot1x\n match result-type method dot1x authoritative\n\nclass-map type control subscriber match-all DOT1X_NO_RESP\n match method dot1x\n match result-type method dot1x agent-not-found\n\nclass-map type control subscriber match-all DOT1X_TIMEOUT\n match method dot1x\n match result-type method dot1x method-timeout\n match result-type method-timeout"
+      },
+      "classMapMab": {
+        "description": "Class maps for MAC Authentication Bypass",
+        "config": "class-map type control subscriber match-all MAB\n match method mab\n\nclass-map type control subscriber match-all MAB_FAILED\n match method mab\n match result-type method mab authoritative"
+      },
+      "classMapCritical": {
+        "description": "Class maps for Critical Authentication",
+        "config": "class-map type control subscriber match-all AAA_SVR_DOWN_AUTHD_HOST\n match result-type aaa-timeout\n match authorization-status authorized\n\nclass-map type control subscriber match-all AAA_SVR_DOWN_UNAUTHD_HOST\n match result-type aaa-timeout\n match authorization-status unauthorized\n\nclass-map type control subscriber match-any IN_CRITICAL_AUTH\n match activated-service-template CRITICAL_DATA_ACCESS\n match activated-service-template CRITICAL_VOICE_ACCESS\n\nclass-map type control subscriber match-none NOT_IN_CRITICAL_AUTH\n match activated-service-template CRITICAL_DATA_ACCESS\n match activated-service-template CRITICAL_VOICE_ACCESS"
+      },
+      "classMapMisc": {
+        "description": "Miscellaneous class maps",
+        "config": "class-map type control subscriber match-all AUTHC_SUCCESS-AUTHZ_FAIL\n match authorization-status unauthorized\n match result-type success"
+      },
+      "policyMapEvents": [
+        {
+          "id": "session-started",
+          "name": "Session Started Event",
+          "description": "Actions when a new session is detected",
+          "options": [
+            {
+              "id": "sequential",
+              "name": "Sequential Authentication",
+              "description": "Try 802.1X first, then MAB if 802.1X fails",
+              "config": "event session-started match-all\n 10 class always do-until-failure\n  10 authenticate using dot1x priority 10"
+            },
+            {
+              "id": "concurrent",
+              "name": "Concurrent Authentication",
+              "description": "Try 802.1X and MAB simultaneously",
+              "recommended": true,
+              "config": "event session-started match-all\n 10 class always do-all\n  10 authenticate using dot1x priority 10\n  20 authenticate using mab priority 20"
+            }
+          ]
+        },
+        {
+          "id": "authentication-failure",
+          "name": "Authentication Failure Event",
+          "description": "Actions when authentication fails",
+          "config": "event authentication-failure match-first\n 5 class DOT1X_FAILED do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 10 class AAA_SVR_DOWN_UNAUTHD_HOST do-until-failure\n  10 clear-authenticated-data-hosts-on-port\n  20 activate service-template CRITICAL_DATA_ACCESS\n  30 activate service-template CRITICAL_VOICE_ACCESS\n  40 authorize\n  50 pause reauthentication\n 20 class AAA_SVR_DOWN_AUTHD_HOST do-until-failure\n  10 pause reauthentication\n  20 authorize\n 30 class DOT1X_NO_RESP do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 40 class DOT1X_TIMEOUT do-until-failure\n  10 terminate dot1x\n  20 authenticate using mab priority 20\n 50 class always do-until-failure\n  10 terminate dot1x\n  20 terminate mab\n  30 authentication-restart 60"
+        },
+        {
+          "id": "agent-found",
+          "name": "Agent Found Event",
+          "description": "Actions when 802.1X supplicant is detected after MAB started",
+          "config": "event agent-found match-all\n 10 class always do-until-failure\n  10 terminate mab\n  20 authenticate using dot1x priority 10"
+        },
+        {
+          "id": "aaa-available",
+          "name": "AAA Available Event",
+          "description": "Actions when AAA server becomes available after being down",
+          "config": "event aaa-available match-all\n 10 class IN_CRITICAL_AUTH do-until-failure\n  10 clear-session\n 20 class NOT_IN_CRITICAL_AUTH do-until-failure\n  10 resume reauthentication"
+        },
+        {
+          "id": "inactivity-timeout",
+          "name": "Inactivity Timeout Event",
+          "description": "Actions when session is inactive for configured time",
+          "config": "event inactivity-timeout match-all\n 10 class always do-until-failure\n  10 clear-session"
+        },
+        {
+          "id": "authentication-success",
+          "name": "Authentication Success Event",
+          "description": "Actions when authentication succeeds",
+          "options": [
+            {
+              "id": "standard",
+              "name": "Standard",
+              "description": "No additional actions",
+              "config": "event authentication-success match-all\n 10 class always do-until-failure\n  10 no-op"
+            },
+            {
+              "id": "macsec",
+              "name": "MACSec Encryption",
+              "description": "Enable MACSec encryption if supported",
+              "config": "event authentication-success match-all\n 10 class always do-until-failure\n  10 activate service-template DEFAULT_LINKSEC_POLICY_SHOULD_SECURE"
+            }
+          ]
+        }
+      ]
+    },
+    "deviceTracking": {
+      "enabled": true,
+      "description": "IP Device Tracking for IBNS 2.0",
+      "trackingOptions": [
+        {
+          "id": "access-policy",
+          "name": "Access Port Policy",
+          "description": "Device tracking policy for access ports",
+          "config": "device-tracking policy IP-TRACKING\n limit address-count 4\n security-level glean\n no protocol ndp\n no protocol dhcp6\n tracking enable reachable-lifetime 30"
+        },
+        {
+          "id": "trunk-policy",
+          "name": "Trunk Port Policy",
+          "description": "Device tracking policy for trunk ports",
+          "config": "device-tracking policy DISABLE-IP-TRACKING\n tracking disable\n trusted-port\n device-role switch"
+        }
+      ],
+      "globalConfig": "device-tracking tracking auto-source"
+    },
+    "deviceSensor": {
+      "enabled": true,
+      "description": "Device Sensor for Profiling",
+      "protocols": [
+        {
+          "id": "dhcp",
+          "name": "DHCP",
+          "enabled": true,
+          "options": [
+            "host-name",
+            "requested-address",
+            "parameter-request-list",
+            "class-identifier",
+            "client-identifier"
+          ],
+          "config": "device-sensor filter-list dhcp list DS_DHCP_LIST\n option name host-name\n option name requested-address\n option name parameter-request-list\n option name class-identifier\n option name client-identifier\ndevice-sensor filter-spec dhcp include list DS_DHCP_LIST"
+        },
+        {
+          "id": "cdp",
+          "name": "CDP",
+          "enabled": true,
+          "options": [
+            "device-name",
+            "address-type",
+            "capabilities-type",
+            "platform-type",
+            "version-type"
+          ],
+          "config": "cdp run\ndevice-sensor filter-list cdp list DS_CDP_LIST\n tlv name device-name\n tlv name address-type\n tlv name capabilities-type\n tlv name platform-type\n tlv name version-type\ndevice-sensor filter-spec cdp include list DS_CDP_LIST"
+        },
+        {
+          "id": "lldp",
+          "name": "LLDP",
+          "enabled": true,
+          "options": [
+            "system-name",
+            "system-description",
+            "system-capabilities"
+          ],
+          "config": "lldp run\ndevice-sensor filter-list lldp list DS_LLDP_LIST\n tlv name system-name\n tlv name system-description\n tlv name system-capabilities\ndevice-sensor filter-spec lldp include list DS_LLDP_LIST"
+        }
+      ],
+      "globalConfig": "device-sensor notify all-changes\naccess-session attributes filter-list list DS_SEND_LIST\n cdp\n lldp\n dhcp\naccess-session accounting attributes filter-spec include list DS_SEND_LIST\naccess-session authentication attributes filter-spec include list DS_SEND_LIST"
+    },
+    "acls": [
+      {
+        "id": "acl-open",
+        "name": "ACL-OPEN",
+        "description": "Open access ACL for pre-authentication or critical authentication",
+        "config": "ip access-list extended ACL-OPEN\n permit ip any any"
+      },
+      {
+        "id": "acl-default",
+        "name": "ACL-DEFAULT",
+        "description": "Default restrictive ACL",
+        "config": "ip access-list extended ACL-DEFAULT\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit icmp any any echo-reply\n permit icmp any any time-exceeded\n permit icmp any any unreachable\n deny ip any any"
+      },
+      {
+        "id": "acl-auth-server",
+        "name": "ACL-AUTH-SERVER",
+        "description": "ACL to allow access to authentication servers only",
+        "config": "ip access-list extended ACL-AUTH-SERVER\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit ip any host {{radius.servers[0].ip}}\n permit ip any host {{radius.servers[1].ip}}\n deny ip any any"
+      },
+      {
+        "id": "acl-guest",
+        "name": "ACL-GUEST",
+        "description": "ACL for guest access",
+        "config": "ip access-list extended ACL-GUEST\n permit udp any eq bootpc any eq bootps\n permit udp any any eq domain\n permit tcp any any eq www\n permit tcp any any eq 443\n permit tcp any any eq 8080\n deny ip any any"
+      }
+    ],
+    "radsec": {
+      "enabled": false,
+      "description": "RadSec (RADIUS over TLS)",
+      "serverConfig": "radius server {{radsec.serverName}}\n address ipv4 {{radsec.serverIP}} auth-port 2083 acct-port 2083\n tls connectiontimeout 5\n tls trustpoint client {{radsec.clientTrustpoint}}\n tls trustpoint server {{radsec.serverTrustpoint}}\n key {{radsec.serverKey}}",
+      "serverGroupConfig": "aaa group server radius {{radsec.serverGroup}}\n server name {{radsec.serverName}}"
+    },
+    "macsec": {
+      "enabled": false,
+      "description": "MACsec (802.1AE)",
+      "policy": [
+        {
+          "id": "should-secure",
+          "name": "Should Secure",
+          "description": "Prefer encryption but allow non-encrypted traffic",
+          "recommended": true,
+          "serviceName": "DEFAULT_LINKSEC_POLICY_SHOULD_SECURE"
+        },
+        {
+          "id": "must-secure",
+          "name": "Must Secure",
+          "description": "Require encryption (blocks non-encrypted traffic)",
+          "recommended": false,
+          "serviceName": "DEFAULT_LINKSEC_POLICY_MUST_SECURE"
+        }
+      ]
+    },
+    "coa": {
+      "enabled": true,
+      "description": "Change of Authorization (RFC 3576)",
+      "config": "aaa server radius dynamic-author\n client {{radius.servers[0].ip}} server-key {{radius.servers[0].key}}\n client {{radius.servers[1].ip}} server-key {{radius.servers[1].key}}\n auth-type any"
+    }
+  },
+  "wlc-9800": {
+    "tacacs": {
+      "authenticationMethods": [
+        {
+          "id": "group-local",
+          "name": "TACACS+ Group then Local",
+          "description": "Authenticate using TACACS+ server group first, then fallback to local database if server unreachable",
+          "recommended": true,
+          "config": "aaa authentication login {{tacacs.authMethod}} group {{tacacs.serverGroup}} local"
+        },
+        {
+          "id": "local-group",
+          "name": "Local then TACACS+ Group",
+          "description": "Authenticate using local database first, then try TACACS+ server group",
+          "recommended": false,
+          "config": "aaa authentication login {{tacacs.authMethod}} local group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "group-only",
+          "name": "TACACS+ Group Only",
+          "description": "Authenticate using TACACS+ server group only, no fallback (warning: may lock out access)",
+          "recommended": false,
+          "config": "aaa authentication login {{tacacs.authMethod}} group {{tacacs.serverGroup}}"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "exec-auth",
+          "name": "EXEC Authorization",
+          "description": "Authorize EXEC sessions through TACACS+",
+          "recommended": true,
+          "config": "aaa authorization exec {{tacacs.authzMethod}} group {{tacacs.serverGroup}} local if-authenticated"
+        }
+      ],
+      "consoleAuthorization": {
+        "enabled": true,
+        "description": "Enable authorization for console connections",
+        "config": "aaa authorization console"
+      },
+      "accountingMethods": [
+        {
+          "id": "commands-0",
+          "name": "Command Accounting (Level 0)",
+          "description": "Log all commands at privilege level 0 to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting commands 0 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "commands-1",
+          "name": "Command Accounting (Level 1)",
+          "description": "Log all commands at privilege level 1 to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting commands 1 default start-stop group {{tacacs.serverGroup}}"
+        },
+        {
+          "id": "commands-15",
+          "name": "Command Accounting (Level 15)",
+          "description": "Log all commands at privilege level 15 to TACACS+ server",
+          "recommended": true,
+          "config": "aaa accounting commands 15 default start-stop group {{tacacs.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 1,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for TACACS+ server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        }
+      ],
+      "serviceConfig": {
+        "authMethodList": "ML-TACACS-AUTHC",
+        "authzMethodList": "ML-TACACS-AUTHZ",
+        "webGui": {
+          "enabled": true,
+          "config": "ip http authentication aaa login-authentication {{tacacs.authMethod}}\nip http authentication aaa exec-authorization {{tacacs.authzMethod}}"
+        },
+        "netconf": {
+          "enabled": true,
+          "config": "yang-interfaces aaa authentication method-list {{tacacs.authMethod}}\nyang-interfaces aaa authorization method-list {{tacacs.authzMethod}}"
+        },
+        "sshVty": {
+          "enabled": true,
+          "timeout": 30,
+          "config": "line vty 0 97\n exec-timeout {{timeout}} 0\n login authentication {{tacacs.authMethod}}\n authorization exec {{tacacs.authzMethod}}\n transport preferred none\n transport input ssh\n transport output none"
+        },
+        "consoleLine": {
+          "enabled": true,
+          "timeout": 15,
+          "config": "line con 0\n exec-timeout {{timeout}} 0\n transport preferred none\n login authentication {{tacacs.authMethod}}\n authorization exec {{tacacs.authzMethod}}"
+        }
+      }
+    },
+    "radius": {
+      "authenticationMethods": [
+        {
+          "id": "group-local",
+          "name": "RADIUS Group then Local",
+          "description": "Authenticate using RADIUS server group first, then fallback to local database if server unreachable",
+          "recommended": true,
+          "config": "aaa authentication login {{radius.authMethod}} group {{radius.serverGroup}} local"
+        },
+        {
+          "id": "local-group",
+          "name": "Local then RADIUS Group",
+          "description": "Authenticate using local database first, then try RADIUS server group",
+          "recommended": false,
+          "config": "aaa authentication login {{radius.authMethod}} local group {{radius.serverGroup}}"
+        },
+        {
+          "id": "group-only",
+          "name": "RADIUS Group Only",
+          "description": "Authenticate using RADIUS server group only, no fallback (warning: may lock out access)",
+          "recommended": false,
+          "config": "aaa authentication login {{radius.authMethod}} group {{radius.serverGroup}}"
+        }
+      ],
+      "authorizationMethods": [
+        {
+          "id": "exec-auth",
+          "name": "EXEC Authorization",
+          "description": "Authorize EXEC sessions through RADIUS",
+          "recommended": true,
+          "config": "aaa authorization exec {{radius.authMethod}} group {{radius.serverGroup}} local if-authenticated"
+        }
+      ],
+      "consoleAuthorization": {
+        "enabled": true,
+        "description": "Enable authorization for console connections",
+        "config": "aaa authorization console"
+      },
+      "accountingMethods": [
+        {
+          "id": "exec-acct",
+          "name": "EXEC Accounting",
+          "description": "Log EXEC session start and stop to RADIUS server",
+          "recommended": true,
+          "config": "aaa accounting exec default start-stop group {{radius.serverGroup}}"
+        }
+      ],
+      "serverOptions": [
+        {
+          "id": "server-timeout",
+          "name": "Server Timeout",
+          "description": "Timeout in seconds before trying next server",
+          "default": 5,
+          "min": 1,
+          "max": 60,
+          "config": "timeout {{value}}"
+        },
+        {
+          "id": "retransmit",
+          "name": "Retransmit Count",
+          "description": "Number of times to retransmit request to server",
+          "default": 2,
+          "min": 1,
+          "max": 10,
+          "config": "retransmit {{value}}"
+        },
+        {
+          "id": "key-encryption",
+          "name": "Key Encryption Type",
+          "description": "Method of key encryption for RADIUS server",
+          "options": [
+            {
+              "id": "type-0",
+              "name": "Type 0 (Clear Text)",
+              "recommended": false
+            },
+            {
+              "id": "type-7",
+              "name": "Type 7 (Weak Encryption)",
+              "recommended": false
+            },
+            {
+              "id": "type-8",
+              "name": "Type 8 (PBKDF2 SHA-256)",
+              "recommended": true
+            }
+          ],
+          "config": "key {{type}} {{key}}"
+        },
+        {
+          "id": "server-probe",
+          "name": "Server Test",
+          "description": "Probe radius server periodically to verify it's available",
+          "default": true,
+          "config": "automate-tester username {{testUsername}} probe-on"
+        }
+      ],
+      "loadBalancingMethods": [
+        {
+          "id": "none",
+          "name": "No Load Balancing",
+          "description": "Primary/Secondary server model",
+          "recommended": false
+        },
+        {
+          "id": "least-outstanding",
+          "name": "Least Outstanding",
+          "description": "Send new requests to the server with the fewest pending requests",
+          "recommended": true,
+          "config": "radius-server load-balance method least-outstanding"
+        }
+      ],
+      "deadtimeSettings": {
+        "enabled": true,
+        "description": "Time in minutes to skip unresponsive servers",
+        "default": 15,
+        "min": 1,
+        "max": 60,
+        "config": "deadtime {{value}}"
+      },
+      "deadCriteriaSettings": {
+        "enabled": true,
+        "time": {
+          "description": "Time in seconds without response to mark server as dead",
+          "default": 5,
+          "min": 1,
+          "max": 120
+        },
+        "tries": {
+          "description": "Number of consecutive timeouts to mark server as dead",
+          "default": 3,
+          "min": 1,
+          "max": 10
+        },
+        "config": "radius-server dead-criteria time {{time}} tries {{tries}}"
+      },
+      "serviceConfig": {
+        "authMethodList": "ML-RAD-ADMIN-AUTHC",
+        "webGui": {
+          "enabled": true,
+          "config": "ip http authentication aaa login-authentication {{radius.authMethod}}\nip http authentication aaa exec-authorization {{radius.authMethod}}"
+        },
+        "netconf": {
+          "enabled": true,
+          "config": "yang-interfaces aaa authentication method-list {{radius.authMethod}}\nyang-interfaces aaa authorization method-list {{radius.authMethod}}"
+        },
+        "sshVty": {
+          "enabled": true,
+          "timeout": 30,
+          "config": "line vty 0 97\n exec-timeout {{timeout}} 0\n login authentication {{radius.authMethod}}\n authorization exec {{radius.authMethod}}\n transport preferred none\n transport input ssh\n transport output none"
+        },
+        "consoleLine": {
+          "enabled": true,
+          "timeout": 15,
+          "config": "line con 0\n exec-timeout {{timeout}} 0\n transport preferred none\n login authentication {{radius.authMethod}}\n authorization exec {{radius.authMethod}}"
+        }
+      }
+    }
+  }
+}

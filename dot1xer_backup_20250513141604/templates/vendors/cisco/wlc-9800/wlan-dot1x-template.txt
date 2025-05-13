@@ -1,0 +1,65 @@
+! Cisco WLC 9800 WLAN 802.1X Configuration Template
+! Based on best practices for 802.1X wireless deployment
+!
+! AAA Configuration
+aaa new-model
+aaa authentication dot1x {{DOT1X_METHOD_NAME}} group {{RADIUS_GROUP}}
+aaa authorization network {{DOT1X_AUTHZ_NAME}} group {{RADIUS_GROUP}}
+aaa accounting identity {{DOT1X_ACCT_NAME}} start-stop group {{RADIUS_GROUP}}
+
+! RADIUS Server Configuration
+radius server {{RADIUS_SERVER_1}}
+ address ipv4 {{RADIUS_SERVER_1_IP}} auth-port 1812 acct-port 1813
+ key {{RADIUS_SERVER_1_KEY}}
+ timeout 5
+ retransmit 3
+
+radius server {{RADIUS_SERVER_2}}
+ address ipv4 {{RADIUS_SERVER_2_IP}} auth-port 1812 acct-port 1813
+ key {{RADIUS_SERVER_2_KEY}}
+ timeout 5
+ retransmit 3
+
+! RADIUS Server Group
+aaa group server radius {{RADIUS_GROUP}}
+ server name {{RADIUS_SERVER_1}}
+ server name {{RADIUS_SERVER_2}}
+ deadtime 15
+ 
+! Change of Authorization (CoA)
+aaa server radius dynamic-author
+ client {{RADIUS_SERVER_1_IP}} server-key {{RADIUS_SERVER_1_KEY}}
+ client {{RADIUS_SERVER_2_IP}} server-key {{RADIUS_SERVER_2_KEY}}
+ auth-type any
+
+! Configure WLAN for 802.1X
+wlan {{WLAN_NAME}} {{WLAN_ID}} {{WLAN_SSID}}
+ accounting-list {{DOT1X_ACCT_NAME}}
+ client vlan {{CLIENT_VLAN}}
+ security dot1x authentication-list {{DOT1X_METHOD_NAME}}
+ security wpa
+ security wpa wpa2
+ security wpa wpa2 ciphers aes
+ security wpa akm dot1x
+ session-timeout 86400
+ no shutdown
+
+! Associate WLAN with wireless policy profile
+wireless profile policy {{POLICY_PROFILE}}
+ aaa-override
+ accounting-list {{DOT1X_ACCT_NAME}}
+ vlan {{CLIENT_VLAN}}
+ no shutdown
+
+! Configure policy tag and wireless tag
+wireless tag policy {{POLICY_TAG_NAME}}
+ wlan {{WLAN_NAME}} policy {{POLICY_PROFILE}}
+
+! Apply tags to access points
+ap {{AP_NAME}}
+ policy-tag {{POLICY_TAG_NAME}}
+ ! Add other required tags
+
+! Optionally apply tags to AP groups or all APs
+wireless tag policy {{POLICY_TAG_NAME}}
+ deploy

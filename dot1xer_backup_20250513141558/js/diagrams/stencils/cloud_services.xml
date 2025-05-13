@@ -1,0 +1,37 @@
+<shapes name="Cloud Services">
+  <shape name="Azure AD" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/cloud/azure/active_directory.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Certificate" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/certificates/certificate.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Certificate Authority" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/certificates/ca.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Smart Card" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/certificates/smart_card.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="MFA" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/security/mfa.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="ServiceNow" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/services/servicenow.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Jira" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/services/jira.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

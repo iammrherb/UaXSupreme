@@ -1,39 +1,65 @@
-# Dot1Xer Supreme Enterprise Edition
+# Dot1Xer Core Edition
+
+A streamlined 802.1X configuration generator for network devices.
 
 ## Overview
 
-Dot1Xer Supreme Enterprise Edition is a comprehensive 802.1X configuration and documentation platform. It provides:
-
-- Multi-vendor 802.1X configuration generation
-- Detailed deployment documentation
-- Architecture diagram generation
-- Project planning and scoping tools
-- AI-assisted optimization
-- Export capabilities (PDF, Word, PowerPoint)
+Dot1Xer Core Edition is a simplified version of the original Dot1Xer tool, focusing on essential 802.1X configuration generation without deployment-specific code, environment dependencies, or bloated features.
 
 ## Features
 
-- **Comprehensive Vendor Support**: Configure 802.1X for all major network vendors including Cisco, Aruba, Juniper, HP, Extreme, Fortinet, Dell, Huawei, and more
-- **Security Protocol Support**: 802.1X, MAB, WebAuth, RADIUS, TACACS+, CoA, RadSec, MACsec
-- **Deployment Planning**: Checklists, timelines, and industry-specific best practices
-- **Documentation Generation**: Create detailed project documentation in multiple formats
-- **Architecture Diagrams**: Generate network architecture diagrams
-- **AI Integration**: Leverage AI for configuration optimization and assistance
+- Support for major network vendors (Cisco, Aruba, Juniper, HP)
+- 802.1X and MAB authentication configuration
+- RADIUS server settings
+- VLAN assignment
+- Security features (DHCP Snooping, DAI, IP Source Guard)
+- Easy-to-use web interface
 
-## Getting Started
+## Project Structure
 
-1. Open `index.html` in your web browser
-2. Select your network vendor and platform
+```
+.
+├── assets/
+│   ├── images/
+│   └── logos/
+├── css/
+│   ├── main.css           # Main stylesheet
+│   ├── vendor-cards.css   # Vendor selection styling
+│   └── help.css           # Help tooltips styling
+├── js/
+│   ├── main.js            # Core initialization
+│   ├── vendors.js         # Vendor definitions
+│   ├── ui.js              # UI functionality
+│   └── config-generator.js # Configuration generation
+├── index.html             # Main application page
+└── README.md              # This file
+```
+
+## Usage
+
+1. Open `index.html` in a web browser
+2. Select your network device vendor and platform
 3. Configure authentication settings
-4. Customize security features
-5. Set network parameters
-6. Generate your configuration
+4. Configure security features
+5. Set up VLANs and interfaces
+6. Generate your 802.1X configuration
+7. Copy or download the configuration
 
-## Requirements
+## Cleanup Process
 
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Internet connection for downloading assets and AI features (optional)
+This repository was created by removing deployment, environment, and bloated code from the original project. The following files were removed or simplified:
+
+- Removed `js/checklist-handler.js`
+- Removed `auth-best-practices-final-part.txt`
+- Removed `Comprehensive 802.1X Deployment Checklist with IoT, Onboarding, Guest Access & Discovery.tsx`
+- Removed `js/diagrams.js` 
+- Simplified `js/config-generator.js`
+- Simplified `js/vendors.js`
+- Simplified `js/main.js`
+- Simplified `js/ui.js`
+- Simplified CSS files
+- Updated HTML to match simplified structure
 
 ## License
 
-Copyright � 2025 Dot1Xer Supreme Enterprise Edition
+MIT License

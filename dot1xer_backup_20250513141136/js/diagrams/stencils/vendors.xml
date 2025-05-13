@@ -1,0 +1,52 @@
+<shapes name="Vendors">
+  <shape name="Cisco Switch" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/cisco/switch.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Cisco Router" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/cisco/router.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Cisco Firewall" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/cisco/firewall.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Cisco Wireless AP" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/cisco/wireless_ap.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Aruba Switch" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/aruba/switch.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Aruba Wireless AP" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/aruba/wireless_ap.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Juniper Switch" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/juniper/switch.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Juniper Router" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/juniper/router.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Palo Alto Firewall" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/paloalto/firewall.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Fortinet Firewall" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/fortinet/firewall.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

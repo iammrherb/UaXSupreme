@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UaXSupreme Fix Bookmarklet</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+    h1, h2 { color: #2c3e50; }
+    .bookmarklet { display: inline-block; padding: 10px 15px; background-color: #3498db; color: white; border-radius: 4px; text-decoration: none; margin: 10px 0; }
+    .instructions { background-color: #f8f9fa; padding: 15px; border-radius: 4px; }
+    code { background-color: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>UaXSupreme Fix Bookmarklet</h1>
+  <p>Drag the bookmarklet below to your bookmarks bar. When you see script bleed on the UaXSupreme page, click the bookmarklet to fix it.</p>
+  
+  <a class="bookmarklet" href="javascript:(function(){
+    // Find all text nodes in the body
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const scriptPatterns = [
+      /#!/,
+      /print_message/,
+      /print_success/,
+      /print_warning/,
+      /print_error/,
+      /function [a-zA-Z0-9_]+\(\)/,
+      /echo -e/
+    ];
+    
+    // Check each text node for script content
+    const nodesToRemove = [];
+    while (node = walk.nextNode()) {
+      const text = node.nodeValue;
+      if (scriptPatterns.some(pattern => pattern.test(text))) {
+        nodesToRemove.push(node);
+      }
+    }
+    
+    // Remove text nodes with script content
+    nodesToRemove.forEach(node => {
+      node.parentNode.removeChild(node);
+    });
+    
+    // Create a notification
+    const notification = document.createElement('div');
+    notification.style.position = 'fixed';
+    notification.style.bottom = '20px';
+    notification.style.right = '20px';
+    notification.style.padding = '10px 15px';
+    notification.style.backgroundColor = '#27ae60';
+    notification.style.color = 'white';
+    notification.style.borderRadius = '4px';
+    notification.style.zIndex = '9999';
+    notification.textContent = `Removed ${nodesToRemove.length} script content nodes`;
+    
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+  })();">Fix Script Bleed</a>
+  
+  <h2>Instructions</h2>
+  <div class="instructions">
+    <ol>
+      <li>Drag the "Fix Script Bleed" bookmarklet to your bookmarks bar</li>
+      <li>When you see script content on the UaXSupreme page, click the bookmarklet</li>
+      <li>The script will remove visible script content from the page</li>
+      <li>This is a temporary fix for viewing the page - to permanently fix the issue, use the <code>clean-index.html.sh</code> script</li>
+    </ol>
+  </div>
+  
+  <h2>Permanent Solution</h2>
+  <p>For a permanent fix, run the shell script created earlier:</p>
+  <code>./clean-index.html.sh</code>
+</body>
+</html>

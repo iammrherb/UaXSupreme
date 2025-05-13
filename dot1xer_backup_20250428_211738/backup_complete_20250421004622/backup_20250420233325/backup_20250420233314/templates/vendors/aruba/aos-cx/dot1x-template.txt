@@ -1,0 +1,72 @@
+! Aruba AOS-CX 802.1X Configuration Template
+! Based on best practices for 802.1X deployments
+!
+! RADIUS Authentication Configuration
+radius-server host {{RADIUS_SERVER_1_IP}} key {{RADIUS_SERVER_1_KEY}}
+radius-server host {{RADIUS_SERVER_2_IP}} key {{RADIUS_SERVER_2_KEY}}
+
+radius-server host {{RADIUS_SERVER_1_IP}} auth-port 1812 acct-port 1813
+radius-server host {{RADIUS_SERVER_2_IP}} auth-port 1812 acct-port 1813
+
+radius-server retransmit 3
+radius-server timeout 5
+
+! AAA Configuration
+aaa authentication port-access eap-radius
+aaa authentication dot1x default radius local
+aaa authentication mac-auth default radius local
+aaa authorization network default radius
+aaa accounting network start-stop radius
+
+! 802.1X and MAC Authentication Timers
+aaa port-access auth-failure-vlan {{AUTH_FAILURE_VLAN}}
+aaa port-access critical-vlan {{CRITICAL_VLAN}}
+aaa port-access guest-vlan {{GUEST_VLAN}}
+
+aaa port-access authenticator active
+aaa port-access authenticator reauth-period {{REAUTH_PERIOD}}
+aaa port-access authenticator quiet-period {{QUIET_PERIOD}}
+aaa port-access authenticator tx-period {{TX_PERIOD}}
+aaa port-access authenticator max-requests {{MAX_REQUEST}}
+aaa port-access authenticator max-retries {{MAX_RETRIES}}
+
+! Define 802.1X Authentication Profiles
+aaa port-access authentication {{DOT1X_PROFILE}}
+ authenticator
+ active
+ control unauthorized
+ interface-mode port-control-mode
+ use-lldp
+ allow-mbv
+ multiauth
+ reauthenticate
+ reauth-period {{REAUTH_PERIOD}}
+ auth-fail-vlan {{AUTH_FAILURE_VLAN}}
+ critical-vlan {{CRITICAL_VLAN}}
+ voice-vlan {{VOICE_VLAN}}
+
+! Define MAC Authentication Profiles
+aaa port-access mac-auth {{MAB_PROFILE}}
+ addr-format no-delimiter uppercase
+ auth-vid {{AUTH_VLAN}}
+ unauth-vid {{UNAUTH_VLAN}}
+ reauth-period {{REAUTH_PERIOD}}
+
+! Interface Configuration (Access Ports)
+interface {{ACCESS_INTERFACE_RANGE}}
+ no routing
+ vlan access {{UNAUTH_VLAN}}
+ aaa port-access authentication {{DOT1X_PROFILE}}
+ aaa port-access mac-auth {{MAB_PROFILE}}
+ spanning-tree bpdu-protection
+ spanning-tree port-type admin-edge
+ voice-vlan {{VOICE_VLAN}}
+ no shutdown
+
+! Interface Configuration (Trunk Ports)
+interface {{TRUNK_INTERFACE}}
+ no routing
+ vlan trunk native {{NATIVE_VLAN}}
+ vlan trunk allowed {{ALLOWED_VLAN_LIST}}
+ no aaa port-access
+ no shutdown

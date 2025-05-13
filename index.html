@@ -3,1171 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dot1Xer Supreme Enterprise Edition</title>
+    <title>Dot1Xer Core Edition - 802.1X Configuration Tool</title>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/vendors.css">
+    <link rel="stylesheet" href="css/vendor-cards.css">
     <link rel="stylesheet" href="css/help.css">
-    <!-- External libraries -->
-    <script src="lib/jspdf.min.js"></script>
-    <script src="lib/html2canvas.min.js"></script>
-    <script src="lib/FileSaver.min.js"></script>
-    <script src="lib/ai-integration.js"></script>
-<link rel="stylesheet" href="css/vendor-fix.css">
+    <!-- Enhanced UI styles -->
+    <link rel="stylesheet" href="css/enhanced/dot1xer-ui.css">
 </head>
 <body>
     <header>
         <div class="header-container">
             <a href="index.html" class="logo">
-                <img src="assets/images/logo.svg" alt="Dot1Xer Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\'%3E%3Crect width=\'40\' height=\'40\' fill=\'%230077cc\' rx=\'5\'/%3E%3Ctext x=\'20\' y=\'25\' font-family=\'Arial\' font-size=\'20\' text-anchor=\'middle\' fill=\'white\'%3E1X%3C/text%3E%3C/svg%3E';">
-                Dot1Xer Supreme
+                <img src="assets/images/logo.png" alt="Dot1Xer Logo">
+                Dot1Xer Core Edition
             </a>
             <nav>
                 <ul>
-                    <li><a href="#" id="questionnaire-link">Project Questionnaire</a></li>
-                    <li><a href="#" id="checklist-link">Deployment Checklist</a></li>
-                    <li><a href="#" id="help-link">Help</a></li>
                     <li><a href="#" id="settings-link">Settings</a></li>
-                    <li><a href="#" id="about-link">About</a></li>
+                    <li><a href="https://github.com/yourusername/dot1xer" target="_blank">GitHub</a></li>
                 </ul>
             </nav>
         </div>
-        
-        <div class="video-banner" id="video-banner">
-            <!-- Video will be loaded here via JavaScript -->
-            <div class="video-overlay">
-                <h1 class="banner-title">Dot1Xer Supreme</h1>
-                <p class="banner-subtitle">Comprehensive 802.1X Configuration & Management Platform</p>
-            </div>
-        </div>
     </header>
-    
+
     <main>
         <div class="container">
             <div class="card main-card">
                 <div class="tabs">
-                    <div class="tab active" data-tab="platform">Platform</div>
-                    <div class="tab" data-tab="authentication">Authentication</div>
-                    <div class="tab" data-tab="security">Security</div>
-                    <div class="tab" data-tab="network">Network</div>
-                    <div class="tab" data-tab="advanced">Advanced</div>
-                    <div class="tab" data-tab="preview">Preview</div>
+                    <div class="tab active" data-tab="platform">1. Platform</div>
+                    <div class="tab" data-tab="authentication">2. Authentication</div>
+                    <div class="tab" data-tab="security">3. Security</div>
+                    <div class="tab" data-tab="network">4. Network</div>
+                    <div class="tab" data-tab="advanced">5. Advanced</div>
+                    <div class="tab" data-tab="preview">6. Preview</div>
                 </div>
-                
                 <div class="tab-content">
                     <!-- Platform Tab -->
-                    <div class="tab-pane active" id="platform">
-                        <h2>Select Vendor and Platform</h2>
+                    <div id="platform" class="tab-pane active">
+                        <h2>Select Network Platform</h2>
+                        <p>Choose your network device vendor and platform to generate 802.1X configuration.</p>
                         
-                        <div class="panel">
-                            <h3>Vendor Selection</h3>
-                            <div id="vendor-grid" class="vendor-grid"></div>
+                        <div id="vendor-grid" class="vendor-grid">
+                            <!-- Vendor icons will be inserted here by JavaScript -->
                         </div>
                         
-                        <div class="panel">
-                            <h3>Platform Details</h3>
-                            <div class="form-group">
-                                <label for="platform-select">Device Platform</label>
-                                <select id="platform-select" class="form-control">
-                                    <option value="">Select a vendor first</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="software-version">Software Version</label>
-                                <input type="text" id="software-version" class="form-control" placeholder="e.g., 17.3.5">
-                            </div>
+                        <div class="form-group">
+                            <label for="platform-select">Select Platform:</label>
+                            <select id="platform-select" class="form-control" disabled>
+                                <option value="">Select a vendor first</option>
+                            </select>
+                        </div>
+                        
+                        <div id="platform-details">
+                            <p>Please select a vendor and platform to view details.</p>
                         </div>
                         
                         <div class="actions">
-                            <button id="platform-next" class="btn next">Next: Authentication</button>
+                            <div></div>
+                            <button id="platform-next" class="btn next" disabled>Next</button>
                         </div>
                     </div>
                     
                     <!-- Authentication Tab -->
-                    <div class="tab-pane" id="authentication">
+                    <div id="authentication" class="tab-pane">
                         <h2>Authentication Settings</h2>
                         
-                        <div class="panel">
-                            <h3>Authentication Method</h3>
-                            <div class="form-group">
-                                <label for="auth-method">Primary Method</label>
-                                <select id="auth-method" class="form-control">
-                                    <option value="dot1x">802.1X Only</option>
-                                    <option value="mab">MAC Authentication Bypass Only</option>
-                                    <option value="dot1x-mab">802.1X with MAB Fallback</option>
-                                    <option value="concurrent">802.1X and MAB Concurrent</option>
-                                    <option value="dot1x-mab-webauth">802.1X + MAB + WebAuth</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="auth-mode">Authentication Mode</label>
-                                <div class="radio-group">
-                                    <div class="radio">
-                                        <input type="radio" id="auth-mode-open" name="auth-mode" value="open">
-                                        <label for="auth-mode-open">Open (Monitor Mode)</label>
-                                    </div>
-                                    <div class="radio">
-                                        <input type="radio" id="auth-mode-closed" name="auth-mode" value="closed" checked>
-                                        <label for="auth-mode-closed">Closed (Enforced Mode)</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="host-mode">Host Mode</label>
-                                <select id="host-mode" class="form-control">
-                                    <option value="multi-auth">Multi-Auth (Multiple Devices)</option>
-                                    <option value="multi-domain">Multi-Domain (1 Data + 1 Voice)</option>
-                                    <option value="single-host">Single-Host (1 Device Total)</option>
-                                    <option value="multi-host">Multi-Host (1 Auth, Multiple Devices)</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="auth-method">Authentication Method:</label>
+                            <select id="auth-method" class="form-control">
+                                <option value="dot1x">802.1X Authentication Only</option>
+                                <option value="mab">MAC Authentication Bypass Only</option>
+                                <option value="dot1x-mab">802.1X with MAB Fallback</option>
+                                <option value="concurrent">802.1X and MAB Concurrent</option>
+                            </select>
                         </div>
                         
-                        <div class="panel">
-                            <h3>RADIUS Configuration</h3>
-                            <div class="form-group">
-                                <label for="radius-server-1">Primary RADIUS Server</label>
-                                <input type="text" id="radius-server-1" class="form-control" placeholder="e.g., 10.1.1.100">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-port-1">Primary RADIUS Ports</label>
-                                <div class="input-group">
-                                    <input type="number" id="radius-auth-port-1" class="form-control" placeholder="Auth Port" value="1812">
-                                    <input type="number" id="radius-acct-port-1" class="form-control" placeholder="Acct Port" value="1813">
+                        <div class="form-group">
+                            <label>Authentication Mode:</label>
+                            <div class="radio-group">
+                                <div class="radio">
+                                    <input type="radio" id="auth-mode-closed" name="auth-mode" value="closed" checked>
+                                    <label for="auth-mode-closed">Closed Mode (Secure)</label>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-secret-1">Primary RADIUS Secret</label>
-                                <input type="password" id="radius-secret-1" class="form-control" placeholder="Shared secret key">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-server-2">Secondary RADIUS Server</label>
-                                <input type="text" id="radius-server-2" class="form-control" placeholder="e.g., 10.1.1.101">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-port-2">Secondary RADIUS Ports</label>
-                                <div class="input-group">
-                                    <input type="number" id="radius-auth-port-2" class="form-control" placeholder="Auth Port" value="1812">
-                                    <input type="number" id="radius-acct-port-2" class="form-control" placeholder="Acct Port" value="1813">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-secret-2">Secondary RADIUS Secret</label>
-                                <input type="password" id="radius-secret-2" class="form-control" placeholder="Shared secret key">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-server-3">Tertiary RADIUS Server</label>
-                                <input type="text" id="radius-server-3" class="form-control" placeholder="e.g., 10.1.1.102">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-port-3">Tertiary RADIUS Ports</label>
-                                <div class="input-group">
-                                    <input type="number" id="radius-auth-port-3" class="form-control" placeholder="Auth Port" value="1812">
-                                    <input type="number" id="radius-acct-port-3" class="form-control" placeholder="Acct Port" value="1813">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="radius-secret-3">Tertiary RADIUS Secret</label>
-                                <input type="password" id="radius-secret-3" class="form-control" placeholder="Shared secret key">
-                            </div>
-                            
-                            <div class="expandable-header">Advanced RADIUS Settings</div>
-                            <div class="expandable-content">
-                                <div class="form-group">
-                                    <label for="radius-timeout">RADIUS Timeout (seconds)</label>
-                                    <input type="number" id="radius-timeout" class="form-control" value="5">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radius-retransmit">RADIUS Retransmit Count</label>
-                                    <input type="number" id="radius-retransmit" class="form-control" value="3">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radius-deadtime">RADIUS Deadtime (minutes)</label>
-                                    <input type="number" id="radius-deadtime" class="form-control" value="15">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radius-attribute-format">RADIUS Attribute Format</label>
-                                    <select id="radius-attribute-format" class="form-control">
-                                        <option value="standard">Standard</option>
-                                        <option value="cisco-acs">Cisco ACS</option>
-                                        <option value="cisco-ise">Cisco ISE</option>
-                                        <option value="aruba-clearpass">Aruba ClearPass</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radius-nas-id">RADIUS NAS-ID</label>
-                                    <input type="text" id="radius-nas-id" class="form-control" placeholder="Network Access Server ID">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radius-nas-ip">RADIUS NAS-IP</label>
-                                    <input type="text" id="radius-nas-ip" class="form-control" placeholder="NAS IP Address">
+                                <div class="radio">
+                                    <input type="radio" id="auth-mode-open" name="auth-mode" value="open">
+                                    <label for="auth-mode-open">Open Mode (Permissive)</label>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="panel">
-                            <h3>TACACS+ Configuration</h3>
+                        <div class="form-group">
+                            <label for="host-mode">Host Mode:</label>
+                            <select id="host-mode" class="form-control">
+                                <option value="single-host">Single-Host (One device per port)</option>
+                                <option value="multi-host">Multi-Host (Multiple devices, single authentication)</option>
+                                <option value="multi-auth" selected>Multi-Auth (Multiple devices, individual authentication)</option>
+                                <option value="multi-domain">Multi-Domain (Data + Voice)</option>
+                            </select>
+                        </div>
+                        
+                        <h3>RADIUS Server Settings</h3>
+                        
+                        <div class="form-group">
+                            <label for="radius-server-1">Primary RADIUS Server:</label>
+                            <input type="text" id="radius-server-1" class="form-control" placeholder="e.g., 10.1.1.1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="radius-key-1">RADIUS Secret Key:</label>
+                            <input type="password" id="radius-key-1" class="form-control" placeholder="Enter RADIUS shared secret">
+                        </div>
+                        
+                        <div class="input-group">
                             <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="use-tacacs">
-                                    <label for="use-tacacs">Enable TACACS+ for Authentication</label>
-                                </div>
+                                <label for="radius-auth-port-1">Authentication Port:</label>
+                                <input type="number" id="radius-auth-port-1" class="form-control" value="1812">
                             </div>
-                            
-                            <div id="tacacs-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="tacacs-server-1">Primary TACACS+ Server</label>
-                                    <input type="text" id="tacacs-server-1" class="form-control" placeholder="e.g., 10.1.1.200">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="tacacs-port-1">TACACS+ Port</label>
-                                    <input type="number" id="tacacs-port-1" class="form-control" value="49">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="tacacs-secret-1">TACACS+ Secret</label>
-                                    <input type="password" id="tacacs-secret-1" class="form-control" placeholder="Shared secret key">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="tacacs-server-2">Secondary TACACS+ Server</label>
-                                    <input type="text" id="tacacs-server-2" class="form-control" placeholder="e.g., 10.1.1.201">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="tacacs-secret-2">Secondary TACACS+ Secret</label>
-                                    <input type="password" id="tacacs-secret-2" class="form-control" placeholder="Shared secret key">
-                                </div>
+                            <div class="form-group">
+                                <label for="radius-acct-port-1">Accounting Port:</label>
+                                <input type="number" id="radius-acct-port-1" class="form-control" value="1813">
                             </div>
                         </div>
                         
-                        <div class="panel">
-                            <h3>Authentication Timers</h3>
-                            <div class="form-group">
-                                <label for="reauth-period">Reauthentication Period (seconds)</label>
-                                <input type="number" id="reauth-period" class="form-control" value="3600">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="tx-period">Transmit Period (seconds)</label>
-                                <input type="number" id="tx-period" class="form-control" value="30">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="quiet-period">Quiet Period (seconds)</label>
-                                <input type="number" id="quiet-period" class="form-control" value="60">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="max-reauth">Maximum Reauth Attempts</label>
-                                <input type="number" id="max-reauth" class="form-control" value="2">
+                        <div class="form-group">
+                            <label for="radius-server-2">Secondary RADIUS Server (Optional):</label>
+                            <input type="text" id="radius-server-2" class="form-control" placeholder="e.g., 10.1.1.2">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="radius-key-2">Secondary RADIUS Secret Key:</label>
+                            <input type="password" id="radius-key-2" class="form-control" placeholder="Enter secondary RADIUS shared secret">
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-accounting">
+                                <label for="enable-accounting">Enable RADIUS Accounting</label>
                             </div>
                         </div>
                         
                         <div class="actions">
-                            <button id="auth-prev" class="btn prev">Previous: Platform</button>
-                            <button id="auth-next" class="btn next">Next: Security</button>
+                            <button id="auth-prev" class="btn prev">Previous</button>
+                            <button id="auth-next" class="btn next">Next</button>
                         </div>
                     </div>
                     
                     <!-- Security Tab -->
-                    <div class="tab-pane" id="security">
-                        <h2>Security Settings</h2>
+                    <div id="security" class="tab-pane">
+                        <h2>Security Features</h2>
                         
-                        <div class="panel">
-                            <h3>RADIUS Security Features</h3>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="use-coa" checked>
-                                    <label for="use-coa">Enable RADIUS Change of Authorization (CoA)</label>
+                        <div class="form-group">
+                            <label>Authentication Timing:</label>
+                            <div class="input-group">
+                                <div class="form-group">
+                                    <label for="reauth-period">Reauthentication Period (seconds):</label>
+                                    <input type="number" id="reauth-period" class="form-control" value="3600">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tx-period">TX Period (seconds):</label>
+                                    <input type="number" id="tx-period" class="form-control" value="30">
                                 </div>
                             </div>
-                            
-                            <div id="coa-settings" class="nested-settings">
+                            <div class="input-group">
                                 <div class="form-group">
-                                    <label for="coa-port">CoA Port</label>
-                                    <input type="number" id="coa-port" class="form-control" value="1700">
+                                    <label for="quiet-period">Quiet Period (seconds):</label>
+                                    <input type="number" id="quiet-period" class="form-control" value="60">
                                 </div>
-                                
                                 <div class="form-group">
-                                    <label for="coa-bounce-port">Enable Port Bounce for CoA</label>
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="coa-bounce-port" checked>
-                                        <label for="coa-bounce-port">Allow port-bounce for session termination</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="coa-reauth">Enable Reauthentication for CoA</label>
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="coa-reauth" checked>
-                                        <label for="coa-reauth">Allow reauthentication requests</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-accounting" checked>
-                                    <label for="enable-accounting">Enable RADIUS Accounting</label>
-                                </div>
-                            </div>
-                            
-                            <div id="accounting-settings" class="nested-settings">
-                                <div class="form-group">
-                                    <label for="accounting-update">Accounting Update Interval (minutes)</label>
-                                    <input type="number" id="accounting-update" class="form-control" value="30">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="accounting-interim" checked>
-                                        <label for="accounting-interim">Send Interim Accounting Updates</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="use-radsec">
-                                    <label for="use-radsec">Enable RadSec (RADIUS over TLS)</label>
-                                </div>
-                            </div>
-                            
-                            <div id="radsec-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="radsec-port">RadSec Port</label>
-                                    <input type="number" id="radsec-port" class="form-control" value="2083">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radsec-cert">TLS Certificate</label>
-                                    <input type="text" id="radsec-cert" class="form-control" placeholder="Certificate name">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="radsec-ca">CA Certificate</label>
-                                    <input type="text" id="radsec-ca" class="form-control" placeholder="CA Certificate name">
+                                    <label for="max-reauth">Max Retries:</label>
+                                    <input type="number" id="max-reauth" class="form-control" value="2">
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="panel">
-                            <h3>Data Protection</h3>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="use-macsec">
-                                    <label for="use-macsec">Enable MACsec (802.1AE)</label>
-                                </div>
-                            </div>
-                            
-                            <div id="macsec-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="macsec-policy">MACsec Policy</label>
-                                    <select id="macsec-policy" class="form-control">
-                                        <option value="must-secure">Must Secure</option>
-                                        <option value="should-secure" selected>Should Secure</option>
-                                        <option value="must-not-secure">Must Not Secure</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="macsec-cipher">MACsec Cipher Suite</label>
-                                    <select id="macsec-cipher" class="form-control">
-                                        <option value="gcm-aes-128">GCM-AES-128</option>
-                                        <option value="gcm-aes-256" selected>GCM-AES-256</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="macsec-include-sci" checked>
-                                        <label for="macsec-include-sci">Include SCI (Secure Channel Identifier)</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="macsec-replay-protection" checked>
-                                        <label for="macsec-replay-protection">Enable Replay Protection</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="macsec-replay-window">Replay Window Size</label>
-                                    <input type="number" id="macsec-replay-window" class="form-control" value="0">
-                                </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="use-coa">
+                                <label for="use-coa">Enable RADIUS Change of Authorization (CoA)</label>
                             </div>
                         </div>
                         
-                        <div class="panel">
-                            <h3>Additional Protections</h3>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-dhcp-snooping" checked>
-                                    <label for="enable-dhcp-snooping">Enable DHCP Snooping</label>
-                                </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="use-radsec">
+                                <label for="use-radsec">Enable RadSec (RADIUS over TLS)</label>
                             </div>
-                            
-                            <div id="dhcp-snooping-settings" class="nested-settings">
-                                <div class="form-group">
-                                    <label for="dhcp-rate-limit">DHCP Rate Limit (packets/sec)</label>
-                                    <input type="number" id="dhcp-rate-limit" class="form-control" value="20">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="dhcp-option82" checked>
-                                        <label for="dhcp-option82">Enable DHCP Option 82 (Circuit ID)</label>
-                                    </div>
-                                </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="use-macsec">
+                                <label for="use-macsec">Enable MACsec (802.1AE)</label>
                             </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-dai">
-                                    <label for="enable-dai">Enable Dynamic ARP Inspection</label>
-                                </div>
+                        </div>
+                        
+                        <h3>Additional Security Features</h3>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-dhcp-snooping">
+                                <label for="enable-dhcp-snooping">Enable DHCP Snooping</label>
                             </div>
-                            
-                            <div id="dai-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="dai-validate-src-mac" checked>
-                                        <label for="dai-validate-src-mac">Validate Source MAC</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="dai-validate-dst-mac" checked>
-                                        <label for="dai-validate-dst-mac">Validate Destination MAC</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="dai-validate-ip" checked>
-                                        <label for="dai-validate-ip">Validate IP Address</label>
-                                    </div>
-                                </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-dai">
+                                <label for="enable-dai">Enable Dynamic ARP Inspection</label>
                             </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-ipsg">
-                                    <label for="enable-ipsg">Enable IP Source Guard</label>
-                                </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-ipsg">
+                                <label for="enable-ipsg">Enable IP Source Guard</label>
                             </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-storm-control">
-                                    <label for="enable-storm-control">Enable Storm Control</label>
-                                </div>
-                            </div>
-                            
-                            <div id="storm-control-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="storm-control-broadcast">Broadcast Storm Control (%)</label>
-                                    <input type="number" id="storm-control-broadcast" class="form-control" value="20">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="storm-control-multicast">Multicast Storm Control (%)</label>
-                                    <input type="number" id="storm-control-multicast" class="form-control" value="30">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="storm-control-unicast">Unicast Storm Control (%)</label>
-                                    <input type="number" id="storm-control-unicast" class="form-control" value="50">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-port-security">
-                                    <label for="enable-port-security">Enable Port Security</label>
-                                </div>
-                            </div>
-                            
-                            <div id="port-security-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="port-security-max-mac">Maximum MAC Addresses</label>
-                                    <input type="number" id="port-security-max-mac" class="form-control" value="1">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="port-security-violation">Violation Action</label>
-                                    <select id="port-security-violation" class="form-control">
-                                        <option value="protect">Protect</option>
-                                        <option value="restrict">Restrict</option>
-                                        <option value="shutdown" selected>Shutdown</option>
-                                    </select>
-                                </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-port-security">
+                                <label for="enable-port-security">Enable Port Security</label>
                             </div>
                         </div>
                         
                         <div class="actions">
-                            <button id="security-prev" class="btn prev">Previous: Authentication</button>
-                            <button id="security-next" class="btn next">Next: Network</button>
+                            <button id="security-prev" class="btn prev">Previous</button>
+                            <button id="security-next" class="btn next">Next</button>
                         </div>
                     </div>
                     
                     <!-- Network Tab -->
-                    <div class="tab-pane" id="network">
+                    <div id="network" class="tab-pane">
                         <h2>Network Settings</h2>
                         
-                        <div class="panel">
-                            <h3>VLAN Configuration</h3>
-                            <div class="form-group">
-                                <label for="vlan-auth">Authentication VLAN ID</label>
-                                <div class="input-group">
-                                    <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
-                                    <input type="text" id="vlan-auth-name" class="form-control" placeholder="VLAN Name (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-unauth">Unauthenticated VLAN ID</label>
-                                <div class="input-group">
-                                    <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
-                                    <input type="text" id="vlan-unauth-name" class="form-control" placeholder="VLAN Name (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-guest">Guest VLAN ID</label>
-                                <div class="input-group">
-                                    <input type="number" id="vlan-guest" class="form-control" placeholder="e.g., 900">
-                                    <input type="text" id="vlan-guest-name" class="form-control" placeholder="VLAN Name (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-voice">Voice VLAN ID</label>
-                                <div class="input-group">
-                                    <input type="number" id="vlan-voice" class="form-control" placeholder="e.g., 200">
-                                    <input type="text" id="vlan-voice-name" class="form-control" placeholder="VLAN Name (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="vlan-critical">Critical VLAN ID</label>
-                                <div class="input-group">
-                                    <input type="number" id="vlan-critical" class="form-control" placeholder="e.g., 998">
-                                    <input type="text" id="vlan-critical-name" class="form-control" placeholder="VLAN Name (optional)">
-                                </div>
-                            </div>
-                            
-                            <div class="expandable-header">Additional VLAN Options</div>
-                            <div class="expandable-content">
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="enable-dynamic-vlan" checked>
-                                        <label for="enable-dynamic-vlan">Enable Dynamic VLAN Assignment</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="enable-vlan-override">
-                                        <label for="enable-vlan-override">Allow Local VLAN Override</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="enable-voice-vlan-detection" checked>
-                                        <label for="enable-voice-vlan-detection">Enable Voice VLAN Detection (CDP/LLDP)</label>
-                                    </div>
-                                </div>
+                        <h3>VLAN Configuration</h3>
+                        
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="enable-dynamic-vlan" checked>
+                                <label for="enable-dynamic-vlan">Enable Dynamic VLAN Assignment</label>
                             </div>
                         </div>
                         
-                        <div class="panel">
-                            <h3>Interface Configuration</h3>
-                            <div class="form-group">
-                                <label for="interface">Interface to Configure</label>
-                                <input type="text" id="interface" class="form-control" placeholder="e.g., GigabitEthernet1/0/1" value="GigabitEthernet1/0/1">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="interface-range">Interface Range</label>
-                                <input type="text" id="interface-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="mgmt-interface">Management Interface</label>
-                                <input type="text" id="mgmt-interface" class="form-control" placeholder="e.g., Vlan10">
-                            </div>
-                            
-                            <div class="expandable-header">Interface Additional Settings</div>
-                            <div class="expandable-content">
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="interface-portfast" checked>
-                                        <label for="interface-portfast">Enable PortFast/Edge Port</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="interface-bpdu-guard" checked>
-                                        <label for="interface-bpdu-guard">Enable BPDU Guard</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="interface-admin-shutdown">
-                                        <label for="interface-admin-shutdown">Start Interface in Shutdown State</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="interface-mtu">Interface MTU</label>
-                                    <input type="number" id="interface-mtu" class="form-control" value="1500">
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="vlan-auth">Authentication VLAN ID:</label>
+                            <input type="number" id="vlan-auth" class="form-control" placeholder="e.g., 100">
                         </div>
                         
-                        <div class="panel">
-                            <h3>Device Tracking & Access Control</h3>
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-device-tracking" checked>
-                                    <label for="enable-device-tracking">Enable Device Tracking</label>
-                                </div>
-                            </div>
-                            
-                            <div id="device-tracking-settings" class="nested-settings">
-                                <div class="form-group">
-                                    <label for="device-tracking-interval">Tracking Interval (seconds)</label>
-                                    <input type="number" id="device-tracking-interval" class="form-control" value="30">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="device-tracking-ipv6">
-                                        <label for="device-tracking-ipv6">Enable IPv6 Tracking</label>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-acl">
-                                    <label for="enable-acl">Apply Access Control Lists</label>
-                                </div>
-                            </div>
-                            
-                            <div id="acl-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <label for="acl-name-auth">ACL for Authenticated Traffic</label>
-                                    <input type="text" id="acl-name-auth" class="form-control" placeholder="e.g., ACL-AUTH">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="acl-name-unauth">ACL for Unauthenticated Traffic</label>
-                                    <input type="text" id="acl-name-unauth" class="form-control" placeholder="e.g., ACL-UNAUTH">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="enable-dynamic-acl" checked>
-                                        <label for="enable-dynamic-acl">Enable Dynamic ACL Assignment</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="enable-redirect-acl">
-                                        <label for="enable-redirect-acl">Enable Redirect ACL for WebAuth</label>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="vlan-unauth">Unauthenticated VLAN ID:</label>
+                            <input type="number" id="vlan-unauth" class="form-control" placeholder="e.g., 999">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vlan-guest">Guest VLAN ID:</label>
+                            <input type="number" id="vlan-guest" class="form-control" placeholder="e.g., 900">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vlan-voice">Voice VLAN ID:</label>
+                            <input type="number" id="vlan-voice" class="form-control" placeholder="e.g., 200">
+                        </div>
+                        
+                        <h3>Interface Settings</h3>
+                        
+                        <div class="form-group">
+                            <label for="interface">Interface:</label>
+                            <input type="text" id="interface" class="form-control" placeholder="e.g., GigabitEthernet1/0/1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interface-range">Interface Range (Optional):</label>
+                            <input type="text" id="interface-range" class="form-control" placeholder="e.g., GigabitEthernet1/0/1-24">
                         </div>
                         
                         <div class="actions">
-                            <button id="network-prev" class="btn prev">Previous: Security</button>
-                            <button id="network-next" class="btn next">Next: Advanced</button>
+                            <button id="network-prev" class="btn prev">Previous</button>
+                            <button id="network-next" class="btn next">Next</button>
                         </div>
                     </div>
                     
                     <!-- Advanced Tab -->
-                    <div class="tab-pane" id="advanced">
+                    <div id="advanced" class="tab-pane">
                         <h2>Advanced Settings</h2>
                         
-                        <div class="panel">
-                            <h3>Deployment Strategy</h3>
-                            <div class="form-group">
-                                <div class="radio">
-                                    <input type="radio" id="deploy-monitor" name="deploy-strategy" value="monitor" checked>
-                                    <label for="deploy-monitor">Monitor Mode (Authentication without enforcement)</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="radio">
-                                    <input type="radio" id="deploy-low-impact" name="deploy-strategy" value="low-impact">
-                                    <label for="deploy-low-impact">Low Impact (Open Authentication with Guest VLAN)</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="radio">
-                                    <input type="radio" id="deploy-closed" name="deploy-strategy" value="closed">
-                                    <label for="deploy-closed">Closed Mode (Full 802.1X Enforcement)</label>
-                                </div>
-                            </div>
-                            
-                            <div class="expandable-header">Deployment Timeline</div>
-                            <div class="expandable-content">
-                                <div class="form-group">
-                                    <label for="phase1-duration">Phase 1 - Monitor Mode Duration (days)</label>
-                                    <input type="number" id="phase1-duration" class="form-control" value="30">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phase2-duration">Phase 2 - Low Impact Mode Duration (days)</label>
-                                    <input type="number" id="phase2-duration" class="form-control" value="15">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="phase3-date">Phase 3 - Full Enforcement Start Date</label>
-                                    <input type="date" id="phase3-date" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="panel">
-                            <h3>Industry-Specific Settings</h3>
-                            <div class="form-group">
-                                <label for="industry-type">Industry Vertical</label>
-                                <select id="industry-type" class="form-control">
-                                    <option value="enterprise">Enterprise (General Business)</option>
-                                    <option value="healthcare">Healthcare</option>
-                                    <option value="education">Education</option>
-                                    <option value="finance">Financial Services</option>
-                                    <option value="government">Government</option>
-                                    <option value="retail">Retail</option>
-                                    <option value="manufacturing">Manufacturing</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="apply-industry-templates">
-                                    <label for="apply-industry-templates">Apply Industry-Specific Templates</label>
-                                </div>
-                            </div>
-                            
-                            <div id="industry-settings" class="nested-settings" style="display: none;">
-                                <div class="form-group">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="compliance-mode" checked>
-                                        <label for="compliance-mode">Enable Compliance Mode</label>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="compliance-framework">Compliance Framework</label>
-                                    <select id="compliance-framework" class="form-control">
-                                        <option value="none">None</option>
-                                        <option value="pci">PCI DSS</option>
-                                        <option value="hipaa">HIPAA</option>
-                                        <option value="nist">NIST 800-53</option>
-                                        <option value="iso27001">ISO 27001</option>
-                                        <option value="fedramp">FedRAMP</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="panel">
-                            <h3>Additional Configuration</h3>
-                            <div class="form-group">
-                                <label for="additional-commands">Additional Commands</label>
-                                <textarea id="additional-commands" class="form-control" rows="5" placeholder="Enter additional commands to include in the configuration..."></textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="include-comments" checked>
-                                    <label for="include-comments">Include Comments in Configuration</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="backup-config">
-                                    <label for="backup-config">Include Backup Configuration Commands</label>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox">
-                                    <input type="checkbox" id="enable-aaa-logging" checked>
-                                    <label for="enable-aaa-logging">Enable AAA Logging</label>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="additional-commands">Additional Commands:</label>
+                            <textarea id="additional-commands" class="form-control" rows="10" placeholder="Enter additional configuration commands to include"></textarea>
                         </div>
                         
                         <div class="actions">
-                            <button id="advanced-prev" class="btn prev">Previous: Network</button>
-                            <button id="advanced-next" class="btn next">Next: Preview</button>
+                            <button id="advanced-prev" class="btn prev">Previous</button>
+                            <button id="advanced-next" class="btn next">Next</button>
                         </div>
                     </div>
                     
                     <!-- Preview Tab -->
-                    <div class="tab-pane" id="preview">
+                    <div id="preview" class="tab-pane">
                         <h2>Configuration Preview</h2>
                         
                         <div class="action-bar">
                             <button id="generate-config" class="btn primary">Generate Configuration</button>
                             <button id="copy-config" class="btn">Copy to Clipboard</button>
                             <button id="download-config" class="btn">Download</button>
-                            <button id="analyze-config" class="btn">Analyze</button>
-                            <button id="optimize-config" class="btn">Optimize with AI</button>
-                            <button id="save-config" class="btn">Save Config</button>
                         </div>
                         
-                        <div class="panel">
-                            <h3>Configuration Output</h3>
-                            <pre id="config-output" class="code-block">
-# No configuration generated yet.
-# Click "Generate Configuration" to create a configuration based on your settings.
-                            </pre>
-                        </div>
-                        
-                        <div class="panel">
-                            <h3>Configuration Analysis</h3>
-                            <div id="config-analysis">
-                                <p>No analysis available yet. Click "Analyze" to analyze your configuration.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="panel">
-                            <h3>Diagram Generator</h3>
-                            <div class="form-group">
-                                <label for="diagram-type">Diagram Type</label>
-                                <select id="diagram-type" class="form-control">
-                                    <option value="network-topology">Network Topology</option>
-                                    <option value="authentication-flow">Authentication Flow</option>
-                                    <option value="deployment-architecture">Deployment Architecture</option>
-                                    <option value="radius-communication">RADIUS Communication</option>
-                                </select>
-                            </div>
-                            <button id="generate-diagram" class="btn">Generate Diagram</button>
-                            
-                            <div id="diagram-display" class="diagram-display">
-                                <p>No diagram generated yet. Select a diagram type and click "Generate Diagram".</p>
-                            </div>
-                        </div>
+                        <pre id="config-output" class="code-block">No configuration generated yet. Click "Generate Configuration" to create the configuration.</pre>
                         
                         <div class="actions">
-                            <button id="preview-prev" class="btn prev">Previous: Advanced</button>
-                            <button id="export-documentation" class="btn primary">Export Documentation</button>
+                            <button id="preview-prev" class="btn prev">Previous</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    
+
     <!-- Modals -->
-    <div id="questionnaire-modal" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2>Project Questionnaire</h2>
-                <button id="questionnaire-modal-close" class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="questionnaire-container">
-                    <!-- Questionnaire content will be dynamically inserted here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="questionnaire-previous" class="btn prev">Previous</button>
-                <button id="questionnaire-next" class="btn next">Next</button>
-                <button id="questionnaire-finish" class="btn primary" style="display: none;">Finish</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="checklist-modal" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2>Deployment Checklist</h2>
-                <button id="checklist-modal-close" class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="checklist-container">
-                    <!-- Checklist content will be dynamically inserted here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="checklist-export" class="btn primary">Export Checklist</button>
-                <button id="checklist-close" class="btn">Close</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="export-modal" class="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2>Export Documentation</h2>
-                <button id="export-modal-close" class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="export-format">Export Format</label>
-                    <select id="export-format" class="form-control">
-                        <option value="pdf">PDF Document</option>
-                        <option value="word">Word Document</option>
-                        <option value="powerpoint">PowerPoint Presentation</option>
-                        <option value="html">HTML Document</option>
-                        <option value="text">Plain Text</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="document-title">Document Title</label>
-                    <input type="text" id="document-title" class="form-control" value="802.1X Configuration Document">
-                </div>
-                
-                <h3>Include Sections</h3>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-configuration" checked>
-                        <label for="export-configuration">Configuration Commands</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-diagram" checked>
-                        <label for="export-diagram">Network Diagrams</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-checklist" checked>
-                        <label for="export-checklist">Deployment Checklist</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-timeline" checked>
-                        <label for="export-timeline">Deployment Timeline</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-best-practices" checked>
-                        <label for="export-best-practices">Best Practices</label>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <div class="checkbox">
-                        <input type="checkbox" id="export-troubleshooting" checked>
-                        <label for="export-troubleshooting">Troubleshooting Guide</label>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="export-cancel" class="btn">Cancel</button>
-                <button id="export-confirm" class="btn primary">Export</button>
-            </div>
-        </div>
-    </div>
-    
     <div id="settings-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
-                <h2>Application Settings</h2>
+                <h2>Settings</h2>
                 <button id="settings-modal-close" class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="tabs settings-tabs">
-                    <div class="tab active" data-tab="general-settings">General</div>
-                    <div class="tab" data-tab="ai-settings">AI Integration</div>
-                    <div class="tab" data-tab="appearance-settings">Appearance</div>
-                    <div class="tab" data-tab="backup-settings">Backup & Restore</div>
-                </div>
-                
-                <div class="tab-content">
-                    <div class="tab-pane active" id="general-settings">
-                        <h3>General Settings</h3>
-                        
-                        <div class="form-group">
-                            <label for="default-vendor">Default Vendor</label>
-                            <select id="default-vendor" class="form-control">
-                                <option value="">None</option>
-                                <option value="cisco">Cisco</option>
-                                <option value="aruba">Aruba</option>
-                                <option value="juniper">Juniper</option>
-                                <option value="hp">HP</option>
-                                <!-- Other vendors will be populated via JavaScript -->
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="auto-save-interval">Auto-save Interval (minutes)</label>
-                            <input type="number" id="auto-save-interval" class="form-control" value="5">
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <input type="checkbox" id="remember-settings" checked>
-                                <label for="remember-settings">Remember Last Settings</label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <input type="checkbox" id="show-advanced-options">
-                                <label for="show-advanced-options">Always Show Advanced Options</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="ai-settings">
-                        <h3>AI Integration Settings</h3>
-                        
-                        <div class="form-group">
-                            <label for="ai-provider">AI Provider</label>
-                            <select id="ai-provider" class="form-control">
-                                <option value="openai">OpenAI (GPT)</option>
-                                <option value="anthropic">Anthropic (Claude)</option>
-                                <option value="gemini">Google (Gemini)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="openai-api-key">OpenAI API Key</label>
-                            <input type="password" id="openai-api-key" class="form-control" placeholder="Enter OpenAI API key">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="anthropic-api-key">Anthropic API Key</label>
-                            <input type="password" id="anthropic-api-key" class="form-control" placeholder="Enter Anthropic API key">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="gemini-api-key">Google Gemini API Key</label>
-                            <input type="password" id="gemini-api-key" class="form-control" placeholder="Enter Google Gemini API key">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="ai-model">AI Model</label>
-                            <select id="ai-model" class="form-control">
-                                <!-- Options will be populated based on selected provider -->
-                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
-                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <input type="checkbox" id="ai-optimize-configs" checked>
-                                <label for="ai-optimize-configs">Use AI for Configuration Optimization</label>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="checkbox">
-                                <input type="checkbox" id="ai-analyze-security" checked>
-                                <label for="ai-analyze-security">Use AI for Security Analysis</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="appearance-settings">
-                        <h3>Appearance Settings</h3>
-                        
-                        <div class="form-group">
-                            <label for="theme-select">Application Theme</label>
-                            <select id="theme-select" class="form-control">
-                                <option value="light">Light Theme</option>
-                                <option value="dark">Dark Theme</option>
-                                <option value="system">System Default</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="font-size">Font Size</label>
-                            <select id="font-size" class="form-control">
-                                <option value="small">Small</option>
-                                <option value="medium" selected>Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="code-font">Code Font</label>
-                            <select id="code-font" class="form-control">
-                                <option value="monospace">Monospace</option>
-                                <option value="courier">Courier</option>
-                                <option value="consolas">Consolas</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="accent-color">Accent Color</label>
-                            <input type="color" id="accent-color" class="form-control" value="#0077cc">
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane" id="backup-settings">
-                        <h3>Backup & Restore</h3>
-                        
-                        <div class="form-group">
-                            <button id="backup-all-settings" class="btn">Backup All Settings</button>
-                            <p class="help-text">Exports all settings and saved configurations to a JSON file</p>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="restore-file">Restore Settings</label>
-                            <input type="file" id="restore-file" class="form-control" accept=".json">
-                            <button id="restore-settings" class="btn">Restore From File</button>
-                        </div>
-                        
-                        <div class="form-group">
-                            <button id="clear-all-settings" class="btn danger">Reset All Settings</button>
-                            <p class="help-text warning">Warning: This will reset all settings to default values</p>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="theme-select">Theme:</label>
+                    <select id="theme-select" class="form-control">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="system">System Default</option>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="settings-save" class="btn primary">Save Settings</button>
                 <button id="settings-cancel" class="btn">Cancel</button>
+                <button id="settings-save" class="btn primary">Save</button>
             </div>
         </div>
     </div>
-    
+
     <div id="save-config-modal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header">
@@ -1176,110 +352,29 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="saved-config-name">Configuration Name</label>
-                    <input type="text" id="saved-config-name" class="form-control" placeholder="Enter a name for this configuration">
+                    <label for="config-name">Configuration Name:</label>
+                    <input type="text" id="config-name" class="form-control" placeholder="Enter a name for this configuration">
                 </div>
-                
                 <div class="form-group">
-                    <label for="saved-config-desc">Description (optional)</label>
-                    <textarea id="saved-config-desc" class="form-control" rows="3" placeholder="Enter a description for this configuration"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="saved-config-tags">Tags (comma separated)</label>
-                    <input type="text" id="saved-config-tags" class="form-control" placeholder="e.g., cisco, production, secure">
+                    <label for="config-description">Description (Optional):</label>
+                    <textarea id="config-description" class="form-control" rows="3" placeholder="Enter a description"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="save-config-confirm" class="btn primary">Save</button>
                 <button id="save-config-cancel" class="btn">Cancel</button>
+                <button id="save-config-confirm" class="btn primary">Save</button>
             </div>
         </div>
     </div>
-    
-    <!-- AI Assistant -->
-    <div id="ai-assistant-button" class="ai-assistant-container">
-        <div class="ai-icon">AI</div>
-    </div>
-    
-    <div id="ai-assistant-panel" class="ai-assistant-panel">
-        <div class="ai-assistant-header">
-            <h3>802.1X Configuration Assistant</h3>
-            <button id="ai-assistant-close" class="ai-assistant-close">&times;</button>
-        </div>
-        <div id="ai-assistant-body" class="ai-assistant-body">
-            <div class="ai-message assistant">
-                Hello! I'm your 802.1X configuration assistant. How can I help you with your deployment today?
-            </div>
-        </div>
-        <div class="ai-assistant-footer">
-            <input type="text" id="ai-assistant-input" class="ai-assistant-input" placeholder="Ask a question...">
-            <button id="ai-assistant-send" class="ai-assistant-send">Send</button>
-        </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Dot1Xer Supreme</h3>
-                    <ul>
-                        <li><a href="#" id="about-footer">About</a></li>
-                        <li><a href="#" id="help-footer">Help</a></li>
-                        <li><a href="#" id="updates-footer">Check for Updates</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#" id="best-practices">Best Practices</a></li>
-                        <li><a href="#" id="vendor-docs">Vendor Documentation</a></li>
-                        <li><a href="#" id="standards">IEEE Standards</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Tools</h3>
-                    <ul>
-                        <li><a href="#" id="export-tool">Export Tools</a></li>
-                        <li><a href="#" id="checklist-tool">Checklists</a></li>
-                        <li><a href="#" id="template-tool">Templates</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Dot1Xer Supreme Enterprise Edition. Version 4.1.0</p>
-            </div>
-        </div>
-    </footer>
-    
+
     <!-- Scripts -->
     <script src="js/main.js"></script>
     <script src="js/vendors.js"></script>
-    <script src="js/help.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/config-generator.js"></script>
-    <script src="js/ai-assistant.js"></script>
-    <script src="js/document-generator.js"></script>
-    <script src="js/diagrams.js"></script>
-    <script src="js/questionnaire.js"></script>
-    <!-- Core Libraries -->
-    <script src="js/vendors.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/help.js"></script>
-    <script src="js/config-generator.js"></script>
-    <script src="js/diagrams.js"></script>
-    <script src="js/questionnaire.js"></script>
-    <script src="js/checklist-handler.js"></script>
-    <!-- Core Libraries -->
-    <script src="js/vendors.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/help.js"></script>
-    <script src="js/config-generator.js"></script>
-    <script src="js/diagrams.js"></script>
-    <script src="js/questionnaire.js"></script>
-    <script src="js/checklist-handler.js"></script>
-    <script src="js/vendor-fix.js"></script>
+<script src="js/vendor-wizard.js"></script>
+<script src="js/wizard-init.js"></script>
+    <!-- Enhanced UI script -->
+    <script src="js/enhanced/dot1xer-ui.js"></script>
 </body>
 </html>

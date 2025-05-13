@@ -1,0 +1,12 @@
+<shapes name="Devices">
+  <shape name="BYOD Device" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/devices/byod.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="IoT Device" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/devices/iot.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

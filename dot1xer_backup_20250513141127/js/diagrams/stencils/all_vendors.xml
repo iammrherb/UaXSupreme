@@ -1,0 +1,12 @@
+<shapes name="Network Vendors">
+  <shape name="Cisco Switch" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/cisco/switch.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Palo Alto Firewall" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/vendors/paloalto/firewall.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

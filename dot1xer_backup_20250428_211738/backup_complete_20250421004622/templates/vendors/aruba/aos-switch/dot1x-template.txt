@@ -1,0 +1,73 @@
+! Aruba AOS-Switch (formerly HPE Provision) 802.1X Configuration Template
+! Based on best practices for 802.1X deployments
+!
+! RADIUS Authentication Configuration
+radius-server host {{RADIUS_SERVER_1_IP}} key {{RADIUS_SERVER_1_KEY}}
+radius-server host {{RADIUS_SERVER_2_IP}} key {{RADIUS_SERVER_2_KEY}}
+
+radius-server host {{RADIUS_SERVER_1_IP}} auth-port 1812 acct-port 1813
+radius-server host {{RADIUS_SERVER_2_IP}} auth-port 1812 acct-port 1813
+
+radius-server timeout 5
+radius-server retransmit 3
+radius-server dead-time 15
+
+! AAA Configuration
+aaa authentication port-access eap-radius
+aaa authentication dot1x default radius local
+aaa authentication mac-auth default radius local
+aaa authorization network default radius
+aaa accounting network start-stop radius
+
+! 802.1X Global Configuration
+aaa port-access authenticator active
+aaa port-access authenticator reauth-period {{REAUTH_PERIOD}}
+aaa port-access authenticator quiet-period {{QUIET_PERIOD}}
+aaa port-access authenticator tx-period {{TX_PERIOD}}
+aaa port-access authenticator max-requests {{MAX_REQUEST}}
+aaa port-access authenticator max-retries {{MAX_RETRIES}}
+
+! MAC Address Format for MAB
+aaa port-access mac-auth addr-format no-delimiter
+aaa port-access mac-auth addr-format uppercase
+
+! User Role Configuration
+aaa authorization user-role name "Authenticated"
+ vlan-id {{AUTH_VLAN}}
+
+aaa authorization user-role name "Unauthenticated"
+ vlan-id {{UNAUTH_VLAN}}
+
+aaa authorization user-role name "VoIP"
+ vlan-id {{VOICE_VLAN}}
+
+! Interface Configuration (Access Ports)
+interface {{ACCESS_INTERFACE_RANGE}}
+ no routing
+ aaa port-access authenticator active
+ aaa port-access authenticator reauth-period {{REAUTH_PERIOD}}
+ aaa port-access authenticator quiet-period {{QUIET_PERIOD}}
+ aaa port-access authenticator tx-period {{TX_PERIOD}}
+ aaa port-access authenticator max-requests {{MAX_REQUEST}}
+ aaa port-access authenticator max-retries {{MAX_RETRIES}}
+ aaa port-access authenticator client-limit {{CLIENT_LIMIT}}
+ aaa port-access authenticator unauth-vid {{UNAUTH_VLAN}}
+ aaa port-access authenticator auth-vid {{AUTH_VLAN}}
+ aaa port-access authenticator logoff-period {{LOGOFF_PERIOD}}
+ aaa port-access mac-auth
+ aaa port-access mac-auth port-role {{PORT_ROLE}}
+ aaa port-access mac-auth unauth-vid {{UNAUTH_VLAN}}
+ aaa port-access mac-auth auth-vid {{AUTH_VLAN}}
+ aaa port-access mac-auth logoff-period {{LOGOFF_PERIOD}}
+ spanning-tree bpdu-protection
+ spanning-tree admin-edge-port
+ voice-vlan {{VOICE_VLAN}}
+
+! Interface Configuration (Trunk Ports)
+interface {{TRUNK_INTERFACE}}
+ no routing
+ trunk
+ tagged vlan {{TAGGED_VLAN_LIST}}
+ untagged vlan {{NATIVE_VLAN}}
+ no aaa port-access authenticator active
+ no aaa port-access mac-auth

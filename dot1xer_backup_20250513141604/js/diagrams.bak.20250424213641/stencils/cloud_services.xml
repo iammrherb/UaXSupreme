@@ -1,0 +1,17 @@
+<shapes name="Cloud Services">
+  <shape name="Azure Active Directory" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/cloud/azure/active_directory.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="AWS" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/cloud/aws/aws.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="GCP" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/cloud/gcp/gcp.svg" width="60" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

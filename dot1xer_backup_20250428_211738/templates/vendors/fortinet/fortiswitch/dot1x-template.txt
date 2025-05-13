@@ -1,0 +1,95 @@
+# FortiSwitch 802.1X Configuration Template
+# Based on best practices for 802.1X deployments
+
+config system global
+    set hostname "{{HOSTNAME}}"
+end
+
+# RADIUS Server Configuration
+config user radius
+    edit "{{RADIUS_NAME}}"
+        set server "{{RADIUS_SERVER_1_IP}}"
+        set secret "{{RADIUS_SERVER_1_KEY}}"
+        set auth-type auto
+        set source-ip "{{MGMT_IP}}"
+        set nas-ip "{{MGMT_IP}}"
+    next
+    edit "{{RADIUS_NAME_2}}"
+        set server "{{RADIUS_SERVER_2_IP}}"
+        set secret "{{RADIUS_SERVER_2_KEY}}"
+        set auth-type auto
+        set source-ip "{{MGMT_IP}}"
+        set nas-ip "{{MGMT_IP}}"
+    next
+end
+
+# RADIUS User Group
+config user group
+    edit "RADIUS_GROUP"
+        set member "{{RADIUS_NAME}}" "{{RADIUS_NAME_2}}"
+    next
+end
+
+# 802.1X Security Policy
+config switch security-feature 802-1X
+    set radius-timeout 5
+    set reauth-period {{REAUTH_PERIOD}}
+    set max-reauth-attempt 3
+    set link-down-auth deauthenticate
+end
+
+# Configure VLANs
+config system interface
+    edit "auth-vlan"
+        set vdom "root"
+        set ip "{{AUTH_VLAN_IP}} {{AUTH_VLAN_NETMASK}}"
+        set allowaccess ping
+        set vlanid {{AUTH_VLAN_ID}}
+        set interface "internal"
+    next
+    edit "unauth-vlan"
+        set vdom "root"
+        set ip "{{UNAUTH_VLAN_IP}} {{UNAUTH_VLAN_NETMASK}}"
+        set allowaccess ping
+        set vlanid {{UNAUTH_VLAN_ID}}
+        set interface "internal"
+    next
+    edit "guest-vlan"
+        set vdom "root"
+        set ip "{{GUEST_VLAN_IP}} {{GUEST_VLAN_NETMASK}}"
+        set allowaccess ping
+        set vlanid {{GUEST_VLAN_ID}}
+        set interface "internal"
+    next
+    edit "voice-vlan"
+        set vdom "root"
+        set ip "{{VOICE_VLAN_IP}} {{VOICE_VLAN_NETMASK}}"
+        set allowaccess ping
+        set vlanid {{VOICE_VLAN_ID}}
+        set interface "internal"
+    next
+end
+
+# Configure 802.1X on ports
+config switch interface
+    edit "{{ACCESS_INTERFACE}}"
+        set native-vlan {{UNAUTH_VLAN_ID}}
+        set allowed-vlans "{{AUTH_VLAN_ID}}" "{{UNAUTH_VLAN_ID}}" "{{GUEST_VLAN_ID}}" "{{VOICE_VLAN_ID}}"
+        set security-groups "RADIUS_GROUP"
+        set snmp-index 1
+        config 802-1X
+            set port-control auto
+            set guest-vlan {{GUEST_VLAN_ID}}
+            set auth-fail-vlan {{UNAUTH_VLAN_ID}}
+            set open-auth enable
+            set security-mode {{SECURITY_MODE}}
+            set radius-timeout-overwrite enable
+            set voice-vlan {{VOICE_VLAN_ID}}
+        end
+    next
+    edit "{{TRUNK_INTERFACE}}"
+        set native-vlan {{NATIVE_VLAN_ID}}
+        set allowed-vlans "{{ALLOWED_VLAN_LIST}}"
+        set snmp-index 2
+    next
+end

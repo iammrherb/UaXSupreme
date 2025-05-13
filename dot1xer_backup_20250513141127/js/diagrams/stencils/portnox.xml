@@ -1,0 +1,22 @@
+<shapes name="Portnox">
+  <shape name="Portnox Cloud" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/portnox/portnox_cloud.svg" width="100" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Portnox RADIUS" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/portnox/portnox_radius.svg" width="100" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Portnox Clear" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/portnox/portnox_clear.svg" width="100" height="60"/>
+    </foreground>
+  </shape>
+  <shape name="Portnox Core" aspect="fixed" strokewidth="2">
+    <foreground>
+      <image src="images/stencils/portnox/portnox_core.svg" width="100" height="60"/>
+    </foreground>
+  </shape>
+</shapes>

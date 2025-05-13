@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UaXSupreme Hide Script Blocks</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+    h1, h2 { color: #2c3e50; }
+    pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    .success { color: #27ae60; font-weight: bold; }
+    .warning { color: #f39c12; font-weight: bold; }
+    .script-control { display: flex; align-items: center; margin-bottom: 10px; }
+    .script-control input { margin-right: 10px; }
+    button { padding: 10px 15px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+    button:hover { background-color: #2980b9; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>UaXSupreme Hide Script Blocks</h1>
+  <p>This tool detects and allows you to hide script blocks that might be causing display issues.</p>
+  
+  <button id="detect-button">Detect Script Blocks</button>
+  
+  <div id="script-blocks"></div>
+  <div id="controls" style="margin-top: 20px; display: none;">
+    <button id="hide-selected">Hide Selected Script Blocks</button>
+    <button id="hide-all">Hide All Script Blocks</button>
+  </div>
+  
+  <div id="results"></div>
+
+  <script>
+    // Function to sanitize HTML for display
+    function escapeHTML(html) {
+      return html
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+    
+    document.getElementById('detect-button').addEventListener('click', function() {
+      const scriptBlocks = document.querySelectorAll('script');
+      const scriptBlocksDiv = document.getElementById('script-blocks');
+      const controlsDiv = document.getElementById('controls');
+      const resultsDiv = document.getElementById('results');
+      
+      if (scriptBlocks.length === 0) {
+        resultsDiv.innerHTML = '<p class="warning">No script blocks found on the page.</p>';
+        return;
+      }
+      
+      let scriptBlocksHTML = '<h2>Detected Script Blocks</h2>';
+      
+      scriptBlocks.forEach((script, index) => {
+        const source = script.src ? `External: ${script.src}` : 'Inline script';
+        const content = script.innerHTML.substring(0, 100) + (script.innerHTML.length > 100 ? '...' : '');
+        
+        scriptBlocksHTML += `
+          <div class="script-control">
+            <input type="checkbox" id="script-${index}" data-index="${index}">
+            <label for="script-${index}">
+              <strong>Script ${index + 1}:</strong> ${source}
+              <pre>${escapeHTML(content)}</pre>
+            </label>
+          </div>
+        `;
+      });
+      
+      scriptBlocksDiv.innerHTML = scriptBlocksHTML;
+      controlsDiv.style.display = 'block';
+      
+      resultsDiv.innerHTML = `
+        <p class="success">Found ${scriptBlocks.length} script blocks. Select the ones you want to hide and click "Hide Selected Script Blocks".</p>
+      `;
+    });
+    
+    document.getElementById('hide-selected').addEventListener('click', function() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      const resultsDiv = document.getElementById('results');
+      
+      if (checkboxes.length === 0) {
+        resultsDiv.innerHTML += '<p class="warning">No script blocks selected.</p>';
+        return;
+      }
+      
+      const scriptBlocks = document.querySelectorAll('script');
+      const indices = Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-index')));
+      
+      indices.forEach(index => {
+        if (index < scriptBlocks.length) {
+          scriptBlocks[index].style.display = 'none';
+        }
+      });
+      
+      resultsDiv.innerHTML = `
+        <p class="success">Hidden ${indices.length} selected script blocks.</p>
+        <p>To permanently fix this issue, you should edit your HTML file to properly structure and close all script tags.</p>
+      `;
+    });
+    
+    document.getElementById('hide-all').addEventListener('click', function() {
+      const scriptBlocks = document.querySelectorAll('script');
+      const resultsDiv = document.getElementById('results');
+      
+      scriptBlocks.forEach(script => {
+        script.style.display = 'none';
+      });
+      
+      resultsDiv.innerHTML = `
+        <p class="success">Hidden all ${scriptBlocks.length} script blocks.</p>
+        <p>To permanently fix this issue, you should edit your HTML file to properly structure and close all script tags.</p>
+      `;
+    });
+  </script>
+</body>
+</html>

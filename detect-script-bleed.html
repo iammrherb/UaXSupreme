@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UaXSupreme Script Bleed Detector</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+    h1 { color: #2c3e50; }
+    pre { background-color: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    .issue { color: #e74c3c; font-weight: bold; }
+    .success { color: #27ae60; font-weight: bold; }
+    button { padding: 10px 15px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #2980b9; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>UaXSupreme Script Bleed Detector</h1>
+  <p>This tool helps identify script content that may be embedded in your HTML files.</p>
+  
+  <button id="check-button">Check for Script Bleed</button>
+  
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('check-button').addEventListener('click', function() {
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '<h2>Checking for script bleed...</h2>';
+      
+      // Get the entire HTML content
+      const htmlContent = document.documentElement.outerHTML;
+      
+      // Check for common shell script patterns
+      const shellPatterns = [
+        '#!/bin/bash',
+        'print_message',
+        'print_success',
+        'print_warning',
+        'print_error',
+        'function',
+        'echo -e',
+        'if [',
+        'for (',
+        'while [',
+        'EOF',
+        'cat >'
+      ];
+      
+      let foundIssues = false;
+      let resultsHTML = '<h2>Results:</h2>';
+      
+      shellPatterns.forEach(pattern => {
+        if (htmlContent.includes(pattern)) {
+          foundIssues = true;
+          resultsHTML += `<p class="issue">Found shell script pattern: <code>${pattern}</code></p>`;
+        }
+      });
+      
+      // Check for content after closing HTML tag
+      const htmlEndPos = htmlContent.indexOf('</html>');
+      if (htmlEndPos !== -1 && htmlEndPos < htmlContent.length - 7) {
+        foundIssues = true;
+        const extraContent = htmlContent.substring(htmlEndPos + 7);
+        resultsHTML += `<p class="issue">Found content after closing HTML tag:</p>`;
+        resultsHTML += `<pre>${extraContent.substring(0, 200)}${extraContent.length > 200 ? '...' : ''}</pre>`;
+      }
+      
+      if (!foundIssues) {
+        resultsHTML += `<p class="success">No script bleed detected!</p>`;
+      } else {
+        resultsHTML += `
+          <h3>How to fix:</h3>
+          <ol>
+            <li>Run the UaXSupreme-fix-script-bleed.sh script</li>
+            <li>Manually edit index.html to remove any remaining script content</li>
+            <li>Ensure your shell scripts don't append content to HTML files</li>
+          </ol>
+        `;
+      }
+      
+      resultsDiv.innerHTML = resultsHTML;
+    });
+  </script>
+</body>
+</html>

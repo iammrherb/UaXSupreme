@@ -1,0 +1,16 @@
+<!-- Add after your existing CSS files -->
+<link href="css/diagrams/diagram-styles.css" rel="stylesheet">
+<link href="css/diagrams/grapheditor.css" rel="stylesheet">
+
+<!-- Add before closing </body> tag -->
+<script src="js/diagrams/mxClient.js"></script>
+<script src="js/diagrams/diagram-generator.js"></script>
+<script src="js/diagrams/diagram-ui.js"></script>
+<script>
+  // Initialize diagram UI when document is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof DiagramUI !== 'undefined') {
+      DiagramUI.initialize();
+    }
+  });
+</script>

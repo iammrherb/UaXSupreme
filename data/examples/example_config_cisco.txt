@@ -1,0 +1,65 @@
+! Example Cisco Switch Configuration with 802.1X and MAB
+
+aaa new-model
+
+! RADIUS Server Configuration
+radius server ISE-1
+ address ipv4 10.1.1.10 auth-port 1812 acct-port 1813
+ key ISEsecretKey123
+ automate-tester username test-user probe-on
+
+radius server ISE-2
+ address ipv4 10.1.1.11 auth-port 1812 acct-port 1813
+ key ISEsecretKey123
+ automate-tester username test-user probe-on
+
+aaa group server radius RAD-SERVERS
+ server name ISE-1
+ server name ISE-2
+ deadtime 15
+ load-balance method least-outstanding
+ ip radius source-interface Vlan10
+
+! AAA Authentication/Authorization
+aaa authentication dot1x default group RAD-SERVERS local
+aaa authorization network default group RAD-SERVERS local
+aaa accounting dot1x default start-stop group RAD-SERVERS
+
+! Global 802.1X Configuration
+dot1x system-auth-control
+dot1x critical eapol
+
+! Advanced Authentication Settings
+authentication critical recovery delay 2000
+radius-server dead-criteria time 5 tries 3
+radius-server vsa send authentication
+radius-server vsa send accounting
+
+! Change of Authorization (CoA)
+aaa server radius dynamic-author
+ client 10.1.1.10 server-key ISEsecretKey123
+ client 10.1.1.11 server-key ISEsecretKey123
+ auth-type any
+
+! Interface Configuration - Employee Access
+interface range GigabitEthernet1/0/1-24
+ description Employee Access Port
+ switchport access vlan 10
+ switchport mode access
+ switchport voice vlan 20
+ switchport nonegotiate
+ spanning-tree portfast
+ spanning-tree bpduguard enable
+ dot1x pae authenticator
+ dot1x timeout tx-period 7
+ dot1x max-reauth-req 2
+ mab
+ access-session host-mode multi-auth
+ access-session closed
+ access-session port-control auto
+ authentication periodic
+ authentication timer reauthenticate server
+ service-policy type control subscriber DOT1X_MAB_POLICY
+ storm-control broadcast level pps 100
+ storm-control action trap
+ no shutdown

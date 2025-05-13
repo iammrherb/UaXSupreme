@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dot1Xer Supreme Enterprise Edition</title>
+    <!-- External libraries -->
+    <link rel="stylesheet" href="lib/inter.css">
+    <link rel="stylesheet" href="lib/fontawesome.css">
+    <!-- Application styles -->
+    <link rel="stylesheet" href="css/dot1xer-ui.css">
+    <!-- Any existing styles -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vendors.css">
+    <link rel="stylesheet" href="css/help.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved logo-icon"></i>
+                <span>Dot1Xer Supreme</span>
+            </div>
+            
+            <div class="step-indicator">
+                <div class="step-label">Step 1 of 6 - Platform Selection</div>
+                <div class="step-dots">
+                    <div class="step-dot active"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                    <div class="step-dot"></div>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button class="header-button">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Save
+                </button>
+                <button class="header-button">
+                    <i class="fa-solid fa-circle-question"></i>
+                    Help
+                </button>
+                <button class="header-button">
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </button>
+                <button class="theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-shield-halved logo-icon"></i>
+                    <span>Dot1Xer v4.2.0</span>
+                </div>
+                <button class="sidebar-toggle">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            </div>
+
+            <div class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Configuration</div>
+                    <a href="#" class="nav-item active">
+                        <i class="fa-solid fa-microchip"></i>
+                        <span class="nav-text">1. Platform</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-key"></i>
+                        <span class="nav-text">2. Authentication</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-lock"></i>
+                        <span class="nav-text">3. Security</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-network-wired"></i>
+                        <span class="nav-text">4. Network</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span class="nav-text">5. Advanced</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-code"></i>
+                        <span class="nav-text">6. Preview</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">Tools</div>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span class="nav-text">Checklist</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span class="nav-text">Questionnaire</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-chart-network"></i>
+                        <span class="nav-text">Diagrams</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fa-solid fa-robot"></i>
+                        <span class="nav-text">AI Assistant</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="progress-indicator">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1 class="page-title">Platform Selection</h1>
+                <div class="breadcrumb">
+                    <a href="#" class="breadcrumb-item">Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="#" class="breadcrumb-item">New Configuration</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-item active">Platform</span>
+                </div>
+            </div>
+            
+            <!-- Deployment Type Card -->
+            <div class="card slide-up">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Deployment Type</h2>
+                        <div class="card-subtitle">Select the type of authentication deployment</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">Authentication Deployment Type</label>
+                        <select class="form-control" id="deployment-type">
+                            <option value="wired" selected>Wired 802.1X Authentication</option>
+                            <option value="wireless">Wireless WPA Enterprise</option>
+                            <option value="tacacs">TACACS+ Device Administration</option>
+                            <option value="vpn">VPN Authentication</option>
+                            <option value="uaac">User Authentication & Access Control</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vendor Selection Card -->
+            <div class="card slide-up">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Vendor Selection</h2>
+                        <div class="card-subtitle">Choose your network equipment vendor</div>
+                    </div>
+                    <button class="btn-icon" data-modal="vendor-fullscreen-modal">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="vendor-browser">
+                        <div class="vendor-filters">
+                            <div class="vendor-search">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" placeholder="Search vendors...">
+                            </div>
+                            <div class="filter-chips">
+                                <div class="filter-chip active" data-filter="all">All Vendors</div>
+                                <div class="filter-chip" data-filter="wired">Wired</div>
+                                <div class="filter-chip" data-filter="wireless">Wireless</div>
+                                <div class="filter-chip" data-filter="both">Both</div>
+                            </div>
+                        </div>
+                        
+                        <div class="vendor-grid">
+                            <div class="vendor-card selected">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/cisco.svg" class="vendor-logo" alt="Cisco">
+                                <div class="vendor-name">Cisco</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/aruba.svg" class="vendor-logo" alt="Aruba">
+                                <div class="vendor-name">Aruba</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/juniper.svg" class="vendor-logo" alt="Juniper">
+                                <div class="vendor-name">Juniper</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type wired">WIRED</div>
+                                <img src="assets/images/vendors/hp.svg" class="vendor-logo" alt="HP">
+                                <div class="vendor-name">HP</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/extreme.svg" class="vendor-logo" alt="Extreme">
+                                <div class="vendor-name">Extreme</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/fortinet.svg" class="vendor-logo" alt="Fortinet">
+                                <div class="vendor-name">Fortinet</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type wired">WIRED</div>
+                                <img src="assets/images/vendors/dell.svg" class="vendor-logo" alt="Dell">
+                                <div class="vendor-name">Dell</div>
+                            </div>
+                            <div class="vendor-card">
+                                <div class="vendor-type both">BOTH</div>
+                                <img src="assets/images/vendors/huawei.svg" class="vendor-logo" alt="Huawei">
+                                <div class="vendor-name">Huawei</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Platform Configuration Card -->
+            <div class="card slide-up">
+                <div class="card-header">
+                    <div>
+                        <h2 class="card-title">Platform Configuration</h2>
+                        <div class="card-subtitle">Configure specific platform and software version</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="platform-select">Device Platform</label>
+                                <select class="form-control" id="platform-select">
+                                    <option value="">Select a platform</option>
+                                    <option value="ios-xe" selected>IOS-XE</option>
+                                    <option value="ios">IOS</option>
+                                    <option value="nx-os">NX-OS</option>
+                                    <option value="catalyst-os">Catalyst OS</option>
+                                    <option value="ise">ISE</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label class="form-label" for="software-version">Software Version</label>
+                                <select class="form-control" id="software-version">
+                                    <option value="">Select a version</option>
+                                    <option value="17.3.x" selected>17.3.x</option>
+                                    <option value="17.6.x">17.6.x</option>
+                                    <option value="17.9.x">17.9.x</option>
+                                    <option value="17.11.x">17.11.x</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Platform Details Box (will be dynamically updated) -->
+                    <div class="platform-box">
+                        <div class="platform-header">
+                            <div class="platform-info">
+                                <div class="platform-icon">
+                                    <i class="fa-solid fa-network-wired"></i>
+                                </div>
+                                <div>
+                                    <h3 class="platform-title">IOS-XE</h3>
+                                </div>
+                            </div>
+                            <span class="vendor-badge">Cisco</span>
+                        </div>
+                        
+                        <p class="platform-description">IOS-XE for newer Catalyst switches and ISR routers with enhanced scalability and modularity.</p>
+                        
+                        <div class="capability-label">Capabilities</div>
+                        <div class="capability-badges">
+                            <span class="capability-badge">802.1X</span>
+                            <span class="capability-badge">MAB</span>
+                            <span class="capability-badge">RadSec</span>
+                            <span class="capability-badge">TACACS+</span>
+                            <span class="capability-badge">RADIUS</span>
+                        </div>
+                        
+                        <div class="tabs">
+                            <div class="tab-nav">
+                                <div class="tab-item active">Overview</div>
+                                <div class="tab-item">Recommended Settings</div>
+                                <div class="tab-item">Compatibility</div>
+                                <div class="tab-item">Documentation</div>
+                            </div>
+                            
+                            <div class="tab-content active">
+                                <p style="margin-bottom: 1rem">Cisco IOS-XE provides a modern operating system for enterprise network devices with enhanced scalability and modularity. It supports the full range of 802.1X authentication methods and security features.</p>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Configuration Template</label>
+                                    <select class="form-control" id="template-select">
+                                        <option value="dot1x-mab-template">802.1X with MAB Fallback</option>
+                                        <option value="dot1x-template">802.1X Only</option>
+                                        <option value="dot1x-mab-concurrent-template">Concurrent Authentication</option>
+                                        <option value="radsec-template">RadSec Configuration</option>
+                                        <option value="tacacs-admin-template">TACACS+ Administration</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-secondary" disabled>
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Previous
+                </button>
+                <button class="btn btn-primary">
+                    Next: Authentication
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Vendor Selection Fullscreen Modal -->
+    <div class="modal-overlay" id="vendor-fullscreen-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Select Network Equipment Vendor</h2>
+                <button class="modal-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="vendor-filters">
+                    <div class="vendor-search">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" placeholder="Search vendors...">
+                    </div>
+                    <div class="filter-chips">
+                        <div class="filter-chip active" data-filter="all">All Vendors</div>
+                        <div class="filter-chip" data-filter="wired">Wired</div>
+                        <div class="filter-chip" data-filter="wireless">Wireless</div>
+                        <div class="filter-chip" data-filter="both">Both</div>
+                    </div>
+                </div>
+                
+                <!-- The modal will display the same vendors as the main grid but in a larger view -->
+                <div class="vendor-grid" style="max-height: 60vh;">
+                    <!-- Vendor cards will be dynamically generated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button class="btn btn-primary">Select Vendor</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External libraries and scripts -->
+    <script src="lib/fontawesome.js"></script>
+    
+    <!-- Application modules -->
+    <script src="js/modules/vendor-data.js"></script>
+    <script src="js/modules/mobile-nav.js"></script>
+    
+    <!-- Main application script -->
+    <script src="js/dot1xer-ui.js"></script>
+    
+    <!-- Any existing scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/vendors.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/config-generator.js"></script>
+</body>
+</html>
