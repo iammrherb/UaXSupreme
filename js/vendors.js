@@ -1,282 +1,604 @@
-/**
- * Dot1Xer Core Edition - Vendor Configuration
- * Version 1.0.0
- */
-
-// Define core vendors with only essential capabilities
+// Vendor data for Dot1Xer
 const vendors = {
   cisco: {
-    name: 'Cisco',
-    types: ['wired', 'wireless'],
-    platforms: {
-      ios: {
-        name: 'IOS',
-        description: 'Traditional Cisco IOS for Catalyst switches',
-        versions: ['15.2(4)E', '15.2(7)E'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      },
-      'ios-xe': {
-        name: 'IOS-XE',
-        description: 'IOS-XE for newer Catalyst switches',
-        versions: ['16.12.x', '17.3.x'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      },
-      'nx-os': {
-        name: 'NX-OS',
-        description: 'NX-OS for Nexus switches',
-        versions: ['9.3.x', '10.1.x'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      }
-    },
+    name: "Cisco",
+    platforms: [
+      { id: "ios", name: "IOS", desc: "For older Cisco switches and routers" },
+      { id: "ios-xe", name: "IOS-XE", desc: "For Catalyst 9000, 3650/3850, and newer platforms" },
+      { id: "nx-os", name: "NX-OS", desc: "For Nexus data center switches" },
+      { id: "wlc-9800", name: "WLC 9800", desc: "For Catalyst 9800 wireless controllers" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: true,
+      coa: true,
+      deviceTracking: true,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: true
+    }
   },
-
-  aruba: {
-    name: 'Aruba',
-    types: ['wired', 'wireless'],
-    platforms: {
-      'aos-cx': {
-        name: 'AOS-CX',
-        description: 'AOS-CX for Aruba CX switches',
-        versions: ['10.06.x', '10.08.x'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      },
-      'aos-switch': {
-        name: 'AOS-Switch',
-        description: 'AOS-Switch for Aruba/HP switches',
-        versions: ['16.08.x', '16.09.x'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      }
-    },
-  },
-
   juniper: {
-    name: 'Juniper',
-    types: ['wired', 'wireless'],
-    platforms: {
-      junos: {
-        name: 'JunOS',
-        description: 'JunOS for EX/QFX switches',
-        versions: ['19.4R3', '20.4R3'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      }
-    },
+    name: "Juniper",
+    platforms: [
+      { id: "junos", name: "JunOS", desc: "For EX, QFX, and MX series devices" },
+      { id: "mist", name: "Mist", desc: "For Mist wireless solutions" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: true,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
   },
-
+  aruba: {
+    name: "Aruba",
+    platforms: [
+      { id: "aos-cx", name: "AOS-CX", desc: "For CX series switches" },
+      { id: "aos-switch", name: "AOS-Switch", desc: "For Aruba switches" },
+      { id: "mobility-controller", name: "Mobility Controller", desc: "For wireless controllers" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: true,
+      coa: true,
+      deviceTracking: true,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
   hp: {
-    name: 'HP',
-    types: ['wired'],
-    platforms: {
-      provision: {
-        name: 'ProVision',
-        description: 'ProVision for legacy HP ProCurve switches',
-        versions: ['K.16.05', 'K.16.06'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      },
-      comware: {
-        name: 'Comware',
-        description: 'Comware for HP H3C switches',
-        versions: ['7.1.x', '7.2.x'],
-        capabilities: ['dot1x', 'mab', 'radius'],
-      }
-    },
+    name: "HP",
+    platforms: [
+      { id: "procurve", name: "ProCurve", desc: "For ProCurve switches" },
+      { id: "aruba-switch", name: "Aruba Switch", desc: "For Aruba branded switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: false,
+      macsec: false
+    }
+  },
+  extreme: {
+    name: "Extreme",
+    platforms: [
+      { id: "exos", name: "EXOS", desc: "For X-series switches" },
+      { id: "voss", name: "VOSS", desc: "For VSP switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  fortinet: {
+    name: "Fortinet",
+    platforms: [
+      { id: "fortiswitch", name: "FortiSwitch", desc: "For FortiSwitch devices" },
+      { id: "fortigate", name: "FortiGate", desc: "For FortiGate firewalls with switch ports" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: true,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  dell: {
+    name: "Dell",
+    platforms: [
+      { id: "powerswitch", name: "PowerSwitch", desc: "For Dell PowerSwitch series" },
+      { id: "force10", name: "Force10", desc: "For legacy Force10 switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: false,
+      macsec: false
+    }
+  },
+  paloalto: {
+    name: "Palo Alto",
+    platforms: [
+      { id: "panos", name: "PAN-OS", desc: "For Palo Alto Networks devices" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: false,
+      guestAccess: true,
+      iot: false,
+      dVlan: false,
+      dACL: true,
+      macsec: false
+    }
+  },
+  checkpoint: {
+    name: "Check Point",
+    platforms: [
+      { id: "gaia", name: "Gaia", desc: "For Check Point Security Gateways" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: false,
+      guestAccess: false,
+      iot: false,
+      dVlan: false,
+      dACL: false,
+      macsec: false
+    }
+  },
+  arista: {
+    name: "Arista",
+    platforms: [
+      { id: "eos", name: "EOS", desc: "For Arista EOS devices" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: false,
+      tacacs: true,
+      radsec: true,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: true
+    }
+  },
+  ruckus: {
+    name: "Ruckus",
+    platforms: [
+      { id: "fastiron", name: "FastIron", desc: "For ICX switches" },
+      { id: "smartzone", name: "SmartZone", desc: "For wireless controllers" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: false,
+      macsec: false
+    }
+  },
+  ubiquiti: {
+    name: "Ubiquiti",
+    platforms: [
+      { id: "unifi", name: "UniFi", desc: "For UniFi network devices" },
+      { id: "edgeswitch", name: "EdgeSwitch", desc: "For EdgeSwitch devices" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: false,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: false,
+      dVlan: true,
+      dACL: false,
+      macsec: false
+    }
+  },
+  meraki: {
+    name: "Meraki",
+    platforms: [
+      { id: "ms", name: "MS Series", desc: "For Meraki switches" },
+      { id: "mr", name: "MR Series", desc: "For Meraki wireless APs" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: false,
+      radsec: false,
+      coa: false,
+      deviceTracking: true,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  avaya: {
+    name: "Avaya",
+    platforms: [
+      { id: "ethernet-routing-switch", name: "Ethernet Routing Switch", desc: "For ERS switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: false,
+      dVlan: true,
+      dACL: false,
+      macsec: false
+    }
+  },
+  huawei: {
+    name: "Huawei",
+    platforms: [
+      { id: "vrp", name: "VRP", desc: "For Huawei enterprise switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  alcatel: {
+    name: "Alcatel-Lucent",
+    platforms: [
+      { id: "aos", name: "AOS", desc: "For OmniSwitch devices" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  sonicwall: {
+    name: "SonicWall",
+    platforms: [
+      { id: "sonicos", name: "SonicOS", desc: "For SonicWall appliances" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: false,
+      guestAccess: true,
+      iot: false,
+      dVlan: false,
+      dACL: true,
+      macsec: false
+    }
+  },
+  watchguard: {
+    name: "WatchGuard",
+    platforms: [
+      { id: "fireware", name: "Fireware", desc: "For WatchGuard appliances" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: false,
+      guestAccess: true,
+      iot: false,
+      dVlan: false,
+      dACL: true,
+      macsec: false
+    }
+  },
+  brocade: {
+    name: "Brocade",
+    platforms: [
+      { id: "fastiron", name: "FastIron", desc: "For FastIron switches" },
+      { id: "netiron", name: "NetIron", desc: "For NetIron switches" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: false,
+      vpn: false,
+      tacacs: true,
+      radsec: false,
+      coa: true,
+      deviceTracking: false,
+      mab: true,
+      guestAccess: true,
+      iot: true,
+      dVlan: true,
+      dACL: true,
+      macsec: false
+    }
+  },
+  sophos: {
+    name: "Sophos",
+    platforms: [
+      { id: "xg", name: "XG Firewall", desc: "For Sophos XG Firewall" }
+    ],
+    capabilities: {
+      wired: true,
+      wireless: true,
+      vpn: true,
+      tacacs: true,
+      radsec: false,
+      coa: false,
+      deviceTracking: false,
+      mab: false,
+      guestAccess: true,
+      iot: false,
+      dVlan: false,
+      dACL: true,
+      macsec: false
+    }
   }
 };
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Initializing vendor selection system...');
-  initVendorGrid();
-  setupVendorSelection();
-});
-
-// Initialize vendor grid
+// Function to initialize the vendor grid
 function initVendorGrid() {
   const vendorGrid = document.getElementById('vendor-grid');
-  if (!vendorGrid) {
-    console.error('Vendor grid element not found!');
-    return;
-  }
+  if (!vendorGrid) return;
 
-  // Clear existing content
+  // Clear any existing content
   vendorGrid.innerHTML = '';
 
-  // Create vendor cards
-  for (const [vendorId, vendor] of Object.entries(vendors)) {
-    const vendorCard = document.createElement('div');
-    vendorCard.className = 'vendor-logo-container';
-    vendorCard.setAttribute('data-vendor', vendorId);
-
-    // Get vendor types and determine primary type for badge
-    const types = vendor.types || [];
-    let primaryType = types.length > 0 ? types[0] : 'unknown';
-    let typeLabel = primaryType.toUpperCase();
-
-    // Create vendor logo
-    const logoPath = `assets/logos/${vendorId}-logo.svg`;
-    const vendorLogo = document.createElement('img');
-    vendorLogo.className = 'vendor-logo';
-    vendorLogo.src = logoPath;
-    vendorLogo.alt = `${vendor.name} logo`;
-    vendorLogo.onerror = function() {
-      this.onerror = null;
-      this.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="16" font-weight="bold" fill="%230077cc">${vendor.name}</text></svg>`;
-    };
-
+  // Create vendor logo containers
+  Object.keys(vendors).forEach(key => {
+    const vendor = vendors[key];
+    const vendorType = getVendorType(vendor.capabilities);
+    
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'vendor-logo-container';
+    logoContainer.dataset.vendor = key;
+    
+    // Create logo image
+    const logo = document.createElement('img');
+    logo.src = `assets/vendors/${key}.png`;
+    logo.alt = vendor.name;
+    logo.className = 'vendor-logo';
+    
     // Create vendor name
-    const vendorName = document.createElement('span');
+    const vendorName = document.createElement('div');
     vendorName.className = 'vendor-name';
     vendorName.textContent = vendor.name;
-
+    
     // Create vendor type badge
-    const vendorType = document.createElement('span');
-    vendorType.className = `vendor-type vendor-type-${primaryType}`;
-    vendorType.textContent = typeLabel;
-
-    // Add all elements to card
-    vendorCard.appendChild(vendorLogo);
-    vendorCard.appendChild(vendorName);
-    vendorCard.appendChild(vendorType);
-
-    // Add click event
-    vendorCard.addEventListener('click', function() {
-      selectVendor(vendorId);
+    const vendorVariant = document.createElement('div');
+    vendorVariant.className = 'vendor-variant';
+    vendorVariant.textContent = vendorType;
+    
+    // Append elements to container
+    logoContainer.appendChild(logo);
+    logoContainer.appendChild(vendorName);
+    logoContainer.appendChild(vendorVariant);
+    
+    // Add click handler
+    logoContainer.addEventListener('click', function() {
+      selectVendor(key);
     });
+    
+    // Add to grid
+    vendorGrid.appendChild(logoContainer);
+  });
+}
 
-    // Add card to grid
-    vendorGrid.appendChild(vendorCard);
+// Function to determine vendor type based on capabilities
+function getVendorType(capabilities) {
+  if (capabilities.wired && capabilities.wireless) {
+    return 'Wired & Wireless';
+  } else if (capabilities.wired) {
+    return 'Wired';
+  } else if (capabilities.wireless) {
+    return 'Wireless';
+  } else {
+    return 'Other';
   }
 }
 
-// Setup vendor selection event handling
-function setupVendorSelection() {
-  // Listen for platform selection changes
+// Function to handle vendor selection
+function selectVendor(vendorKey) {
+  // Update visual selection
+  document.querySelectorAll('.vendor-logo-container').forEach(el => {
+    el.classList.remove('selected');
+  });
+  
+  const selectedVendor = document.querySelector(`.vendor-logo-container[data-vendor="${vendorKey}"]`);
+  if (selectedVendor) {
+    selectedVendor.classList.add('selected');
+  }
+  
+  // Populate platform dropdown
   const platformSelect = document.getElementById('platform-select');
   if (platformSelect) {
-    platformSelect.addEventListener('change', updatePlatformDetails);
-  }
-}
-
-// Select a vendor
-function selectVendor(vendorId) {
-  // Update selected vendor styling
-  const vendorCards = document.querySelectorAll('.vendor-logo-container');
-  vendorCards.forEach((card) => {
-    if (card.getAttribute('data-vendor') === vendorId) {
-      card.classList.add('selected');
-    } else {
-      card.classList.remove('selected');
+    // Clear existing options
+    platformSelect.innerHTML = '<option value="">Select a platform</option>';
+    
+    // Add platform options
+    const vendor = vendors[vendorKey];
+    if (vendor && vendor.platforms) {
+      vendor.platforms.forEach(platform => {
+        const option = document.createElement('option');
+        option.value = platform.id;
+        option.textContent = platform.name;
+        platformSelect.appendChild(option);
+      });
     }
-  });
-
-  // Update platform select
-  updatePlatformSelect(vendorId);
-
-  // Store selected vendor
-  localStorage.setItem('selectedVendor', vendorId);
-
-  // Enable the next button
+    
+    // Enable the dropdown
+    platformSelect.disabled = false;
+  }
+  
+  // Update platform details
+  updatePlatformDetails(vendorKey);
+  
+  // Enable next button
   const nextButton = document.getElementById('platform-next');
   if (nextButton) {
     nextButton.disabled = false;
   }
+  
+  // Store selected vendor
+  localStorage.setItem('selectedVendor', vendorKey);
 }
 
-// Update platform select dropdown for selected vendor
-function updatePlatformSelect(vendorId) {
-  const platformSelect = document.getElementById('platform-select');
-  if (!platformSelect) return;
-
-  // Clear existing options
-  platformSelect.innerHTML = '';
-
-  // Add default option
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.textContent = 'Select a platform';
-  platformSelect.appendChild(defaultOption);
-
-  // Get vendor platforms
-  const vendor = vendors[vendorId];
-  if (!vendor) return;
-
-  // Add platform options
-  for (const [platformId, platform] of Object.entries(vendor.platforms)) {
-    const option = document.createElement('option');
-    option.value = platformId;
-    option.textContent = platform.name;
-    platformSelect.appendChild(option);
-  }
-
-  // Enable select
-  platformSelect.disabled = false;
-
-  // Update platform details
-  updatePlatformDetails();
-}
-
-// Update platform details
-function updatePlatformDetails() {
+// Function to update platform details section
+function updatePlatformDetails(vendorKey) {
   const platformDetails = document.getElementById('platform-details');
   if (!platformDetails) return;
-
-  // Get selected vendor and platform
-  const selectedVendor = getSelectedVendor();
-  const platformSelect = document.getElementById('platform-select');
-  const selectedPlatform = platformSelect ? platformSelect.value : '';
-
-  // Clear if nothing selected
-  if (!selectedVendor || !selectedPlatform) {
-    platformDetails.innerHTML = '<p>Please select a vendor and platform.</p>';
+  
+  const vendor = vendors[vendorKey];
+  if (!vendor) {
+    platformDetails.innerHTML = '<p>Please select a vendor to view details.</p>';
     return;
   }
-
-  // Get vendor and platform data
-  const vendor = vendors[selectedVendor];
-  if (!vendor) return;
-
-  const platform = vendor.platforms[selectedPlatform];
-  if (!platform) return;
-
-  // Create platform details HTML
-  platformDetails.innerHTML = `
-    <div class="platform-details-header">
-      <h3>${platform.name}</h3>
-      <span class="vendor-badge">${vendor.name}</span>
-    </div>
-    <p>${platform.description}</p>
-    
-    <h4>Capabilities</h4>
+  
+  // Create capabilities list
+  const capabilitiesList = [];
+  if (vendor.capabilities.wired) capabilitiesList.push('802.1X Wired');
+  if (vendor.capabilities.wireless) capabilitiesList.push('Wireless Auth');
+  if (vendor.capabilities.vpn) capabilitiesList.push('VPN Auth');
+  if (vendor.capabilities.tacacs) capabilitiesList.push('TACACS+');
+  if (vendor.capabilities.radsec) capabilitiesList.push('RADSEC');
+  if (vendor.capabilities.coa) capabilitiesList.push('CoA');
+  if (vendor.capabilities.mab) capabilitiesList.push('MAB');
+  if (vendor.capabilities.guestAccess) capabilitiesList.push('Guest Access');
+  if (vendor.capabilities.dVlan) capabilitiesList.push('Dynamic VLAN');
+  if (vendor.capabilities.dACL) capabilitiesList.push('Dynamic ACLs');
+  if (vendor.capabilities.macsec) capabilitiesList.push('MACsec');
+  
+  // Build HTML
+  let html = `
+    <h3>${vendor.name} Authentication Capabilities</h3>
     <div class="capability-badges">
-      ${(platform.capabilities || []).map(cap => 
-        `<span class="capability-badge">${cap.toUpperCase()}</span>`
-      ).join('')}
+      ${capabilitiesList.map(cap => `<span class="badge">${cap}</span>`).join('')}
     </div>
-    
-    <h4>Software Version</h4>
-    <select id="platform-version" class="form-control">
-      <option value="">Select a version</option>
-      ${(platform.versions || []).map(ver => 
-        `<option value="${ver}">${ver}</option>`
-      ).join('')}
-    </select>
+    <p>Select a platform from the dropdown above to continue.</p>
+    <h4>Supported Platforms:</h4>
+    <ul>
   `;
+  
+  // Add platforms
+  vendor.platforms.forEach(platform => {
+    html += `<li><strong>${platform.name}</strong>: ${platform.desc}</li>`;
+  });
+  
+  html += '</ul>';
+  
+  platformDetails.innerHTML = html;
 }
 
-// Get selected vendor
-function getSelectedVendor() {
-  const selectedCard = document.querySelector('.vendor-logo-container.selected');
-  return selectedCard ? selectedCard.getAttribute('data-vendor') : '';
-}
-
-// Select the default vendor
-function selectDefaultVendor() {
-  // Check if we have a saved vendor
-  const savedVendor = localStorage.getItem('selectedVendor');
-
-  if (savedVendor && vendors[savedVendor]) {
-    selectVendor(savedVendor);
-  } else {
-    // Otherwise select Cisco by default
-    selectVendor('cisco');
+// Setup vendor selection events
+function setupVendorSelection() {
+  // Platform dropdown change event
+  const platformSelect = document.getElementById('platform-select');
+  if (platformSelect) {
+    platformSelect.addEventListener('change', function() {
+      const vendorKey = localStorage.getItem('selectedVendor');
+      if (vendorKey && this.value) {
+        updatePlatformDetails(vendorKey, this.value);
+      }
+    });
   }
 }

@@ -1,0 +1,216 @@
+/* Dot1Xer Enhanced UI - Resource-friendly version */
+:root {
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --secondary: #10b981;
+  --accent: #8b5cf6;
+  --background: #f9fafb;
+  --surface: white;
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --border-active: #3b82f6;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --radius: 8px;
+}
+
+/* Global enhancements */
+body {
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Card enhancements */
+.card, .panel {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background-color: var(--surface);
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s;
+}
+
+.card:hover, .panel:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-header, .panel h3 {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9fafb;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Button enhancements */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn.primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+}
+
+.btn.primary:hover {
+  background-color: var(--primary-light);
+}
+
+/* Vendor grid enhancements */
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.vendor-logo-container {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.vendor-logo-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-light);
+}
+
+.vendor-logo-container.selected {
+  border-color: var(--primary);
+  background-color: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 0 2px var(--border-active);
+}
+
+.vendor-logo {
+  max-width: 100%;
+  max-height: 40px;
+  margin-bottom: 10px;
+}
+
+.vendor-name {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+
+.vendor-type {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  background-color: #f3f4f6;
+}
+
+.vendor-type.both {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.vendor-type.wired {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.vendor-type.wireless {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+/* Form enhancements */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Tab enhancements */
+.tab {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--primary);
+}
+
+.tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 500;
+}
+
+/* Platform details enhancements */
+#platform-details {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+.platform-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.capability-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.capability-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  font-weight: 500;
+}

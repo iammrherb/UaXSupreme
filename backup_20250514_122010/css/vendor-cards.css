@@ -1,0 +1,123 @@
+/* Simplified Vendor Selection Grid */
+.vendor-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* Vendor Card Container */
+.vendor-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 110px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.vendor-logo-container:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(0, 119, 204, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vendor-logo-container.selected {
+  border-color: var(--accent-color);
+  background-color: rgba(0, 119, 204, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 119, 204, 0.2);
+}
+
+/* Vendor Logo */
+.vendor-logo {
+  width: 80px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+  background: none;
+}
+
+.vendor-logo-container:hover .vendor-logo {
+  transform: scale(1.05);
+}
+
+/* Vendor Name */
+.vendor-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text-color);
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+/* Vendor Type Badge */
+.vendor-type {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.vendor-type-wired {
+  background-color: #bbdefb;
+  color: #0d47a1;
+}
+
+.vendor-type-wireless {
+  background-color: #d1c4e9;
+  color: #4527a0;
+}
+
+/* Platform Details */
+.platform-details {
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: white;
+}
+
+.platform-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* Capability Badges */
+.capability-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.capability-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}

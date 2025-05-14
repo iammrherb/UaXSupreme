@@ -1,237 +1,365 @@
-/**
- * Dot1Xer Core Edition - Configuration Generator
- * Version 1.0.0
- */
-
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Initializing Configuration Generator...');
-  setupConfigGeneratorEvents();
-});
-
-// Set up configuration generator event handlers
-function setupConfigGeneratorEvents() {
-  const generateBtn = document.getElementById('generate-config');
-  if (generateBtn) generateBtn.addEventListener('click', generateConfiguration);
-  
-  const copyBtn = document.getElementById('copy-config');
-  if (copyBtn) copyBtn.addEventListener('click', copyConfigToClipboard);
-  
-  const downloadBtn = document.getElementById('download-config');
-  if (downloadBtn) downloadBtn.addEventListener('click', downloadConfiguration);
-}
-
-// Generate configuration
-function generateConfiguration() {
-  const selectedVendor = getSelectedVendor();
-  const platformSelect = document.getElementById('platform-select');
-  const selectedPlatform = platformSelect ? platformSelect.value : '';
-
-  if (!selectedVendor || !selectedPlatform) {
-    showAlert('Please select a vendor and platform first.', 'warning');
-    return;
+// Configuration Generator for Dot1Xer
+class ConfigGenerator {
+  constructor() {
+    this.templates = {};
+    this.loadedTemplates = 0;
+    this.totalTemplates = 0;
+    this.vendor = null;
+    this.platform = null;
+    this.formData = {};
   }
 
-  const settings = collectFormSettings();
-  let configText = '';
-
-  try {
-    configText = generateVendorConfig(selectedVendor, selectedPlatform, settings);
-  } catch (error) {
-    console.error('Error generating configuration:', error);
-    showAlert('Error generating configuration: ' + error.message, 'danger');
-    return;
+  // Initialize the generator
+  init() {
+    console.log("Initializing Configuration Generator...");
+    this.setupEventListeners();
   }
 
-  const configOutput = document.getElementById('config-output');
-  if (configOutput) configOutput.textContent = configText;
+  // Set up event listeners
+  setupEventListeners() {
+    const generateBtn = document.getElementById('generate-config');
+    if (generateBtn) {
+      generateBtn.addEventListener('click', () => this.generateConfiguration());
+    }
 
-  showAlert('Configuration generated successfully!', 'success');
-}
+    const copyBtn = document.getElementById('copy-config');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', () => this.copyToClipboard());
+    }
 
-// Get the selected vendor
-function getSelectedVendor() {
-  const selectedVendorContainer = document.querySelector('.vendor-logo-container.selected');
-  return selectedVendorContainer ? selectedVendorContainer.getAttribute('data-vendor') : null;
-}
-
-// Collect form settings
-function collectFormSettings() {
-  return {
-    // Authentication settings
-    authMethod: getSelectValue('auth-method', 'dot1x'),
-    authMode: getRadioValue('auth-mode', 'closed'),
-    hostMode: getSelectValue('host-mode', 'multi-auth'),
-
-    // RADIUS server settings
-    radiusServer: getInputValue('radius-server-1', ''),
-    radiusKey: getInputValue('radius-key-1', ''),
-    radiusAuthPort: getInputValue('radius-auth-port-1', '1812'),
-    radiusAcctPort: getInputValue('radius-acct-port-1', '1813'),
-    radiusTimeout: getInputValue('radius-timeout', '5'),
-    radiusRetransmit: getInputValue('radius-retransmit', '3'),
-    
-    // Secondary RADIUS server
-    secondaryServer: getInputValue('radius-server-2', ''),
-    secondaryKey: getInputValue('radius-key-2', ''),
-    
-    // RADIUS options
-    enableAccounting: getCheckboxValue('enable-accounting', false),
-    useCoa: getCheckboxValue('use-coa', false),
-    useRadsec: getCheckboxValue('use-radsec', false),
-
-    // Authentication timing
-    reauthPeriod: getInputValue('reauth-period', '3600'),
-    txPeriod: getInputValue('tx-period', '30'),
-    quietPeriod: getInputValue('quiet-period', '60'),
-    maxReauth: getInputValue('max-reauth', '2'),
-
-    // VLAN settings
-    vlanAuth: getInputValue('vlan-auth', ''),
-    vlanUnauth: getInputValue('vlan-unauth', ''),
-    vlanGuest: getInputValue('vlan-guest', ''),
-    vlanVoice: getInputValue('vlan-voice', ''),
-    enableDynamicVlan: getCheckboxValue('enable-dynamic-vlan', true),
-
-    // Interface settings
-    interface: getInputValue('interface', ''),
-    interfaceRange: getInputValue('interface-range', ''),
-    
-    // Security features
-    enableDhcpSnooping: getCheckboxValue('enable-dhcp-snooping', false),
-    enableDai: getCheckboxValue('enable-dai', false),
-    enableIpsg: getCheckboxValue('enable-ipsg', false),
-    enablePortSecurity: getCheckboxValue('enable-port-security', false),
-    useMacsec: getCheckboxValue('use-macsec', false),
-  };
-}
-
-// Helper function to get input value
-function getInputValue(id, defaultValue) {
-  const element = document.getElementById(id);
-  return element && element.value ? element.value : defaultValue;
-}
-
-// Helper function to get select value
-function getSelectValue(id, defaultValue) {
-  const element = document.getElementById(id);
-  if (!element) return defaultValue;
-  return element.value || defaultValue;
-}
-
-// Helper function to get radio button value
-function getRadioValue(name, defaultValue) {
-  const elements = document.getElementsByName(name);
-  for (let i = 0; i < elements.length; i++) {
-    if (elements[i].checked) {
-      return elements[i].value;
+    const downloadBtn = document.getElementById('download-config');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => this.downloadConfiguration());
     }
   }
-  return defaultValue;
-}
 
-// Helper function to get checkbox value
-function getCheckboxValue(id, defaultValue) {
-  const element = document.getElementById(id);
-  return element ? element.checked : defaultValue;
-}
-
-// Generate a generic configuration when vendor-specific generator is not available
-function generateVendorConfig(vendor, platform, settings) {
-  return `! ${vendor.toUpperCase()} ${platform.toUpperCase()} 802.1X Configuration
-! Generated by Dot1Xer Core Edition v1.0.0
-!
-! RADIUS Server: ${settings.radiusServer || 'Not specified'} (${settings.radiusAuthPort}/${settings.radiusAcctPort})
-! Secondary RADIUS: ${settings.secondaryServer || 'Not specified'}
-! Authentication Method: ${settings.authMethod}
-! Authentication Mode: ${settings.authMode}
-! Host Mode: ${settings.hostMode}
-! Authentication VLAN: ${settings.vlanAuth || 'Not specified'}
-! Unauthenticated VLAN: ${settings.vlanUnauth || 'Not specified'}
-! Guest VLAN: ${settings.vlanGuest || 'Not specified'}
-! Voice VLAN: ${settings.vlanVoice || 'Not specified'}
-! Interface: ${settings.interface || 'Not specified'}
-! Interface Range: ${settings.interfaceRange || 'Not specified'}`;
-}
-
-// Copy configuration to clipboard
-function copyConfigToClipboard() {
-  const configOutput = document.getElementById('config-output');
-  if (!configOutput) return;
-
-  const config = configOutput.textContent;
-  if (config.trim() === '') {
-    showAlert('Please generate a configuration first.', 'warning');
-    return;
+  // Load template for vendor/platform
+  loadTemplate(vendor, platform) {
+    return new Promise((resolve, reject) => {
+      const templateUrl = `templates/vendors/${vendor}/${platform}.txt`;
+      
+      fetch(templateUrl)
+        .then(response => {
+          if (!response.ok) {
+            // Try fallback to basic template
+            return fetch(`templates/vendors/${vendor}/basic.txt`);
+          }
+          return response;
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Could not load template for ${vendor}/${platform}`);
+          }
+          return response.text();
+        })
+        .then(template => {
+          this.templates[`${vendor}/${platform}`] = template;
+          resolve(template);
+        })
+        .catch(error => {
+          console.error("Error loading template:", error);
+          reject(error);
+        });
+    });
   }
 
-  if (navigator.clipboard) {
-    navigator.clipboard
-      .writeText(config)
-      .then(() => {
-        showAlert('Configuration copied to clipboard!', 'success');
-      })
-      .catch((err) => {
-        console.error('Failed to copy: ', err);
-        showAlert('Failed to copy. Please try manually.', 'danger');
-      });
-  } else {
+  // Gather form data
+  gatherFormData() {
+    this.formData = {
+      // Authentication Settings
+      authMethod: document.getElementById('auth-method')?.value,
+      authMode: document.querySelector('input[name="auth-mode"]:checked')?.value,
+      hostMode: document.getElementById('host-mode')?.value,
+      
+      // RADIUS Server Settings
+      radiusServer1: document.getElementById('radius-server-1')?.value,
+      radiusKey1: document.getElementById('radius-key-1')?.value,
+      radiusAuthPort1: document.getElementById('radius-auth-port-1')?.value || "1812",
+      radiusAcctPort1: document.getElementById('radius-acct-port-1')?.value || "1813",
+      radiusServer2: document.getElementById('radius-server-2')?.value,
+      radiusKey2: document.getElementById('radius-key-2')?.value,
+      radiusTimeout: document.getElementById('radius-timeout')?.value || "5",
+      radiusRetransmit: document.getElementById('radius-retransmit')?.value || "3",
+      radiusDeadtime: document.getElementById('radius-deadtime')?.value || "15",
+      enableAccounting: document.getElementById('enable-accounting')?.checked,
+      accountingInterval: document.getElementById('accounting-interval')?.value || "1440",
+      
+      // Security Settings
+      reauthPeriod: document.getElementById('reauth-period')?.value || "3600",
+      txPeriod: document.getElementById('tx-period')?.value || "30",
+      quietPeriod: document.getElementById('quiet-period')?.value || "60",
+      maxReauth: document.getElementById('max-reauth')?.value || "2",
+      useCoa: document.getElementById('use-coa')?.checked,
+      coaPort: document.getElementById('coa-port')?.value || "3799",
+      useRadsec: document.getElementById('use-radsec')?.checked,
+      radsecPort: document.getElementById('radsec-port')?.value || "2083",
+      useMacsec: document.getElementById('use-macsec')?.checked,
+      
+      // Network Settings
+      enableDynamicVlan: document.getElementById('enable-dynamic-vlan')?.checked,
+      vlanAuth: document.getElementById('vlan-auth')?.value,
+      vlanUnauth: document.getElementById('vlan-unauth')?.value,
+      vlanGuest: document.getElementById('vlan-guest')?.value,
+      vlanVoice: document.getElementById('vlan-voice')?.value,
+      vlanCritical: document.getElementById('vlan-critical')?.value,
+      interface: document.getElementById('interface')?.value,
+      interfaceRange: document.getElementById('interface-range')?.value,
+      
+      // DHCP and ARP Settings
+      enableDhcpSnooping: document.getElementById('enable-dhcp-snooping')?.checked,
+      dhcpSnoopingVlans: document.getElementById('dhcp-snooping-vlans')?.value || "1-4094",
+      dhcpSnoopingOption82: document.getElementById('dhcp-snooping-option82')?.checked,
+      enableDai: document.getElementById('enable-dai')?.checked,
+      daiVlans: document.getElementById('dai-vlans')?.value || "1-4094",
+      daiValidateSrc: document.getElementById('dai-validate-src')?.checked,
+      daiValidateDst: document.getElementById('dai-validate-dst')?.checked,
+      daiValidateIp: document.getElementById('dai-validate-ip')?.checked,
+      enableIpsg: document.getElementById('enable-ipsg')?.checked,
+      
+      // Storm Control
+      enableStormControl: document.getElementById('enable-storm-control')?.checked,
+      stormControlAction: document.getElementById('storm-control-action')?.value || "trap",
+      stormControlBroadcast: document.getElementById('storm-control-broadcast')?.value || "80.00",
+      stormControlMulticast: document.getElementById('storm-control-multicast')?.value || "80.00",
+      stormControlUnicast: document.getElementById('storm-control-unicast')?.value || "80.00",
+      
+      // Port Security
+      enablePortSecurity: document.getElementById('enable-port-security')?.checked,
+      portSecurityMaxMac: document.getElementById('port-security-max-mac')?.value || "5",
+      portSecurityViolation: document.getElementById('port-security-violation')?.value || "protect",
+      
+      // TACACS Settings
+      useTacacs: document.getElementById('use-tacacs')?.checked,
+      tacacsServer1: document.getElementById('tacacs-server-1')?.value,
+      tacacsKey1: document.getElementById('tacacs-key-1')?.value,
+      tacacsServer2: document.getElementById('tacacs-server-2')?.value,
+      tacacsKey2: document.getElementById('tacacs-key-2')?.value,
+      tacacsTimeout: document.getElementById('tacacs-timeout')?.value || "5",
+      tacacsSourceInterface: document.getElementById('tacacs-source-interface')?.value,
+      
+      // Additional Commands
+      additionalCommands: document.getElementById('additional-commands')?.value
+    };
+    
+    return this.formData;
+  }
+
+  // Generate configuration
+  async generateConfiguration() {
+    const configOutput = document.getElementById('config-output');
+    if (!configOutput) return;
+    
+    // Show loading message
+    configOutput.textContent = "Generating configuration...";
+    
     try {
-      const textarea = document.createElement('textarea');
-      textarea.value = config;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textarea);
-      showAlert('Configuration copied to clipboard!', 'success');
+      // Get vendor and platform
+      this.vendor = localStorage.getItem('selectedVendor');
+      this.platform = document.getElementById('platform-select')?.value;
+      
+      if (!this.vendor || !this.platform) {
+        configOutput.textContent = "Error: Please select a vendor and platform.";
+        return;
+      }
+      
+      // Gather form data
+      this.gatherFormData();
+      
+      // Load template if not already loaded
+      if (!this.templates[`${this.vendor}/${this.platform}`]) {
+        await this.loadTemplate(this.vendor, this.platform);
+      }
+      
+      // Get template
+      let template = this.templates[`${this.vendor}/${this.platform}`];
+      
+      // Process template with form data
+      const config = this.processTemplate(template);
+      
+      // Display configuration
+      configOutput.textContent = config;
+      
     } catch (error) {
-      console.error('Failed to copy: ', error);
-      showAlert('Failed to copy. Please try manually.', 'danger');
+      console.error("Error generating configuration:", error);
+      configOutput.textContent = `Error generating configuration: ${error.message}`;
     }
   }
-}
 
-// Download configuration as file
-function downloadConfiguration() {
-  const configOutput = document.getElementById('config-output');
-  if (!configOutput) return;
-
-  const config = configOutput.textContent;
-  if (config.trim() === '') {
-    showAlert('Please generate a configuration first.', 'warning');
-    return;
+  // Process template with form data
+  processTemplate(template) {
+    // Replace variables in template with form data
+    let config = template;
+    
+    // Replace basic field variables
+    Object.keys(this.formData).forEach(key => {
+      const value = this.formData[key];
+      if (value !== undefined && value !== null) {
+        // Handle boolean values
+        if (typeof value === 'boolean') {
+          // Skip section if boolean is false
+          const regex = new RegExp(`{{#${key}}}([\\s\\S]*?){{/${key}}}`, 'g');
+          if (value) {
+            // Keep content but remove the conditional tags
+            config = config.replace(regex, '$1');
+          } else {
+            // Remove content and tags
+            config = config.replace(regex, '');
+          }
+        } else {
+          // Replace variable with value
+          const regex = new RegExp(`{{${key}}}`, 'g');
+          config = config.replace(regex, value);
+        }
+      }
+    });
+    
+    // Handle conditional blocks that haven't been processed
+    config = this.processConditionalBlocks(config);
+    
+    // Clean up any remaining template variables
+    config = this.cleanupTemplate(config);
+    
+    return config;
   }
 
-  const selectedVendor = getSelectedVendor() || 'vendor';
-  const platformSelect = document.getElementById('platform-select');
-  const platform = platformSelect ? platformSelect.value : 'platform';
-  const date = new Date().toISOString().split('T')[0];
-  const filename = `${selectedVendor}-${platform}-dot1x-config-${date}.txt`;
+  // Process conditional blocks in template
+  processConditionalBlocks(template) {
+    let config = template;
+    
+    // Handle equality conditional blocks {{#key eq "value"}}...{{/key}}
+    const eqRegex = /{{#(\w+) eq "([^"]+)"}}/g;
+    let match;
+    
+    while ((match = eqRegex.exec(template)) !== null) {
+      const [fullMatch, key, value] = match;
+      const endTag = `{{/${key}}}`;
+      
+      // Find the end of this conditional block
+      const startIndex = match.index;
+      const endIndex = template.indexOf(endTag, startIndex) + endTag.length;
+      
+      if (endIndex > startIndex) {
+        const blockContent = template.substring(startIndex + fullMatch.length, endIndex - endTag.length);
+        
+        // Check if condition is met
+        if (this.formData[key] === value) {
+          // Replace the entire block with just the content
+          config = config.replace(`${fullMatch}${blockContent}${endTag}`, blockContent);
+        } else {
+          // Remove the entire block
+          config = config.replace(`${fullMatch}${blockContent}${endTag}`, '');
+        }
+      }
+    }
+    
+    // Handle negation conditional blocks {{^key}}...{{/key}}
+    const negRegex = /{{^(\w+)}}/g;
+    
+    while ((match = negRegex.exec(template)) !== null) {
+      const [fullMatch, key] = match;
+      const endTag = `{{/${key}}}`;
+      
+      // Find the end of this conditional block
+      const startIndex = match.index;
+      const endIndex = template.indexOf(endTag, startIndex) + endTag.length;
+      
+      if (endIndex > startIndex) {
+        const blockContent = template.substring(startIndex + fullMatch.length, endIndex - endTag.length);
+        
+        // Check if condition is met (value is falsy)
+        if (!this.formData[key]) {
+          // Replace the entire block with just the content
+          config = config.replace(`${fullMatch}${blockContent}${endTag}`, blockContent);
+        } else {
+          // Remove the entire block
+          config = config.replace(`${fullMatch}${blockContent}${endTag}`, '');
+        }
+      }
+    }
+    
+    return config;
+  }
 
-  try {
-    const blob = new Blob([config], { type: 'text/plain' });
-    const element = document.createElement('a');
-    element.href = URL.createObjectURL(blob);
-    element.download = filename;
-    element.style.display = 'none';
-    document.body.appendChild(element);
-    element.click();
+  // Clean up any remaining template variables and conditionals
+  cleanupTemplate(template) {
+    let config = template;
+    
+    // Remove any remaining simple variables
+    config = config.replace(/{{[^{}]+}}/g, '');
+    
+    // Remove any remaining conditional blocks
+    config = config.replace(/{{#[^{}]+}}[\s\S]*?{{\/[^{}]+}}/g, '');
+    config = config.replace(/{{^[^{}]+}}[\s\S]*?{{\/[^{}]+}}/g, '');
+    
+    // Clean up empty lines (more than 2 consecutive)
+    config = config.replace(/\n{3,}/g, '\n\n');
+    
+    return config;
+  }
+
+  // Copy configuration to clipboard
+  copyToClipboard() {
+    const configOutput = document.getElementById('config-output');
+    if (!configOutput || !configOutput.textContent) {
+      alert('No configuration to copy. Please generate a configuration first.');
+      return;
+    }
+    
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = configOutput.textContent;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = 0;
+    document.body.appendChild(textarea);
+    
+    // Select and copy text
+    textarea.select();
+    document.execCommand('copy');
+    
+    // Clean up
+    document.body.removeChild(textarea);
+    
+    // Show success message
+    alert('Configuration copied to clipboard!');
+  }
+
+  // Download configuration as a file
+  downloadConfiguration() {
+    const configOutput = document.getElementById('config-output');
+    if (!configOutput || !configOutput.textContent) {
+      alert('No configuration to download. Please generate a configuration first.');
+      return;
+    }
+    
+    // Create filename based on vendor and platform
+    let filename = 'config.txt';
+    if (this.vendor && this.platform) {
+      filename = `${this.vendor}-${this.platform}-config.txt`;
+    }
+    
+    // Create a blob and download link
+    const blob = new Blob([configOutput.textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    
+    // Trigger download
+    document.body.appendChild(a);
+    a.click();
+    
+    // Clean up
     setTimeout(() => {
-      document.body.removeChild(element);
-      URL.revokeObjectURL(element.href);
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }, 100);
-    showAlert(`Configuration downloaded as "${filename}"`, 'success');
-  } catch (error) {
-    console.error('Error downloading:', error);
-    showAlert('Error downloading. Please try again.', 'danger');
   }
 }
 
-// Helper function to show alerts
-function showAlert(message, type = 'info') {
-  if (typeof window.showAlert === 'function') {
-    window.showAlert(message, type);
-    return;
-  }
-
-  alert(message);
-}
+// Initialize the generator when the document is ready
+document.addEventListener('DOMContentLoaded', () => {
+  const generator = new ConfigGenerator();
+  generator.init();
+});

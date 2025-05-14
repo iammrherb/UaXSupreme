@@ -29,9 +29,10 @@ aaa group server tacacs+ {{TACACS_ADMIN_GROUP}}
 !  ip vrf forwarding {{VRF_NAME}}
 !  ip tacacs source-interface {{SOURCE_INTERFACE}}
 
-! Create Method List for TACACS+ authentication (TACACS+ first, then local fallback)
-aaa authentication login {{ADMIN_AUTH_METHOD}} group {{TACACS_ADMIN_GROUP}} local
-aaa authorization exec {{ADMIN_AUTHZ_METHOD}} group {{TACACS_ADMIN_GROUP}} local if-authenticated
+! Create Method List to use TACACS+ logins primarily.
+! Fallback to Local User Accounts ONLY if all TACACS+ servers fail.
+aaa authentication login {{TACACS_AUTH_METHOD}} group {{TACACS_ADMIN_GROUP}} local
+aaa authorization exec {{TACACS_AUTHZ_METHOD}} group {{TACACS_ADMIN_GROUP}} local if-authenticated
 aaa authorization console
 
 ! Configure Command Accounting
@@ -40,12 +41,12 @@ aaa accounting commands 1 default start-stop group {{TACACS_ADMIN_GROUP}}
 aaa accounting commands 15 default start-stop group {{TACACS_ADMIN_GROUP}}
 
 ! Activate AAA TACACS+ for HTTPS Web GUI
-ip http authentication aaa login-authentication {{ADMIN_AUTH_METHOD}}
-ip http authentication aaa exec-authorization {{ADMIN_AUTHZ_METHOD}}
+ip http authentication aaa login-authentication {{TACACS_AUTH_METHOD}}
+ip http authentication aaa exec-authorization {{TACACS_AUTHZ_METHOD}}
 
 ! Activate AAA TACACS+ for NETCONF/RESTCONF authentication
-yang-interfaces aaa authentication method-list {{ADMIN_AUTH_METHOD}}
-yang-interfaces aaa authorization method-list {{ADMIN_AUTHZ_METHOD}}
+yang-interfaces aaa authentication method-list {{TACACS_AUTH_METHOD}}
+yang-interfaces aaa authorization method-list {{TACACS_AUTHZ_METHOD}}
 
 ! Restart HTTP/HTTPS services
 no ip http server
@@ -56,8 +57,8 @@ ip http secure-server
 ! Activate AAA TACACS+ authentication for SSH sessions
 line vty 0 97
  exec-timeout 30 0
- login authentication {{ADMIN_AUTH_METHOD}}
- authorization exec {{ADMIN_AUTHZ_METHOD}}
+ login authentication {{TACACS_AUTH_METHOD}}
+ authorization exec {{TACACS_AUTHZ_METHOD}}
  transport preferred none
  transport input ssh
  transport output none
@@ -66,5 +67,5 @@ line vty 0 97
 line con 0
  exec-timeout 15 0
  transport preferred none
- login authentication {{ADMIN_AUTH_METHOD}}
- authorization exec {{ADMIN_AUTHZ_METHOD}}
+ login authentication {{TACACS_AUTH_METHOD}}
+ authorization exec {{TACACS_AUTHZ_METHOD}}

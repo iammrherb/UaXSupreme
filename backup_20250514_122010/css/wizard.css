@@ -1,0 +1,206 @@
+/* Vendor-Specific Wizard Styles */
+.vendor-wizard-container {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.wizard-toggle {
+    margin: 10px 0;
+}
+
+.wizard-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.wizard-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.wizard-header h2 {
+    margin: 0 0 15px 0;
+    color: #343a40;
+}
+
+.wizard-progress {
+    margin-top: 15px;
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #0077cc;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.wizard-body {
+    min-height: 400px;
+    padding: 20px 0;
+}
+
+.wizard-footer {
+    border-top: 1px solid #dee2e6;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.wizard-navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+.wizard-navigation .btn {
+    min-width: 120px;
+}
+
+.wizard-step-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.wizard-step-content h3 {
+    margin-bottom: 25px;
+    color: #343a40;
+}
+
+.wizard-step-content h4 {
+    margin: 25px 0 15px 0;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.col-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio {
+    display: flex;
+    align-items: center;
+}
+
+.radio input[type="radio"] {
+    margin-right: 8px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 5px;
+    display: block;
+}
+
+.feature-settings {
+    margin-left: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-left: 3px solid #0077cc;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.review-section {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.review-section h4 {
+    margin-top: 0;
+}
+
+#config-summary ul {
+    margin: 0;
+    padding-left: 25px;
+}
+
+#config-summary li {
+    margin-bottom: 8px;
+}
+
+.generation-options {
+    margin-top: 30px;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.actions .btn {
+    min-width: 200px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .col-4, .col-6 {
+        flex: 1;
+        max-width: 100%;
+    }
+    
+    .wizard-navigation {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+    
+    .wizard-navigation .btn {
+        width: 100%;
+    }
+}
