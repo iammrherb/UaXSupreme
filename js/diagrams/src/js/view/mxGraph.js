@@ -916,14 +916,14 @@ mxGraph.prototype.tapAndHoldValid = false;
 /**
  * Variable: initialTouchX
  * 
- * Holds the x-coordinate of the intial touch event for tap and hold.
+ * Holds the x-coordinate of the initial touch event for tap and hold.
  */
 mxGraph.prototype.initialTouchX = 0;
 
 /**
  * Variable: initialTouchY
  * 
- * Holds the y-coordinate of the intial touch event for tap and hold.
+ * Holds the y-coordinate of the initial touch event for tap and hold.
  */
 mxGraph.prototype.initialTouchY = 0;
 
