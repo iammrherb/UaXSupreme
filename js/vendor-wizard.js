@@ -234,11 +234,14 @@ class VendorWizard {
     // Enable the dropdown
     platformSelect.disabled = false;
     
+    // Remove any existing change handler to avoid duplicates
+    platformSelect.onchange = null;
+
     // Add change handler
-    platformSelect.addEventListener('change', () => {
+    platformSelect.onchange = () => {
       this.formData.platform = platformSelect.value;
       this.updatePlatformInfo(platformSelect.value);
-    });
+    };
   }
 
   // Format platform name for display
