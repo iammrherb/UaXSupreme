@@ -244,10 +244,10 @@ function populatePlatformDropdown(vendorKey) {
   // Enable the select
   platformSelect.disabled = false;
   
-  // Add change event
-  platformSelect.addEventListener('change', function() {
+  // Replace existing change handler to avoid duplicate events
+  platformSelect.onchange = function() {
     updatePlatformDetails(vendorKey, this.value);
-  });
+  };
 }
 
 // Update platform details section
